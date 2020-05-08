@@ -1,0 +1,2 @@
+rootProject.name = 'bao_an_bank'
+include 'server'

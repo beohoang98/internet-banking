@@ -1,0 +1,7 @@
+server:
+    port: 8000
+spring:
+    datasource:
+        url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3308}/${DB_NAME:bank_db}
+        username: ${DB_USER:admin}
+        password: ${DB_PASS:123456}

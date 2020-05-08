@@ -1,0 +1,16 @@
+# FOR DEVELOPMENT
+
+version: "3"
+services:
+    db:
+        image: mysql:5.7
+        environment:
+          MYSQL_ROOT_PASSWORD: 123456
+          MYSQL_USERNAME: admin
+          MYSQL_PASSWORD: 123456
+        ports:
+        - 3308:3306 # avoid conflict with local machine database
+    redis:
+        image: redis:alpine
+        ports:
+        - 6380:6379

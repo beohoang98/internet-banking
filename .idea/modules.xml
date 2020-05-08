@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/bao_an_bank.main.iml" filepath="$PROJECT_DIR$/.idea/modules/bao_an_bank.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/bao_an_bank.test.iml" filepath="$PROJECT_DIR$/.idea/modules/bao_an_bank.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/hcmus.beohoang98.bao_an_bank.bao_an_bank.main.iml" filepath="$PROJECT_DIR$/.idea/modules/hcmus.beohoang98.bao_an_bank.bao_an_bank.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/hcmus.beohoang98.bao_an_bank.bao_an_bank.test.iml" filepath="$PROJECT_DIR$/.idea/modules/hcmus.beohoang98.bao_an_bank.bao_an_bank.test.iml" />
+    </modules>
+  </component>
+</project>
