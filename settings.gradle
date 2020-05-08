@@ -1,2 +1,3 @@
 rootProject.name = 'bao_an_bank'
+include 'client'
 include 'server'

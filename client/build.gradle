@@ -1,0 +1,18 @@
+plugins {
+    id "com.github.node-gradle.node" version "2.2.3"
+}
+
+node {
+    version = '13.11.0'
+    download = true
+}
+
+task build(type: YarnTask) {
+    args = ['build']
+    doLast {
+        copy {
+            from "dist"
+            into project(":server").file("src/main/resources/static")
+        }
+    }
+}

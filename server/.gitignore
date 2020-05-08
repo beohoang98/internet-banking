@@ -30,3 +30,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Frontend build
+/src/main/resources/static/

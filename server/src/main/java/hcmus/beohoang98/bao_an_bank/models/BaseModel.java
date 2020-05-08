@@ -3,6 +3,8 @@ package hcmus.beohoang98.bao_an_bank.models;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.util.Date;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,7 +21,7 @@ public class BaseModel {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
-  @CreationTimestamp private long createdAt;
+  @CreationTimestamp private Date createdAt;
 
-  @UpdateTimestamp private long updatedAt;
+  @UpdateTimestamp private Date updatedAt;
 }

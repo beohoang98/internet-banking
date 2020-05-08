@@ -15,13 +15,11 @@ import hcmus.beohoang98.bao_an_bank.models.User;
 import hcmus.beohoang98.bao_an_bank.repos.UserRepository;
 
 @Component
-@Import(PassEncoder.class)
+@Import(BCryptPassEncoder.class)
 public class CustomAuthProvider implements AuthenticationProvider {
-  @Autowired
-  UserRepository userRepository;
+  @Autowired UserRepository userRepository;
 
-  @Autowired
-  PasswordEncoder passwordEncoder;
+  @Autowired PasswordEncoder passwordEncoder;
 
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
