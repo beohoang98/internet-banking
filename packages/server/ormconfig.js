@@ -8,6 +8,7 @@ const config = {
 };
 
 module.exports = {
+    name: "default",
     type: config.TYPEORM_TYPE || "postgres",
     database: config.TYPEORM_DATABASE || "bank_db",
     username: config.TYPEORM_USERNAME || "admin",
@@ -19,12 +20,12 @@ module.exports = {
     entities: [
         path.resolve(__dirname, "dist/models/*{.ts,.js}"),
         path.resolve(
-            require.resolve("@switchit/nestjs-oauth2-server"),
-            "..",
-            "**/*.entity.js",
+            "../nestjs-oauth2-server-module/dist",
+            "**/*.entity{.js,.ts}",
         ),
     ],
     synchronize: config.NODE_ENV !== "production",
+    debug: config.SQL_DEBUG,
     cli: {
         migrationsDir: path.resolve(__dirname, "src/migrations"),
         subscribersDir: path.resolve(__dirname, "src/subscribers"),

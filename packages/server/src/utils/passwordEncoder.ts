@@ -1,7 +1,7 @@
 import { hashSync, compareSync } from "bcrypt";
 
 export class PasswordEncoder {
-    static round: number = 5;
+    static round = 5;
     static encode(pass: string): string {
         return hashSync(pass, this.round);
     }

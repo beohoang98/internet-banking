@@ -13,7 +13,6 @@ export function swaggerInit(app: INestApplication) {
         "user:create",
     ];
     const swaggerOpts = new DocumentBuilder()
-        .addServer("/api")
         .addOAuth2({
             type: "oauth2",
             bearerFormat: "JWT",

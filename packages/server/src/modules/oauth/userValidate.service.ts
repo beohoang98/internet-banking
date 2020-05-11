@@ -3,7 +3,7 @@ import {
     InvalidUserException,
     UserInterface,
     UserValidatorInterface,
-} from "@switchit/nestjs-oauth2-server";
+} from "@0auth2Server";
 import { Repository } from "typeorm";
 import { User } from "../../models/User";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -11,11 +11,13 @@ import { PasswordEncoder } from "../../utils/passwordEncoder";
 
 @Injectable()
 export class UserValidateService implements UserValidatorInterface {
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>;
+    constructor(
+        @InjectRepository(User)
+        private readonly userRepo: Repository<User>,
+    ) {}
 
     async validate(username: string, password: string): Promise<UserInterface> {
-        const user = await this.userRepository.findOne({
+        const user = await this.userRepo.findOne({
             where: { username },
         });
         if (!user) {

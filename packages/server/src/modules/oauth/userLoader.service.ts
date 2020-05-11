@@ -2,19 +2,19 @@ import {
     InvalidUserException,
     UserInterface,
     UserLoaderInterface,
-} from "@switchit/nestjs-oauth2-server";
+} from "@0auth2Server";
 import { Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { User } from "../../models/User";
-import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
 export class UserLoaderService implements UserLoaderInterface {
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>;
-
+    constructor(
+        // @InjectRepository(User)
+        private readonly userRepo: Repository<User>,
+    ) {}
     async load(userId: string): Promise<UserInterface> {
-        const user = await this.userRepository.findOne(+userId);
+        const user = await this.userRepo.findOne(+userId);
         if (!user) {
             throw InvalidUserException.withId(userId);
         }
