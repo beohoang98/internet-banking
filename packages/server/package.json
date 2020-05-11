@@ -21,7 +21,6 @@
     "c": "yarn nestjs-command"
   },
   "dependencies": {
-    "@beohoang98/nestjs-oauth2-server": "*",
     "@nestjs/common": "^6.10.14",
     "@nestjs/config": "^0.4.1",
     "@nestjs/core": "^6.10.14",

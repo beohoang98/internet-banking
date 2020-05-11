@@ -1,3 +1,3 @@
 [submodule "packages/nestjs-oauth2-server-module"]
-	path = packages/nestjs-oauth2-server-module
+	path = submodules/nestjs-oauth2-server-module
 	url = git@github.com:beohoang98/nestjs-oauth2-server-module.git
