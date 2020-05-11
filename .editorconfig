@@ -9,8 +9,4 @@ insert_final_newline = true
 max_line_length = 80
 tab_width = 4
 trim_trailing_whitespace = true
-ij_java_align_multiline_chained_methods = true
 
-[*.java]
-indent_size = 2
-tab_width = 2

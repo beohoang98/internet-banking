@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "packages/server"
+		},
+		{
+			"path": "packages/client"
+		},
+		{
+			"path": "."
+		},
+		{
+			"path": "packages/nestjs-oauth2-server-module"
+		}
+	],
+	"settings": {}
+}
