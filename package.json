@@ -1,6 +1,9 @@
 {
     "name": "root",
     "private": true,
+    "repository": {
+        "url": "https://github.com/beohoang98/internet-banking"
+    },
     "devDependencies": {
         "lerna": "^3.20.2",
         "lerna-changelog": "^1.0.1",
@@ -28,5 +31,5 @@
             "upgrade": "Upgrade"
         }
     },
-    "version": "0.0.0"
+    "version": "0.0.2"
 }
