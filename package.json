@@ -3,6 +3,7 @@
     "private": true,
     "devDependencies": {
         "lerna": "^3.20.2",
+        "lerna-changelog": "^1.0.1",
         "typescript": "^3.8.3"
     },
     "workspaces": {
@@ -13,6 +14,19 @@
             "**/typeorm",
             "**/typeorm/**"
         ]
+    },
+    "scripts": {
+        "version": "lerna-changelog"
+    },
+    "changelog": {
+        "labels": {
+            "feat": "New Feature",
+            "fix": "Bug Fix",
+            "breaking": "BREAKING CHANGE",
+            "chore": "Chore",
+            "migration": "Migration",
+            "upgrade": "Upgrade"
+        }
     },
     "version": "0.0.0"
 }
