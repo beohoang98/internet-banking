@@ -9,12 +9,7 @@ const config = {
 
 module.exports = {
     name: "default",
-    type: config.TYPEORM_TYPE || "postgres",
-    database: config.TYPEORM_DATABASE || "bank_db",
-    username: config.TYPEORM_USERNAME || "admin",
-    password: config.TYPEORM_PASSWORD || "123456",
-    host: config.TYPEORM_HOST || "localhost",
-    port: config.TYPEORM_PORT || 5432,
+    url: parsed.DATABASE_URL,
     migrations: [path.resolve(__dirname, "dist/migrations/*{.ts,.js}")],
     subscribers: [path.resolve(__dirname, "dist/subscribers/*{.ts,.js}")],
     entities: [

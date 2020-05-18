@@ -15,11 +15,13 @@
         ],
         "nohoist": [
             "**/typeorm",
-            "**/typeorm/**"
+            "**/typeorm/**",
+            "client/@vue/cli-plugin-typescript/**"
         ]
     },
     "scripts": {
-        "version": "lerna-changelog"
+        "version": "lerna-changelog",
+        "build": "yarn workspace client build & yarn workspace server build"
     },
     "changelog": {
         "labels": {
