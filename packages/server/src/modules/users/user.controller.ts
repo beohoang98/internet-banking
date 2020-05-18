@@ -8,15 +8,22 @@ import {
     UseGuards,
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
-import { ApiConsumes, ApiOAuth2, ApiTags } from "@nestjs/swagger";
+import {
+    ApiBasicAuth,
+    ApiBearerAuth,
+    ApiConsumes,
+    ApiOAuth2,
+    ApiTags,
+} from "@nestjs/swagger";
 import { CreateUserDto } from "@src/dto/user.dto";
 
 @Controller("user")
 @ApiTags("user")
+@ApiBearerAuth()
+@UseGuards(AuthGuard("jwt"))
 export class UserController {
     @Get("profile")
     @ApiOAuth2(["profile:read"])
-    @UseGuards(AuthGuard("access-token"))
     async profile(@Req() req) {
         return req.user;
     }
@@ -24,7 +31,6 @@ export class UserController {
     @Post("")
     @ApiOAuth2(["user:create"], "password")
     @ApiConsumes("application/json", "multipart/form-data")
-    @UseGuards(AuthGuard("access_token"))
     async create(@Body() body: CreateUserDto) {
         throw new NotImplementedException();
     }

@@ -2,13 +2,12 @@ import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { UserModule } from "./modules/users/user.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { createConnection } from "typeorm";
-import { User } from "./models/User";
-import { UserLoaderService } from "./modules/oauth/userLoader.service";
-import { UserValidateService } from "./modules/oauth/userValidate.service";
-import { Oauth2Module } from "@switchit/nestjs-oauth2-server";
 import { ClientModule } from "@src/modules/client/client.module";
-import { CqrsModule } from "@nestjs/cqrs";
+import { PassportModule } from "@nestjs/passport";
+import { JwtModule } from "@nestjs/jwt";
+import { JwtConfig } from "@src/config/jwt.config";
+import { AuthModule } from "@src/modules/auth/auth.module";
+import { RedisModule } from "@src/modules/redis/redis.module";
 
 @Module({
     imports: [
@@ -19,21 +18,29 @@ import { CqrsModule } from "@nestjs/cqrs";
         TypeOrmModule.forRoot({
             autoLoadEntities: true,
         }),
-        Oauth2Module.forRootAsync({
-            useFactory: async () => {
-                const connection = await createConnection();
-                const userRepo = connection.getRepository(User);
-                return {
-                    userLoader: new UserLoaderService(userRepo),
-                    userValidator: new UserValidateService(userRepo),
-                };
-            },
+        RedisModule.register({
+            url: process.env.REDIS_URL,
         }),
-        CqrsModule,
+        PassportModule.register({
+            session: false,
+            defaultStrategy: "jwt",
+        }),
+        {
+            ...JwtModule.register({
+                privateKey: JwtConfig.PRIVATE,
+                publicKey: JwtConfig.PUBLIC,
+                signOptions: {
+                    expiresIn: JwtConfig.ACCESS_EXPIRE,
+                },
+            }),
+            global: true,
+        },
+        AuthModule,
         ClientModule,
         UserModule,
     ],
     controllers: [],
     providers: [],
+    exports: [],
 })
 export class AppModule {}

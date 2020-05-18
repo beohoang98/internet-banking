@@ -18,23 +18,14 @@ export function swaggerInit(app: INestApplication) {
     };
 
     const swaggerOpts = new DocumentBuilder()
-        .addOAuth2({
-            type: "oauth2",
+        .addBasicAuth({
+            name: "basic",
+            type: "http",
+        })
+        .addBearerAuth({
+            name: "jwt",
             bearerFormat: "JWT",
-            name: "oauth2",
-            in: "query",
-            flows: {
-                password: {
-                    tokenUrl: "/api/oauth2/v2/token",
-                    refreshUrl: "/api/oauth2/v2/token",
-                    scopes,
-                },
-                clientCredentials: {
-                    tokenUrl: "/api/oauth2/v2/token",
-                    refreshUrl: "/api/oauth2/v2/token",
-                    scopes: clientScopes,
-                },
-            },
+            type: "http",
         })
         .setTitle("Bank API")
         .setVersion("0.0.1")

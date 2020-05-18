@@ -5,6 +5,13 @@ import { PasswordEncoder } from "@src/utils/passwordEncoder";
 
 @Injectable()
 export class UserService {
+    async findById(id: number) {
+        return await getRepository(User).findOne(id);
+    }
+    async findByEmail(email: string) {
+        return await getRepository(User).findOne({ email });
+    }
+
     async create(
         name: string,
         email: string,

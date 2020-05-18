@@ -1,5 +1,6 @@
 import { Column, Entity } from "typeorm";
 import { Base } from "./Base";
+import { Exclude } from "class-transformer";
 
 export enum UserRole {
     ADMIN = "ADMIN",
@@ -18,6 +19,7 @@ export class User extends Base<User> {
     email: string;
 
     @Column()
+    @Exclude()
     password: string;
 
     @Column({ type: "enum", enum: UserRole })

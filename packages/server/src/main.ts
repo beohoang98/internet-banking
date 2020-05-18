@@ -15,10 +15,8 @@ async function bootstrap() {
     app.use(compression());
     app.use(helmet());
     app.setGlobalPrefix("/api");
-    swaggerInit(app);
-
-    useContainer(app.set(AppModule), { fallbackOnErrors: true });
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
+    swaggerInit(app);
 
     await app.listen(3000);
 }
