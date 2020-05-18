@@ -2,10 +2,10 @@ import {
     InvalidUserException,
     UserInterface,
     UserLoaderInterface,
-} from "@0auth2Server";
+} from "@switchit/nestjs-oauth2-server";
 import { Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
-import { User } from "../../models/User";
+import { User } from "@src/models/User";
 
 @Injectable()
 export class UserLoaderService implements UserLoaderInterface {

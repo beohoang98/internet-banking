@@ -10,7 +10,7 @@
         "outDir": "./dist",
         "baseUrl": "./",
         "paths": {
-            "@0auth2Server": ["../../submodules/nestjs-oauth2-server-module"]
+            "@src/*": ["src/*"]
         },
         "incremental": true
     },
@@ -20,10 +20,5 @@
     "exclude": [
         "**/node_modules",
         "dist"
-    ],
-    "references": [
-        {
-            "path": "../../submodules/nestjs-oauth2-server-module/tsconfig.json"
-        }
     ]
 }

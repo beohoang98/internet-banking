@@ -1829,7 +1829,7 @@
     webpack "4.41.5"
     webpack-node-externals "1.7.2"
 
-"@nestjs/common@^6.10.14":
+"@nestjs/common@^6.0.0", "@nestjs/common@^6.10.14":
   version "6.11.11"
   resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-6.11.11.tgz#701da2462a15cc94d55ec863ddd9f2fb0bbd7136"
   integrity sha512-K4wuK/V2M82AsoudtY0UYV+M1nYDSSb10t8AkMwFiP+AWMuxCJNtE8qLc9jUe2aTKMbhBiQUfsbZFmg/MRinPg==
@@ -1850,7 +1850,7 @@
     lodash.set "4.3.2"
     uuid "8.0.0"
 
-"@nestjs/core@^6.10.14":
+"@nestjs/core@^6.0.0", "@nestjs/core@^6.10.14":
   version "6.11.11"
   resolved "https://registry.yarnpkg.com/@nestjs/core/-/core-6.11.11.tgz#2b97a3e9c2a853f5693ed84daf81c1ee3b2782b4"
   integrity sha512-ewUy2rjiRWi6SziI5gXZnlat7PfnVklL3tusnU1qqtUm74cPY1Zre+zDCJ27P/+B7sFJHbkFfpi0qQP2pQv9jQ==
@@ -1863,10 +1863,25 @@
     tslib "1.11.1"
     uuid "7.0.1"
 
+"@nestjs/cqrs@^6.0.0":
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/@nestjs/cqrs/-/cqrs-6.1.0.tgz#84529cfcdffa43624e251b1a71d61591fd4c3cad"
+  integrity sha512-J1csaa2LdodZtwXOoYNcnqvFzk+G3RAR+G0N8k1/dlP7GvDJT3OakS2YXPiOSl7fEMOD40eS4+9sQMs8xqiegw==
+
+"@nestjs/cqrs@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@nestjs/cqrs/-/cqrs-7.0.0.tgz#12b70af5f06ca5ffde5fb1493f17dcfc6eed5e1d"
+  integrity sha512-ZqsQuTdTzgqpizFEgacwHXvfz2+ekGLbMWuPcXk5uDS0+rY1R1rkY8oVkHA7SG700PaV4CccG93THxGfRM9mBQ==
+
 "@nestjs/mapped-types@0.0.3":
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/@nestjs/mapped-types/-/mapped-types-0.0.3.tgz#7b50206935452e74a270ed9a07ad05a6305b0b42"
   integrity sha512-PKxWOVaMyvj9/82afLpMZ/+Pb5JacCURRP/FY/tCDtsoS+MABeQGj2oqbtH4uQUiL4n+H0IigvQGHWQ1zPPknA==
+
+"@nestjs/passport@^6.1.0":
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/@nestjs/passport/-/passport-6.2.0.tgz#de5bf9b20912d26e15a99c7478b2760e7c3ebc79"
+  integrity sha512-Wy8FeSCNxbfTKRe/mJk0w5hSLsqoNMehg6DUQOoDug+6Uaq+QLEy6wvGPUJbVqGKpJwFHGgUoWp2ag05zh4zpA==
 
 "@nestjs/passport@^7.0.0":
   version "7.0.0"
@@ -1893,6 +1908,14 @@
     "@angular-devkit/schematics" "7.3.8"
     fs-extra "8.1.0"
 
+"@nestjs/swagger@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@nestjs/swagger/-/swagger-3.1.0.tgz#eea2d2ef7416a588e5f122b58cd194884e265dc4"
+  integrity sha512-12J7cEcj1K2TtCrxVktRrdW6j5bT7BaruNXPlyzBjs3uJopLLOYSR7j5+2JvlPK+uQcnnZFIOiffYEXoozm/zg==
+  dependencies:
+    lodash "4.17.14"
+    path-to-regexp "3.0.0"
+
 "@nestjs/swagger@^4.5.5":
   version "4.5.5"
   resolved "https://registry.yarnpkg.com/@nestjs/swagger/-/swagger-4.5.5.tgz#6d3c8ee182d8e0186d55dd5a5d62d1cdba07a1d2"
@@ -1909,6 +1932,13 @@
   dependencies:
     optional "0.1.4"
     tslib "1.11.1"
+
+"@nestjs/typeorm@^6.1.3":
+  version "6.3.4"
+  resolved "https://registry.yarnpkg.com/@nestjs/typeorm/-/typeorm-6.3.4.tgz#d73ee782080500f7d314ec5131fe9cb32817d2a4"
+  integrity sha512-qMUHaTMo+U5WOlMfL0ogNm8C2T/Kej/v+NnjSixx/UmtluLvTbNYuZUfbHI9ePCmtCXDV0lMRvIAi+U5LCjsbA==
+  dependencies:
+    uuid "^7.0.2"
 
 "@nestjs/typeorm@^7.0.0":
   version "7.0.0"
@@ -2082,6 +2112,26 @@
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@soda/get-current-script/-/get-current-script-1.0.0.tgz#623aa40623550e3b94767cffeb096a6fb597ed09"
   integrity sha512-9GvTek+7cVw7r+L7TNGOG1astZJWXz2h5q4BqMXl28KN+24iSCm1xo+RhZOZvwdT3bzNe9hD7riJc/lBoO7mgg==
+
+"@switchit/nestjs-oauth2-server@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@switchit/nestjs-oauth2-server/-/nestjs-oauth2-server-0.1.4.tgz#bb2d9ba3f976ef68ca3eeac15bca6daacbf8eb6c"
+  integrity sha512-gbd1liN9CcMT77xAgJXRIoZdoqcHgltCGqj53CrFOsBf4t4eJQMhox26upf1zcK+L4AhWbWrF8ZgeJVURrtQAQ==
+  dependencies:
+    "@nestjs/common" "^6.0.0"
+    "@nestjs/core" "^6.0.0"
+    "@nestjs/cqrs" "^6.0.0"
+    "@nestjs/passport" "^6.1.0"
+    "@nestjs/swagger" "^3.1.0"
+    "@nestjs/typeorm" "^6.1.3"
+    class-transformer "^0.2.3"
+    class-validator "^0.9.1"
+    passport "^0.4.0"
+    passport-http-bearer "^1.0.1"
+    rimraf "^3.0.0"
+    rxjs "^6.3.3"
+    selfsigned "^1.10.6"
+    typeorm "^0.2.18"
 
 "@types/anymatch@*":
   version "1.3.1"
@@ -4414,6 +4464,14 @@ class-validator@^0.12.2:
     google-libphonenumber "^3.2.8"
     tslib ">=1.9.0"
     validator "13.0.0"
+
+class-validator@^0.9.1:
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/class-validator/-/class-validator-0.9.1.tgz#d60e58c5d14abca0a41bce38cf792ad4c46d1531"
+  integrity sha512-3wApflrd3ywVZyx4jaasGoFt8pmo4aGLPPAEKCKCsTRWVGPilahD88q3jQjRQwja50rl9a7rsP5LAxJYwGK8/Q==
+  dependencies:
+    google-libphonenumber "^3.1.6"
+    validator "10.4.0"
 
 clean-css@4.2.x:
   version "4.2.3"
@@ -7174,7 +7232,7 @@ globule@^1.0.0:
     lodash "~4.17.12"
     minimatch "~3.0.2"
 
-google-libphonenumber@^3.2.8:
+google-libphonenumber@^3.1.6, google-libphonenumber@^3.2.8:
   version "3.2.9"
   resolved "https://registry.yarnpkg.com/google-libphonenumber/-/google-libphonenumber-3.2.9.tgz#d65c2467eec22c35e3dcddfc91d26e2b135024c4"
   integrity sha512-PCU6Z5drRaFHNICJcurXsf6DN//ZNl0PXmPIpbHi+E1pp54GwyrhxBn57rr1nx+3mNUOMr4zeWirIKPc4ziJgw==
@@ -9371,6 +9429,11 @@ lodash.uniq@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
 
+lodash@4.17.14:
+  version "4.17.14"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.14.tgz#9ce487ae66c96254fe20b599f21b6816028078ba"
+  integrity sha512-mmKYbW3GLuJeX+iGP+Y7Gp1AiGHGbXHCOh/jZmrawMmsE7MS4znI3RL2FsjbqOyMayHInjOeykW7PEajUk1/xw==
+
 lodash@4.17.15, lodash@^4.0.0, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.2.1, lodash@~4.17.12:
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
@@ -10973,12 +11036,19 @@ pascalcase@^0.1.1:
   resolved "https://registry.yarnpkg.com/pascalcase/-/pascalcase-0.1.1.tgz#b363e55e8006ca6fe21784d2db22bd15d7917f14"
   integrity sha1-s2PlXoAGym/iF4TS2yK9FdeRfxQ=
 
+passport-http-bearer@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/passport-http-bearer/-/passport-http-bearer-1.0.1.tgz#147469ea3669e2a84c6167ef99dbb77e1f0098a8"
+  integrity sha1-FHRp6jZp4qhMYWfvmdu3fh8AmKg=
+  dependencies:
+    passport-strategy "1.x.x"
+
 passport-strategy@1.x.x:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/passport-strategy/-/passport-strategy-1.0.0.tgz#b5539aa8fc225a3d1ad179476ddf236b440f52e4"
   integrity sha1-tVOaqPwiWj0a0XlHbd8ja0QPUuQ=
 
-passport@^0.4.1:
+passport@^0.4.0, passport@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/passport/-/passport-0.4.1.tgz#941446a21cb92fc688d97a0861c38ce9f738f270"
   integrity sha512-IxXgZZs8d7uFSt3eqNjM9NQ3g3uQCW5avD8mRNoXV99Yig50vjuaez6dQK2qC0kVWPRTujxY0dWgGfT09adjYg==
@@ -11042,6 +11112,11 @@ path-to-regexp@0.1.7:
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-0.1.7.tgz#df604178005f522f15eb4490e7247a1bfaa67f8c"
   integrity sha1-32BBeABfUi8V60SQ5yR6G/qmf4w=
+
+path-to-regexp@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-3.0.0.tgz#c981a218f3df543fa28696be2f88e0c58d2e012a"
+  integrity sha512-ZOtfhPttCrqp2M1PBBH4X13XlvnfhIwD7yCLx+GoGoXRPQyxGOTdQMpIzPSPKXAJT/JQrdfFrgdJOyAzvgpQ9A==
 
 path-to-regexp@3.2.0:
   version "3.2.0"
@@ -12574,7 +12649,7 @@ select-hose@^2.0.0:
   resolved "https://registry.yarnpkg.com/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
   integrity sha1-Yl2GWPhlr0Psliv8N2o3NZpJlMo=
 
-selfsigned@^1.10.7:
+selfsigned@^1.10.6, selfsigned@^1.10.7:
   version "1.10.7"
   resolved "https://registry.yarnpkg.com/selfsigned/-/selfsigned-1.10.7.tgz#da5819fd049d5574f28e88a9bcc6dbc6e6f3906b"
   integrity sha512-8M3wBCzeWIJnQfl43IKwOmC4H/RAp50S8DF60znzjW5GVqTcSe2vWclt7hmYVPkKPlHWOu5EaWOMZ2Y6W8ZXTA==
@@ -13972,7 +14047,7 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typeorm@^0.2.24:
+typeorm@^0.2.18, typeorm@^0.2.24:
   version "0.2.24"
   resolved "https://registry.yarnpkg.com/typeorm/-/typeorm-0.2.24.tgz#cd0fbd907326873a96c98e290fca49c589f0ffa8"
   integrity sha512-L9tQv6nNLRyh+gex/qc8/CyLs8u0kXKqk1OjYGF13k/KOg6N2oibwkuGgv0FuoTGYx2ta2NmqvuMUAMrHIY5ew==
@@ -14243,6 +14318,11 @@ uuid@^3.0.1, uuid@^3.3.2, uuid@^3.4.0:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
 
+uuid@^7.0.2:
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-7.0.3.tgz#c5c9f2c8cf25dc0a372c4df1441c41f5bd0c680b"
+  integrity sha512-DPSke0pXhTZgoF/d+WSt2QaKMCFSfx7QegxEWT+JOuHF5aWrKEn0G+ztjuJg/gG8/ItK+rbPCD/yNv8yyih6Cg==
+
 v8-compile-cache@^2.0.3:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/v8-compile-cache/-/v8-compile-cache-2.1.0.tgz#e14de37b31a6d194f5690d67efc4e7f6fc6ab30e"
@@ -14262,6 +14342,11 @@ validate-npm-package-name@^3.0.0:
   integrity sha1-X6kS2B630MdK/BQN5zF/DKffQ34=
   dependencies:
     builtins "^1.0.3"
+
+validator@10.4.0:
+  version "10.4.0"
+  resolved "https://registry.yarnpkg.com/validator/-/validator-10.4.0.tgz#ee99a44afb3bb5ed350a159f056ca72a204cfc3c"
+  integrity sha512-Q/wBy3LB1uOyssgNlXSRmaf22NxjvDNZM2MtIQ4jaEOAB61xsh1TQxsq1CgzUMBV1lDrVMogIh8GjG1DYW0zLg==
 
 validator@13.0.0:
   version "13.0.0"

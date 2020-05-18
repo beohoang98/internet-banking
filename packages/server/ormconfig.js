@@ -19,10 +19,8 @@ module.exports = {
     subscribers: [path.resolve(__dirname, "dist/subscribers/*{.ts,.js}")],
     entities: [
         path.resolve(__dirname, "dist/models/*{.ts,.js}"),
-        path.resolve(
-            "../nestjs-oauth2-server-module/dist",
-            "**/*.entity{.js,.ts}",
-        ),
+        path.dirname(require.resolve("@switchit/nestjs-oauth2-server"))
+         + "/**/*.entity{.js,.ts}",
     ],
     synchronize: config.NODE_ENV !== "production",
     debug: config.SQL_DEBUG,

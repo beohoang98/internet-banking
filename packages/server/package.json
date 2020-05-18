@@ -18,16 +18,18 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "c": "yarn nestjs-command"
+    "init_admin": "node dist/init_admin"
   },
   "dependencies": {
     "@nestjs/common": "^6.10.14",
     "@nestjs/config": "^0.4.1",
     "@nestjs/core": "^6.10.14",
+    "@nestjs/cqrs": "^7.0.0",
     "@nestjs/passport": "^7.0.0",
     "@nestjs/platform-express": "^6.10.14",
     "@nestjs/swagger": "^4.5.5",
     "@nestjs/typeorm": "^7.0.0",
+    "@switchit/nestjs-oauth2-server": "^0.1.4",
     "bcrypt": "^4.0.1",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.12.2",

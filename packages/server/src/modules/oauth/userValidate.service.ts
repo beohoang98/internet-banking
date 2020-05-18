@@ -3,11 +3,11 @@ import {
     InvalidUserException,
     UserInterface,
     UserValidatorInterface,
-} from "@0auth2Server";
+} from "@switchit/nestjs-oauth2-server";
 import { Repository } from "typeorm";
-import { User } from "../../models/User";
+import { User } from "@src/models/User";
 import { InjectRepository } from "@nestjs/typeorm";
-import { PasswordEncoder } from "../../utils/passwordEncoder";
+import { PasswordEncoder } from "@src/utils/passwordEncoder";
 
 @Injectable()
 export class UserValidateService implements UserValidatorInterface {

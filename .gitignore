@@ -253,3 +253,4 @@ gradle-app.setting
 **/build/
 
 # End of https://www.gitignore.io/api/vue,node,java,gradle,intellij
+.idea/google-java-format.xml

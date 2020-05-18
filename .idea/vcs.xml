@@ -2,8 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/packages/nestjs-oauth2-server-module" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/packages/server" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/submodules/nestjs-oauth2-server-module" vcs="Git" />
   </component>
 </project>
