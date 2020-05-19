@@ -1,0 +1,13 @@
+flags:
+    backend:
+        paths:
+            - packages/server
+    frontend:
+        paths:
+            - packages/client
+
+coverage:
+    status:
+        project: true
+        patch: false
+

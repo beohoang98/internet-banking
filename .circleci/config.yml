@@ -1,4 +1,7 @@
 version: "2.1"
+orbs:
+    codecov: codecov/codecov@1.0.5
+
 executors:
     node:
         docker:
@@ -24,12 +27,18 @@ jobs:
         executor: node
         working_directory: ~/project/packages/client
         steps:
-            - run: yarn test
+            - run: yarn test --coverage
+            - codecov/upload:
+                  file: ./coverage
+                  flags: frontend
     test_server:
         executor: node
         working_directory: ~/project/packages/server
         steps:
             - run: yarn test
+            - codecov/upload:
+                file: ./coverage
+                flags: backend
     build_client:
         executor: node
         working_directory: ~/project/packages/client
