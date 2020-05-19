@@ -4,6 +4,13 @@ executors:
         docker:
             - image: node:13-alpine
 
+commands:
+    checkout_and_attach_workspace:
+        steps:
+            - checkout
+            - attach_workspace:
+                at: .
+
 jobs:
     install:
         executor: node
@@ -21,29 +28,35 @@ jobs:
                     - node_modules
                     - packages/client/node_modules/
                     - packages/server/node_modules/
+            - persist_to_workspace:
+                  root: .
+                  paths:
+                      - node_modules
+                      - packages/client/node_modules/
+                      - packages/server/node_modules/
     test_client:
         executor: node
-        working_directory: ~/project/packages/client
         steps:
-            - checkout
+            - checkout_and_attach_workspace
+            - run: cd packages/client
             - run: yarn test --coverage
     test_server:
         executor: node
-        working_directory: ~/project/packages/server
         steps:
-            - checkout
-            - run: yarn test
+            - checkout_and_attach_workspace
+            - run: cd packages/server
+            - run: yarn test:cov
     build_client:
         executor: node
-        working_directory: ~/project/packages/client
         steps:
-            - checkout
+            - checkout_and_attach_workspace
+            - run: cd packages/client
             - run: yarn build
     build_server:
         executor: node
-        working_directory: ~/project/packages/server
         steps:
-            - checkout
+            - checkout_and_attach_workspace
+            - run: cd packages/server
             - run: yarn build
 
 workflows:
