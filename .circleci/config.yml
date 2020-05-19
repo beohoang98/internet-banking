@@ -10,6 +10,7 @@ commands:
             - checkout
             - attach_workspace:
                 at: .
+            - run: ls -al
 
 jobs:
     install:
