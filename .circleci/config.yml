@@ -5,7 +5,7 @@ executors:
             - image: node:13-alpine
 
 jobs:
-    build:
+    install:
         executor: node
         steps:
             - checkout
@@ -25,38 +25,42 @@ jobs:
         executor: node
         working_directory: ~/project/packages/client
         steps:
+            - checkout
             - run: yarn test --coverage
     test_server:
         executor: node
         working_directory: ~/project/packages/server
         steps:
+            - checkout
             - run: yarn test
     build_client:
         executor: node
         working_directory: ~/project/packages/client
         steps:
+            - checkout
             - run: yarn build
     build_server:
         executor: node
         working_directory: ~/project/packages/server
         steps:
+            - checkout
             - run: yarn build
 
 workflows:
     main:
         jobs:
-            - build
+            - install
             - test_client:
                   requires:
-                      - build
+                      - install
             - test_server:
                   requires:
-                      - build
+                      - install
             - build_client:
                   requires:
-                      - build
+                      - install
                       - test_client
             - build_server:
                   requires:
-                      - build
+                      - install
                       - test_server
