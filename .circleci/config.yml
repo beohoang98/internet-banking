@@ -39,26 +39,34 @@ jobs:
         executor: node
         steps:
             - checkout_and_attach_workspace
-            - run: cd packages/client
-            - run: yarn test:unit
+            - run:
+                working_directory: ~/project/packages/client
+                name: test
+                command: yarn test:unit
     test_server:
         executor: node
         steps:
             - checkout_and_attach_workspace
-            - run: cd packages/server
-            - run: yarn jest --coverage
+            - run:
+                working_directory: ~/project/packages/server
+                name: test
+                command: yarn test:cov
     build_client:
         executor: node
         steps:
             - checkout_and_attach_workspace
-            - run: cd packages/client
-            - run: yarn build
+            - run:
+                working_directory: ~/project/packages/client
+                name: build
+                command: yarn build
     build_server:
         executor: node
         steps:
             - checkout_and_attach_workspace
-            - run: cd packages/server
-            - run: yarn build
+            - run:
+                working_directory: ~/project/packages/server
+                name: build
+                command: yarn build
 
 workflows:
     main:
