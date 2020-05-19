@@ -8,6 +8,7 @@ jobs:
     build:
         executor: node
         steps:
+            - checkout
             - restore_cache:
                 keys:
                     - v1-deps-{{ checksum "yarn.lock" }}
