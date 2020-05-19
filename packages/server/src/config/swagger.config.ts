@@ -2,21 +2,6 @@ import { INestApplication } from "@nestjs/common";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
 export function swaggerInit(app: INestApplication) {
-    const scopes = {
-        "profile:read": "",
-        "profile:write": "",
-        "transaction:read": "",
-        "transaction:write": "",
-        "user:read": "",
-        "user:update": "",
-        "user:delete": "",
-        "user:create": "",
-    };
-    const clientScopes = {
-        "profile:read": "",
-        "transaction:write": "",
-    };
-
     const swaggerOpts = new DocumentBuilder()
         .addBasicAuth({
             name: "basic",

@@ -5,7 +5,6 @@ import * as compression from "compression";
 import * as helmet from "helmet";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { swaggerInit } from "./config/swagger.config";
-import { useContainer } from "class-validator";
 
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);

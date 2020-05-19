@@ -1,0 +1,61 @@
+version: "2.1"
+executors:
+    node:
+        docker:
+            - image: node:13-alpine
+
+jobs:
+    build:
+        executor: node
+        steps:
+            - restore_cache:
+                keys:
+                    - v1-deps-{{ checksum "yarn.lock" }}
+                    - v1-deps
+            - run: yarn
+            - save_cache:
+                key: v1-deps-{{ checksum "yarn.lock" }}
+                paths:
+                    - ~/.cache/yarn
+                    - node_modules
+                    - packages/client/node_modules/
+                    - packages/server/node_modules/
+    test_client:
+        executor: node
+        working_directory: ~/project/packages/client
+        steps:
+            - run: yarn test
+    test_server:
+        executor: node
+        working_directory: ~/project/packages/server
+        steps:
+            - run: yarn test
+    build_client:
+        executor: node
+        working_directory: ~/project/packages/client
+        steps:
+            - run: yarn build
+    build_server:
+        executor: node
+        working_directory: ~/project/packages/server
+        steps:
+            - run: yarn build
+
+workflows:
+    main:
+        jobs:
+            - build
+            - test_client:
+                  requires:
+                      - build
+            - test_server:
+                  requires:
+                      - build
+            - build_client:
+                  requires:
+                      - build
+                      - test_client
+            - build_server:
+                  requires:
+                      - build
+                      - test_server

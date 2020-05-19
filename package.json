@@ -14,6 +14,9 @@
             "packages/*"
         ],
         "nohoist": [
+            "**/ts-jest",
+            "**/ts-jest/**",
+            "**/@typescript-eslint/**",
             "**/typeorm",
             "**/typeorm/**",
             "client/@vue/cli-plugin-typescript/**"

@@ -27,6 +27,8 @@ export class AuthService {
         }
         return classToPlain(user);
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async verifyClient(id: string, secret: string) {
         return null; // TODO: continue implement
     }

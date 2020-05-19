@@ -9,7 +9,6 @@ import {
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import {
-    ApiBasicAuth,
     ApiBearerAuth,
     ApiConsumes,
     ApiOAuth2,
@@ -31,6 +30,7 @@ export class UserController {
     @Post("")
     @ApiOAuth2(["user:create"], "password")
     @ApiConsumes("application/json", "multipart/form-data")
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async create(@Body() body: CreateUserDto) {
         throw new NotImplementedException();
     }
