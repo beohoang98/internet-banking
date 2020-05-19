@@ -40,13 +40,13 @@ jobs:
         steps:
             - checkout_and_attach_workspace
             - run: cd packages/client
-            - run: yarn test --coverage
+            - run: yarn test:unit
     test_server:
         executor: node
         steps:
             - checkout_and_attach_workspace
             - run: cd packages/server
-            - run: yarn test:cov
+            - run: yarn jest --coverage
     build_client:
         executor: node
         steps:
