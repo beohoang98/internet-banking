@@ -8,6 +8,8 @@ import { JwtModule } from "@nestjs/jwt";
 import { JwtConfig } from "@src/config/jwt.config";
 import { AuthModule } from "@src/modules/auth/auth.module";
 import { RedisModule } from "@src/modules/redis/redis.module";
+import { ConsoleModule } from "nestjs-console";
+import { CryptoModule } from "@src/modules/crypto/crypto.module";
 
 @Module({
     imports: [
@@ -35,9 +37,11 @@ import { RedisModule } from "@src/modules/redis/redis.module";
             }),
             global: true,
         },
+        CryptoModule.forRoot(),
         AuthModule,
         ClientModule,
         UserModule,
+        ConsoleModule,
     ],
     controllers: [],
     providers: [],

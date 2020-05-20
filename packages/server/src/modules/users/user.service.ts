@@ -2,8 +2,14 @@ import { Injectable } from "@nestjs/common";
 import { User, UserRole } from "@src/models/User";
 import { getRepository } from "typeorm";
 import { PasswordEncoder } from "@src/utils/passwordEncoder";
+import { Command, Console } from "nestjs-console";
+import { Command as _Command } from "commander";
+import { CreateUserDto } from "@src/dto/user.dto";
+import { validateOrReject } from "class-validator";
+import * as crypto from "crypto";
 
 @Injectable()
+@Console()
 export class UserService {
     async findById(id: number) {
         return await getRepository(User).findOne(id);
@@ -24,6 +30,43 @@ export class UserService {
             name,
             role,
         });
-        return await getRepository(User).save(user);
+        await getRepository(User).insert(user);
+        return user;
+    }
+
+    @Command({
+        command: "user:create",
+        options: [
+            {
+                flags: "-n, --name <name>",
+            },
+            {
+                flags: "-e, --email <email>",
+            },
+            {
+                flags: "-r, --role <role>",
+                description: Object.keys(UserRole).join(", "),
+                defaultValue: UserRole.CUSTOMER,
+            },
+            {
+                flags: "-p, --password <password>",
+                description: "if empty, fill by random string",
+            },
+        ],
+    })
+    async createCommand(command: _Command) {
+        console.log(command.opts());
+        const { name, email, role, password } = command.opts();
+        const user = new CreateUserDto();
+        user.name = name;
+        user.email = email;
+        user.role = role;
+
+        const checkPass = password || crypto.randomBytes(10).toString("utf8");
+        user.password = PasswordEncoder.encode(checkPass);
+
+        await validateOrReject(user);
+        await getRepository(User).insert(user);
+        console.log(user);
     }
 }

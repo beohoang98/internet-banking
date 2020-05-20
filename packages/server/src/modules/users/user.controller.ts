@@ -7,31 +7,36 @@ import {
     Req,
     UseGuards,
 } from "@nestjs/common";
-import { AuthGuard } from "@nestjs/passport";
-import {
-    ApiBearerAuth,
-    ApiConsumes,
-    ApiOAuth2,
-    ApiTags,
-} from "@nestjs/swagger";
+import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { CreateUserDto } from "@src/dto/user.dto";
+import { RoleGuard } from "@src/guards/role.guard";
+import { ForRoles } from "@src/guards/role.decorator";
+import { UserRole } from "@src/models/User";
+import { UserService } from "@src/modules/users/user.service";
 
 @Controller("user")
 @ApiTags("user")
 @ApiBearerAuth()
-@UseGuards(AuthGuard("jwt"))
+@UseGuards(RoleGuard)
 export class UserController {
+    constructor(private readonly userService: UserService) {}
+
     @Get("profile")
-    @ApiOAuth2(["profile:read"])
+    @ForRoles(UserRole.CUSTOMER)
     async profile(@Req() req) {
         return req.user;
     }
 
-    @Post("")
-    @ApiOAuth2(["user:create"], "password")
+    @Post("/")
     @ApiConsumes("application/json", "multipart/form-data")
+    @ForRoles(UserRole.ADMIN, UserRole.EMPLOYEE)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async create(@Body() body: CreateUserDto) {
-        throw new NotImplementedException();
+    create(@Body() body: CreateUserDto) {
+        return this.userService.create(
+            body.name,
+            body.email,
+            body.password,
+            body.role,
+        );
     }
 }

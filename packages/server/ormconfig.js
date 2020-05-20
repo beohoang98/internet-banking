@@ -9,13 +9,14 @@ const config = {
 
 module.exports = {
     name: "default",
+    type: parsed.TYPEORM_TYPE || "postgres",
     url: parsed.DATABASE_URL,
     migrations: [path.resolve(__dirname, "dist/migrations/*{.ts,.js}")],
     subscribers: [path.resolve(__dirname, "dist/subscribers/*{.ts,.js}")],
     entities: [
         path.resolve(__dirname, "dist/models/*{.ts,.js}"),
-        path.dirname(require.resolve("@switchit/nestjs-oauth2-server"))
-         + "/**/*.entity{.js,.ts}",
+        path.dirname(require.resolve("@switchit/nestjs-oauth2-server")) +
+            "/**/*.entity{.js,.ts}",
     ],
     synchronize: config.NODE_ENV !== "production",
     debug: config.SQL_DEBUG,
