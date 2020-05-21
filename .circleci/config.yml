@@ -2,10 +2,10 @@ version: "2.1"
 executors:
     node:
         docker:
-            - image: circleci/node
+            - image: node:13-alpine
     node_and_db:
         docker:
-            - image: circleci/node
+            - image: node:13-alpine
               environment:
                   DATABASE_TEST_URL: postgres://postgres:test@localhost:5432/test
             - image: circleci/postgres:alpine
