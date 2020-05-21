@@ -3,8 +3,13 @@ export interface AbstractSignService {
      * Return signature string
      * @param data
      * @param privateKeyBuffer
+     * @param passphrase
      */
-    sign(data: string, privateKeyBuffer: Buffer): Promise<string>;
+    sign(
+        data: string,
+        privateKeyBuffer: Buffer,
+        passphrase?: string,
+    ): Promise<string>;
 
     /**
      * Return verify result

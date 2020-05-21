@@ -1,10 +1,9 @@
 import { Column, Entity, PrimaryColumn } from "typeorm";
-import { Base } from "@src/models/Base";
 import { Exclude } from "class-transformer";
 
 @Entity()
-export class Client extends Base<Client> {
-    @PrimaryColumn({ type: "string" })
+export class Client {
+    @PrimaryColumn()
     id: string;
 
     @Column()
@@ -14,4 +13,8 @@ export class Client extends Base<Client> {
     @Column({ nullable: true })
     @Exclude()
     publicKey: string;
+
+    constructor(data: Partial<Client>) {
+        Object.assign(this, data);
+    }
 }

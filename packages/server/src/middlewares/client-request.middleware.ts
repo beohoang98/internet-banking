@@ -22,7 +22,7 @@ export class ClientRequestMiddleware
 
         const signature = req.body.signature;
         const data = req.body.data;
-        const isVerify = this.pgpService.verify(
+        const isVerify = await this.pgpService.verify(
             data,
             signature,
             Buffer.from(client.publicKey, "base64"),

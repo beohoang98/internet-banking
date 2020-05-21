@@ -1,16 +1,21 @@
 import { Injectable } from "@nestjs/common";
 import { randomBytes } from "crypto";
-import { FindOneOptions, getRepository } from "typeorm";
+import { FindOneOptions, Repository } from "typeorm";
 import { Client } from "@src/models/Client";
 import { PasswordEncoder } from "@src/utils/passwordEncoder";
 import { Command, Console } from "nestjs-console";
 import { Command as CommandClass } from "commander";
+import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
 @Console({
     name: "client",
 })
 export class ClientService {
+    constructor(
+        @InjectRepository(Client)
+        private readonly clientRepository: Repository<Client>,
+    ) {}
     /**
      * create new client
      * @param id
@@ -24,7 +29,7 @@ export class ClientService {
         secret = secret || randomBytes(10).toString("utf8");
         client.secret = PasswordEncoder.encode(secret);
 
-        return getRepository(Client).save(client);
+        return this.clientRepository.save(client);
     }
 
     @Command({
@@ -43,6 +48,6 @@ export class ClientService {
     }
 
     findOne(args: FindOneOptions<Client>) {
-        return getRepository(Client).findOne(args);
+        return this.clientRepository.findOne(args);
     }
 }
