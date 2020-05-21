@@ -8,6 +8,7 @@ executors:
             - image: node:13-alpine
               environment:
                   DATABASE_TEST_URL: postgres://postgres:test@localhost:5432/test
+                  DATABASE_URL: postgres://postgres:test@localhost:5432/test
             - image: circleci/postgres:alpine
               environment:
                   POSTGRES_USER: postgres
