@@ -11,6 +11,7 @@ import { AccessTokenDto } from "@src/dto/auth.dto";
 import { v4 as uuid } from "uuid";
 import { RedisService } from "@src/modules/redis/redis.service";
 import { JwtConfig } from "@src/config/jwt.config";
+import { ClientService } from "@src/modules/client/client.service";
 
 @Injectable()
 export class AuthService {
@@ -18,6 +19,7 @@ export class AuthService {
         private readonly userService: UserService,
         private readonly jwtService: JwtService,
         private readonly redisService: RedisService,
+        private readonly clientService: ClientService,
     ) {}
 
     async verifyUser(usernameOrEmail: string, pass: string) {
@@ -30,7 +32,13 @@ export class AuthService {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async verifyClient(id: string, secret: string) {
-        return null; // TODO: continue implement
+        const client = await this.clientService.findOne({
+            where: { id },
+        });
+        if (!client || !PasswordEncoder.compare(secret, client.secret)) {
+            return null;
+        }
+        return classToPlain(client);
     }
 
     async userLogin(userFromReq: any) {

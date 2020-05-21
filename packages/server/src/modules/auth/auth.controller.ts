@@ -3,7 +3,7 @@ import { AuthService } from "@src/modules/auth/auth.service";
 import { AuthGuard } from "@nestjs/passport";
 import { Request } from "express";
 import { AccessTokenDto } from "@src/dto/auth.dto";
-import { ApiBasicAuth, ApiOAuth2 } from "@nestjs/swagger";
+import { ApiBasicAuth } from "@nestjs/swagger";
 
 @Controller("auth")
 export class AuthController {
@@ -22,9 +22,9 @@ export class AuthController {
     }
 
     @Post("partner")
-    @ApiOAuth2(["partner"])
-    @UseGuards(AuthGuard("basic"), AuthGuard("client"))
+    @ApiBasicAuth("client")
+    @UseGuards(AuthGuard(["basic", "client"]))
     clientLogin(@Req() req: Request) {
-        return req.user;
+        return { user: req.user, client: req.client };
     }
 }

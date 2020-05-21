@@ -1,18 +1,22 @@
 import {
     CreateDateColumn,
+    DeleteDateColumn,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from "typeorm";
 
 export class Base<T = any> {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn({ type: "bigint" })
+    id: number | string;
 
-    @CreateDateColumn()
+    @CreateDateColumn({ name: "created_at", default: "now()" })
     createdAt: Date;
 
-    @UpdateDateColumn()
+    @UpdateDateColumn({ name: "updated_at", default: "now()" })
     updatedAt: Date;
+
+    @DeleteDateColumn({ name: "deleted_at", default: "now()" })
+    deletedAt: Date;
 
     constructor(data: Partial<T>) {
         Object.assign(this, data);

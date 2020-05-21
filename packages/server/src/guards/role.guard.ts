@@ -15,6 +15,10 @@ export class RoleGuard extends JwtGuard implements CanActivate {
         const roles =
             this.reflector.get<string[]>("roles", context.getHandler()) || [];
 
-        return roles.length > 0 && roles.includes(requestRole);
+        return (
+            roles.length > 0 &&
+            roles.includes(requestRole) &&
+            super.canActivate(context)
+        );
     }
 }

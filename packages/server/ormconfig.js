@@ -1,22 +1,20 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require("path");
-const { parsed } = require("dotenv").config();
+const {parsed} = require("dotenv").config();
 
 const config = {
     ...(parsed || {}),
     ...process.env,
 };
 
-module.exports = {
+module.exports = [{
     name: "default",
-    type: parsed.TYPEORM_TYPE || "postgres",
-    url: parsed.DATABASE_URL,
+    type: config.TYPEORM_TYPE || "postgres",
+    url: config.DATABASE_URL,
     migrations: [path.resolve(__dirname, "dist/migrations/*{.ts,.js}")],
     subscribers: [path.resolve(__dirname, "dist/subscribers/*{.ts,.js}")],
     entities: [
-        path.resolve(__dirname, "dist/models/*{.ts,.js}"),
-        path.dirname(require.resolve("@switchit/nestjs-oauth2-server")) +
-            "/**/*.entity{.js,.ts}",
+        path.resolve(__dirname, "dist/models/*{.ts,.js}")
     ],
     synchronize: config.NODE_ENV !== "production",
     debug: config.SQL_DEBUG,
@@ -25,4 +23,4 @@ module.exports = {
         subscribersDir: path.resolve(__dirname, "src/subscribers"),
         entitiesDir: path.resolve(__dirname, "src/models"),
     },
-};
+}];

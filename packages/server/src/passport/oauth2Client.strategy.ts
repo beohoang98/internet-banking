@@ -1,12 +1,14 @@
-import { PassportStrategy } from "@nestjs/passport";
-import { Strategy } from "passport-oauth2-client-password";
+import { AbstractStrategy, PassportStrategy } from "@nestjs/passport";
+import { BasicStrategy } from "passport-http";
 import { AuthService } from "@src/modules/auth/auth.service";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
-export class Oauth2ClientStrategy extends PassportStrategy(Strategy, "client") {
+export class Oauth2ClientStrategy
+    extends PassportStrategy(BasicStrategy, "client")
+    implements AbstractStrategy {
     constructor(private readonly authService: AuthService) {
-        super({});
+        super();
     }
 
     validate(clientId: string, clientSecret: string) {

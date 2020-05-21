@@ -17,6 +17,8 @@
             "**/ts-jest",
             "**/ts-jest/**",
             "**/@typescript-eslint/**",
+            "**/eslint-config-*",
+            "**/eslint",
             "**/typeorm",
             "**/typeorm/**",
             "client/@vue/cli-plugin-typescript/**"

@@ -5,9 +5,10 @@ import { AuthController } from "@src/modules/auth/auth.controller";
 import { BasicStrategy } from "@src/passport/basic.strategy";
 import { JwtStrategy } from "@src/passport/jwt.strategy";
 import { Oauth2ClientStrategy } from "@src/passport/oauth2Client.strategy";
+import { ClientModule } from "@src/modules/client/client.module";
 
 @Module({
-    imports: [UserModule],
+    imports: [UserModule, ClientModule],
     controllers: [AuthController],
     providers: [AuthService, BasicStrategy, JwtStrategy, Oauth2ClientStrategy],
     exports: [AuthService],

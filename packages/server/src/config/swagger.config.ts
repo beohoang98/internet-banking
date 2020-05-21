@@ -3,10 +3,20 @@ import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
 export function swaggerInit(app: INestApplication) {
     const swaggerOpts = new DocumentBuilder()
-        .addBasicAuth({
-            name: "basic",
-            type: "http",
-        })
+        .addBasicAuth(
+            {
+                type: "http",
+                in: "header",
+            },
+            "basic",
+        )
+        .addBasicAuth(
+            {
+                type: "http",
+                in: "header",
+            },
+            "client",
+        )
         .addBearerAuth({
             name: "jwt",
             bearerFormat: "JWT",

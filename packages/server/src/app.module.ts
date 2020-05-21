@@ -10,6 +10,8 @@ import { AuthModule } from "@src/modules/auth/auth.module";
 import { RedisModule } from "@src/modules/redis/redis.module";
 import { ConsoleModule } from "nestjs-console";
 import { CryptoModule } from "@src/modules/crypto/crypto.module";
+import { APP_FILTER } from "@nestjs/core";
+import { AllExceptionsFilter } from "@src/filters/all-http.filter";
 
 @Module({
     imports: [
@@ -44,7 +46,12 @@ import { CryptoModule } from "@src/modules/crypto/crypto.module";
         ConsoleModule,
     ],
     controllers: [],
-    providers: [],
+    providers: [
+        {
+            provide: APP_FILTER,
+            useClass: AllExceptionsFilter,
+        },
+    ],
     exports: [],
 })
 export class AppModule {}
