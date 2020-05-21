@@ -3,6 +3,17 @@ executors:
     node:
         docker:
             - image: node:13-alpine
+    node_and_db:
+        docker:
+            - image: node:13-alpine
+              environment:
+                  DATABASE_TEST_URL: postgres://postgres:test@db:5432/test
+            - image: postgres:12-alpine
+              environment:
+                  POSTGRES_PASSWORD: test
+                  POSTGRES_DATABASE: test
+              name: db
+
 
 commands:
     checkout_and_attach_workspace:
@@ -44,7 +55,7 @@ jobs:
                 name: test
                 command: yarn test:unit
     test_server:
-        executor: node
+        executor: node_and_db
         steps:
             - checkout_and_attach_workspace
             - run:
