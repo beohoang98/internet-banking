@@ -37,6 +37,7 @@
     "compression": "^1.7.4",
     "helmet": "^3.22.0",
     "ioredis": "^4.17.1",
+    "moment": "^2.26.0",
     "nestjs-console": "^3.0.5",
     "node-rsa": "^1.0.8",
     "openpgp": "^4.10.4",

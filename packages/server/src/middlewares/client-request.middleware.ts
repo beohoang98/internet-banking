@@ -21,7 +21,7 @@ export class ClientRequestMiddleware
         }
 
         const signature = req.body.signature;
-        const data = req.body.data;
+        const data = JSON.stringify(req.body.data);
         const isVerify = await this.pgpService.verify(
             data,
             signature,
