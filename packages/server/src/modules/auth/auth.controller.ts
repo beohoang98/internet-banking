@@ -3,9 +3,10 @@ import { AuthService } from "@src/modules/auth/auth.service";
 import { AuthGuard } from "@nestjs/passport";
 import { Request } from "express";
 import { AccessTokenDto } from "@src/dto/auth.dto";
-import { ApiBasicAuth } from "@nestjs/swagger";
+import { ApiBasicAuth, ApiTags } from "@nestjs/swagger";
 
 @Controller("auth")
+@ApiTags("auth")
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
@@ -19,12 +20,5 @@ export class AuthController {
     @Post("refresh")
     userRefresh(@Body() dto: AccessTokenDto) {
         return this.authService.userRefresh(dto.accessToken, dto.refreshToken);
-    }
-
-    @Post("partner")
-    @ApiBasicAuth("client")
-    @UseGuards(AuthGuard(["basic", "client"]))
-    clientLogin(@Req() req: Request) {
-        return { user: req.user, client: req.client };
     }
 }

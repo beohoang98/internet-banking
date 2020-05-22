@@ -5,11 +5,18 @@ import { Type } from "class-transformer";
 export class CheckAccountDto {
     @ApiProperty({
         type: "integer",
-        example: "1234567890",
+        example: 1234567890,
     })
     @IsInt()
     @Min(10 ** 10) // 10 digits
     accountNumber: number;
+}
+export class CheckAccountResponseDto {
+    @ApiProperty()
+    accountNumber: number;
+
+    @ApiProperty()
+    name: string;
 }
 
 export class SendMoneyDto extends CheckAccountDto {

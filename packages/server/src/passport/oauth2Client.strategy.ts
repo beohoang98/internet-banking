@@ -5,7 +5,7 @@ import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class Oauth2ClientStrategy
-    extends PassportStrategy(BasicStrategy, "client")
+    extends PassportStrategy(BasicStrategy, "partner")
     implements AbstractStrategy {
     constructor(private readonly authService: AuthService) {
         super();

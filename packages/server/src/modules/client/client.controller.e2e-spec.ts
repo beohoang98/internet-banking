@@ -1,6 +1,4 @@
 import * as moment from "moment";
-
-require("dotenv").config();
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import { TypeOrmModule } from "@nestjs/typeorm";
@@ -18,6 +16,8 @@ import {
     SendMoneyDto,
     SendMoneyRequestDto,
 } from "@src/dto/client.dto";
+
+require("dotenv").config();
 
 jest.setTimeout(30000);
 
@@ -52,7 +52,7 @@ describe("ClientController", () => {
         app.close();
     });
 
-    it("Should-create-client", async () => {
+    it("Should-create-partner", async () => {
         const service = app.get(ClientService);
         const client = service.create(
             testClient.id,
@@ -62,7 +62,7 @@ describe("ClientController", () => {
         await expect(client).resolves.toBeDefined();
     });
 
-    it("Client-check-info", async () => {
+    it("partner-check-info", async () => {
         await app
             .get(ClientService)
             .create(testClient.id, testClient.secret, testClient.publicKey);
@@ -76,7 +76,7 @@ describe("ClientController", () => {
             .digest("hex");
 
         return request(app.getHttpServer())
-            .post("/client/check-account")
+            .post("/partner/check-account")
             .set("x-partner-time", moment().unix().toString())
             .set("x-partner-hash", hash)
             .auth(testClient.id, testClient.secret)
@@ -84,7 +84,7 @@ describe("ClientController", () => {
             .expect(201);
     });
 
-    it("Client-check-info-expires", async () => {
+    it("partner-check-info-expires", async () => {
         await app
             .get(ClientService)
             .create(testClient.id, testClient.secret, testClient.publicKey);
@@ -98,7 +98,7 @@ describe("ClientController", () => {
             .digest("hex");
 
         return request(app.getHttpServer())
-            .post("/client/check-account")
+            .post("/partner/check-account")
             .set("x-partner-time", moment().add(61, "second").unix().toString())
             .set("x-partner-hash", hash)
             .auth(testClient.id, testClient.secret)
@@ -106,7 +106,7 @@ describe("ClientController", () => {
             .expect(403);
     });
 
-    it("Client-check-info-that-body-was-modified", async () => {
+    it("partner-check-info-that-body-was-modified", async () => {
         await app
             .get(ClientService)
             .create(testClient.id, testClient.secret, testClient.publicKey);
@@ -122,7 +122,7 @@ describe("ClientController", () => {
         body.accountNumber = 1234567891;
 
         return request(app.getHttpServer())
-            .post("/client/check-account")
+            .post("/partner/check-account")
             .set("x-partner-time", moment().unix().toString())
             .set("x-partner-hash", hash)
             .auth(testClient.id, testClient.secret)
@@ -155,7 +155,7 @@ describe("ClientController", () => {
             .digest("hex");
 
         const res = await request(app.getHttpServer())
-            .post("/client/send")
+            .post("/partner/send")
             .set("x-partner-time", moment().unix().toString())
             .set("x-partner-hash", hash)
             .auth(testClient.id, testClient.secret)
@@ -191,7 +191,7 @@ describe("ClientController", () => {
             .digest("hex");
 
         const res = await request(app.getHttpServer())
-            .post("/client/send")
+            .post("/partner/send")
             .set("x-partner-time", moment().unix().toString())
             .set("x-partner-hash", hash)
             .auth(testClient.id, testClient.secret)

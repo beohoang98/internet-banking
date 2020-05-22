@@ -30,12 +30,12 @@ export class ClientModule implements NestModule {
         consumer
             .apply(ClientRequestMiddleware)
             .forRoutes({
-                path: "/client/send",
+                path: "/partner/send",
                 method: RequestMethod.POST,
             })
             .apply(ClientCheckMiddleware)
             .forRoutes({
-                path: "/client/*",
+                path: "/partner/*",
                 method: RequestMethod.POST,
             });
     }

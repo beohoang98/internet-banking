@@ -9,6 +9,7 @@ executors:
               environment:
                   DATABASE_TEST_URL: postgres://postgres:test@localhost:5432/test
                   DATABASE_URL: postgres://postgres:test@localhost:5432/test
+                  HASH_SECRET: circleci
             - image: circleci/postgres:alpine
               environment:
                   POSTGRES_USER: postgres

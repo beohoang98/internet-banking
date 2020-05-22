@@ -1,0 +1,229 @@
+openapi: "3.0.0"
+info:
+  description: "Documentation for partner"
+  version: "1.0.0"
+  title: "Team 29 Partner Documentation"
+  contact:
+    email: "miketuannguyen@gmail.com"
+servers:
+  - url: "http://internetBanking-service.herokuapp.com"
+tags:
+- name: "user"
+  description: "User resources"
+- name: "account"
+  description: "Account resources"
+components:
+  schemas:
+    partnerEssential:
+      type: object
+      properties:
+        partnerCode:
+          type: string
+          description: "Contact developer to get"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2020-05-18T08:59:33.170Z"
+          description: "get by new Date(), 60s expiry"
+        secureHash:
+          type: string
+          example: "c0fa1bc00531bd78ef38c628449c5102aeabd49b5dc3a2a516ea6ea959d6658e"
+          description: "JSON.stringify(object without secureHash) hashed with crypto.createHmac(\"sha256\", HASH_SECRET).update(stringifyObject).digest(\"hex\")"
+    getUserInfoQuerySchema:
+      allOf:
+      - description: "Query user's information API schema"
+      - $ref: "#/components/schemas/partnerEssential"
+    increaseBalanceSchema:
+      description: "Increase account's balance API schema"
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/partnerEssential"
+        - type: object
+          properties:
+            amount:
+              type: number
+              example: 100000
+            signature:
+              type: string
+              example: "EMad+EgQvLRQM60hEk/SRhfe..."
+              description: "Contact developer for more instructions"
+    user:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        email:
+          type: string
+          format: email
+          example: "miketuannguyen@gmail.com"
+        name:
+          type: string
+          example: "Lưu Tuấn Nguyên"
+        username:
+          type: string
+          example: "nhoknguyen00"
+        avatar:
+          type: string
+          format: url
+          example: "handsomeboy.com"
+        phone:
+          type: string
+          format: phone
+          example: "012345678"
+    account:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        userId:
+          type: number
+          example: 1
+        balance:
+          type: number
+          example: 100000
+        type:
+          type: string
+          enum: [SAVING, PAYMENT]
+  responses:
+    400:
+      description: "Invalid payload or expired request"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "This request is expired."
+    401:
+      description: "Invalid signature"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Invalid signature"
+paths:
+  /partner/user/{id}:
+    get:
+      tags:
+        - "user"
+      summary: "Query user's information"
+      parameters:
+        - in: path
+          name: id
+          description: userId
+          required: true
+          schema:
+            type: number
+            example: 1
+        - in: query
+          name: partnerCode
+          description: "Contact developer to get"
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: createdAt
+          description: "get by new Date(), 60s expiry"
+          required: true
+          schema:
+            type: string
+            format: date-time
+            example: "2020-05-18T08:59:33.170Z"
+        - in: query
+          name: secureHash
+          description: "JSON.stringify(object without secureHash) hashed with crypto.createHmac(\"sha256\", HASH_SECRET).update(stringifyObject).digest(\"hex\")"
+          required: true
+          schema:
+            type: string
+            example: "c0fa1bc00531bd78ef38c628449c5102aeabd49b5dc3a2a516ea6ea959d6658e"
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    default: "OK"
+                  payload:
+                    $ref: "#/components/schemas/user"
+        400:
+          description: "Invalid payload or expired request"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "This request is expired."
+        401:
+          description: "Invalid signature"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid signature"
+  /partner/account/{id}:
+    patch:
+      tags:
+        - "account"
+      summary: "Increase account's balance"
+      parameters:
+        - in: path
+          name: id
+          description: userId
+          required: true
+          schema:
+            type: number
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/increaseBalanceSchema"
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    default: "OK"
+                  payload:
+                    $ref: "#/components/schemas/account"
+        400:
+          description: "Invalid payload or expired request"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "This request is expired."
+        401:
+          description: "Invalid signature"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid signature"

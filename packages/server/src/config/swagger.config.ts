@@ -15,7 +15,7 @@ export function swaggerInit(app: INestApplication) {
                 type: "http",
                 in: "header",
             },
-            "client",
+            "partner",
         )
         .addBearerAuth({
             name: "jwt",
@@ -24,6 +24,17 @@ export function swaggerInit(app: INestApplication) {
         })
         .setTitle("Bank API")
         .setVersion("0.0.1")
+        .setContact(
+            "An Hoang",
+            "https://github.com/beohoang98",
+            "beohoang98@gmail.com",
+        )
+        .addServer(
+            process.env.NODE_ENV !== "production"
+                ? `http://localhost:${process.env.PORT || 3000}`
+                : process.env.SERVER_URL ||
+                      `https://beohoang98-bank-dev.herokuapp.com`,
+        )
         .build();
 
     const doc = SwaggerModule.createDocument(app, swaggerOpts);
