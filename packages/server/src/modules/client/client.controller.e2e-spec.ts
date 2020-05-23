@@ -130,7 +130,7 @@ describe("ClientController", () => {
             .expect(403);
     });
 
-    it("Client-should-be-verify", async () => {
+    it("partner-should-be-verify", async () => {
         await app
             .get(ClientService)
             .create(testClient.id, testClient.secret, testClient.publicKey);
@@ -164,7 +164,45 @@ describe("ClientController", () => {
         expect(res.status).toBe(201);
     });
 
-    it("Client-denied-because-wrong-signature", async () => {
+    it("partner-cant-be-verify-when-diff-json-order-keys", async () => {
+        await app
+            .get(ClientService)
+            .create(testClient.id, testClient.secret, testClient.publicKey);
+        const pgpClient = app.get(PGPService);
+        const sendData: SendMoneyDto = {
+            amount: 500000,
+            accountNumber: 1234567890,
+        };
+        const signature = await pgpClient.sign(
+            JSON.stringify(sendData),
+            readFileSync(resolve(__dirname, "../../keys/test-private.asc")),
+            testPGPPassphrase,
+        );
+        const body: SendMoneyRequestDto = {
+            signature,
+            data: sendData,
+        };
+        const bodyButDiffOrder = {
+            data: sendData,
+            signature,
+        };
+
+        const hash = crypto
+            .createHmac("md5", hashSecret)
+            .update(JSON.stringify(body))
+            .digest("hex");
+
+        const res = await request(app.getHttpServer())
+            .post("/partner/send")
+            .set("x-partner-time", moment().unix().toString())
+            .set("x-partner-hash", hash)
+            .auth(testClient.id, testClient.secret)
+            .send(bodyButDiffOrder);
+
+        expect(res.status).toBe(403);
+    });
+
+    it("partner-denied-because-wrong-signature", async () => {
         await app
             .get(ClientService)
             .create(testClient.id, testClient.secret, testClient.publicKey);

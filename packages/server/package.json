@@ -63,7 +63,7 @@
     "@types/jest": "^25.2.2",
     "@types/node": "^13.13.6",
     "@types/node-rsa": "^1.0.0",
-    "@types/openpgp": "^4.4.11",
+    "@types/openpgp": "^4.4.12",
     "@types/passport-http": "^0.3.8",
     "@types/passport-jwt": "^3.0.3",
     "@types/passport-local": "^1.0.33",

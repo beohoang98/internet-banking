@@ -1,4 +1,10 @@
-import { Body, Controller, Post, UseGuards } from "@nestjs/common";
+import {
+    Body,
+    Controller,
+    Post,
+    UseGuards,
+    UseInterceptors,
+} from "@nestjs/common";
 import {
     ApiAcceptedResponse,
     ApiBasicAuth,
@@ -16,6 +22,7 @@ import {
     CheckAccountResponseDto,
     SendMoneyRequestDto,
 } from "@src/dto/client.dto";
+import { ClientRequestInterceptor } from "@src/middlewares/client-request.interceptor";
 
 @Controller("partner")
 @ApiTags("partner")
@@ -50,6 +57,7 @@ export class ClientController {
 
     @Post("send")
     @ApiAcceptedResponse({ description: "Accepted send request" })
+    @UseInterceptors(ClientRequestInterceptor)
     makeTransaction(@Body() body: SendMoneyRequestDto) {
         return body;
     }

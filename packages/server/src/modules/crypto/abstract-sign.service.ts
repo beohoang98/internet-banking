@@ -22,4 +22,20 @@ export interface AbstractSignService {
         signature: string,
         clientPublicKeyBuffer: Buffer,
     ): Promise<boolean>;
+
+    /**
+     * Return Buffer encrypted
+     * @param data
+     * @param privateKeyBuffer
+     * @param publicKeyBuffer
+     * @param passphrase
+     * @param detached true if using for Encrypt&Sign
+     */
+    encrypt?: (
+        data: string,
+        privateKeyBuffer: Buffer,
+        publicKeyBuffer: Buffer,
+        passphrase?: string,
+        detached?: boolean,
+    ) => Promise<{ encrypted: string; signature: string }>;
 }

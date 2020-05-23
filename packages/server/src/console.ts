@@ -1,5 +1,3 @@
-import "tsconfig-paths/register";
-
 import { BootstrapConsole } from "nestjs-console";
 import { AppModule } from "@src/app.module";
 

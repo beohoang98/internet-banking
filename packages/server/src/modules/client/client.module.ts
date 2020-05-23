@@ -13,11 +13,12 @@ import { CryptoModule } from "@src/modules/crypto/crypto.module";
 import { ClientController } from "@src/modules/client/client.controller";
 import { ClientCheckMiddleware } from "@src/middlewares/client-check.middleware";
 import { ConfigModule } from "@nestjs/config";
+import { ClientRequestLog } from "@src/models/ClientRequestLog";
 
 @Module({
     imports: [
         ConfigModule,
-        TypeOrmModule.forFeature([Client]),
+        TypeOrmModule.forFeature([Client, ClientRequestLog]),
         ConsoleModule,
         CryptoModule,
     ],

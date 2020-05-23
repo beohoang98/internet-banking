@@ -8,9 +8,7 @@ import { Command as CommandClass } from "commander";
 import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
-@Console({
-    name: "client",
-})
+@Console()
 export class ClientService {
     constructor(
         @InjectRepository(Client)
@@ -26,14 +24,14 @@ export class ClientService {
         const client = new Client({ id, publicKey });
 
         console.debug(id, secret);
-        secret = secret || randomBytes(10).toString("utf8");
+        secret = secret || randomBytes(10).toString("base64");
         client.secret = PasswordEncoder.encode(secret);
 
         return this.clientRepository.save(client);
     }
 
     @Command({
-        command: "create <id>",
+        command: "client:create <id>",
         options: [
             {
                 flags: "-s, --secret <secret>",

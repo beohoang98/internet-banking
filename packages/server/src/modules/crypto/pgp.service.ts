@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable } from "@nestjs/common";
+import {
+    ForbiddenException,
+    Injectable,
+    InternalServerErrorException,
+} from "@nestjs/common";
 import * as pgp from "openpgp";
 import { AbstractSignService } from "@src/modules/crypto/abstract-sign.service";
 
@@ -45,5 +49,36 @@ export class PGPService implements AbstractSignService {
         });
 
         return valid;
+    }
+
+    async encrypt(
+        data: string,
+        privateKeyBuffer: Buffer,
+        publicKeyBuffer: Buffer,
+        passphrase = "",
+        detached = false,
+    ): Promise<{ encrypted: string; signature: string }> {
+        const {
+            keys: [privateKey],
+        } = await pgp.key.readArmored(privateKeyBuffer);
+
+        const {
+            keys: [publicKey],
+        } = await pgp.key.readArmored(publicKeyBuffer);
+
+        const isDecrypted = await privateKey.decrypt(passphrase);
+        if (!isDecrypted) {
+            console.error("Passphrase not match");
+            throw new InternalServerErrorException();
+        }
+
+        const { data: encrypted, signature } = await pgp.encrypt({
+            message: pgp.message.fromText(data),
+            privateKeys: privateKey,
+            publicKeys: publicKey,
+            detached,
+        });
+
+        return { encrypted, signature };
     }
 }
