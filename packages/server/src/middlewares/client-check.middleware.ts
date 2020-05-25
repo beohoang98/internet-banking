@@ -14,6 +14,8 @@ export class ClientCheckMiddleware
         const partnerTime = +req.header("x-partner-time");
         const partnerHash = req.header("x-partner-hash");
 
+        console.debug(req.headers);
+
         const diffSec = moment
             .unix(partnerTime)
             .diff(serverTime, "millisecond");
