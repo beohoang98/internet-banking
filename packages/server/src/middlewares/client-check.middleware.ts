@@ -22,13 +22,20 @@ export class ClientCheckMiddleware
         }
 
         const hashSecret = this.config.get<string>("HASH_SECRET");
-        const body = JSON.stringify(req.body);
+        const body =
+            typeof req.body === "string" ? req.body : JSON.stringify(req.body);
         const hash = crypto
             .createHmac("md5", hashSecret)
             .update(body)
             .digest("hex");
+        console.debug(body, hash, partnerHash);
+
         if (hash !== partnerHash) {
-            throw new ForbiddenException("Hash invalid");
+            throw new ForbiddenException({
+                hash,
+                yourHash: partnerHash,
+                body,
+            });
         }
 
         return next();
