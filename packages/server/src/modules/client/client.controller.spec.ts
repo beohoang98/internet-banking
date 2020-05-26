@@ -52,17 +52,35 @@ describe("ClientController", () => {
         app.close();
     });
 
-    it("Should-create-partner", async () => {
+    const createClient = async () => {
         const service = app.get(ClientService);
-        const client = service.create(
+        return await service.create(
             testClient.id,
             testClient.secret,
             testClient.publicKey,
         );
+    };
+
+    async function createSignBody(sendData: SendMoneyDto) {
+        const pgpClient = app.get(PGPService);
+        const signature = await pgpClient.sign(
+            JSON.stringify(sendData),
+            readFileSync(resolve(__dirname, "../../keys/test-private.asc")),
+            testPGPPassphrase,
+        );
+        const body: SendMoneyRequestDto = {
+            data: sendData,
+            signature,
+        };
+        return body;
+    }
+
+    test("Should-create-partner", async () => {
+        const client = createClient();
         await expect(client).resolves.toBeDefined();
     });
 
-    it("partner-check-info", async () => {
+    test("partner-check-info", async () => {
         await app
             .get(ClientService)
             .create(testClient.id, testClient.secret, testClient.publicKey);
@@ -84,7 +102,7 @@ describe("ClientController", () => {
             .expect(201);
     });
 
-    it("partner-check-info-expires", async () => {
+    test("partner-check-info-expires", async () => {
         await app
             .get(ClientService)
             .create(testClient.id, testClient.secret, testClient.publicKey);
@@ -106,7 +124,7 @@ describe("ClientController", () => {
             .expect(403);
     });
 
-    it("partner-check-info-that-body-was-modified", async () => {
+    test("partner-check-info-that-body-was-modified", async () => {
         await app
             .get(ClientService)
             .create(testClient.id, testClient.secret, testClient.publicKey);
@@ -130,41 +148,30 @@ describe("ClientController", () => {
             .expect(403);
     });
 
-    it("partner-should-be-verify", async () => {
-        await app
-            .get(ClientService)
-            .create(testClient.id, testClient.secret, testClient.publicKey);
-        const pgpClient = app.get(PGPService);
+    test("partner-should-be-verify", async () => {
+        await createClient();
         const sendData: SendMoneyDto = {
             accountNumber: 1234567890,
             amount: 500000,
         };
-        const signature = await pgpClient.sign(
-            JSON.stringify(sendData),
-            readFileSync(resolve(__dirname, "../../keys/test-private.asc")),
-            testPGPPassphrase,
-        );
-        const body: SendMoneyRequestDto = {
-            data: sendData,
-            signature,
-        };
-
+        const body = await createSignBody(sendData);
         const hash = crypto
             .createHmac("md5", hashSecret)
             .update(JSON.stringify(body))
             .digest("hex");
 
         const res = await request(app.getHttpServer())
-            .post("/partner/send")
+            .post("/partner/send/")
             .set("x-partner-time", moment().unix().toString())
             .set("x-partner-hash", hash)
             .auth(testClient.id, testClient.secret)
             .send(body);
 
+        console.debug(res.error);
         expect(res.status).toBe(201);
     });
 
-    it("partner-cant-be-verify-when-diff-json-order-keys", async () => {
+    test("partner-cant-be-verify-when-diff-json-order-keys", async () => {
         await app
             .get(ClientService)
             .create(testClient.id, testClient.secret, testClient.publicKey);
@@ -202,7 +209,7 @@ describe("ClientController", () => {
         expect(res.status).toBe(403);
     });
 
-    it("partner-denied-because-wrong-signature", async () => {
+    test("partner-denied-because-wrong-signature", async () => {
         await app
             .get(ClientService)
             .create(testClient.id, testClient.secret, testClient.publicKey);

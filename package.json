@@ -21,6 +21,7 @@
             "**/eslint",
             "**/typeorm",
             "**/typeorm/**",
+            "server/@nestjs/**",
             "client/@vue/cli-plugin-typescript/**"
         ]
     },

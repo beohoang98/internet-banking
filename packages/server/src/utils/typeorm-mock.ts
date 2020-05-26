@@ -11,6 +11,7 @@ export class MockTypeORMConfig implements TypeOrmOptionsFactory {
             type: "postgres",
             url: process.env.DATABASE_TEST_URL,
             entities: [Client, User, ClientRequestLog],
+            autoLoadEntities: true,
             name: connectionName,
             synchronize: true,
             dropSchema: true,
