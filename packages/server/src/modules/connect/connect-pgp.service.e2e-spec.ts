@@ -21,17 +21,17 @@ describe("Connect PGP", () => {
     });
 
     test("should check account success", async () => {
-        const res = service.checkAccount("123456789101112").then((res) => {
-            console.log(res.data);
-            return res.data;
+        const res = service.checkAccount("123456789101112").then((data) => {
+            console.log(data);
+            return data;
         });
         await expect(res).resolves.toBeDefined();
     });
 
     test("should send money success", async () => {
-        const res = service.sendMoney("123456789101112", 0).then((res) => {
-            console.log(res.data);
-            return res.data;
+        const res = service.sendMoney("123456789101112", 50000).then((data) => {
+            console.log(data, typeof data);
+            return data;
         });
         await expect(res).resolves.toBeDefined();
     });

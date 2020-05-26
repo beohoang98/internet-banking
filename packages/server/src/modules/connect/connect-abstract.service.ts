@@ -9,11 +9,6 @@ export interface ConnectAbstractService {
     privateKey: Buffer;
 
     /**
-     * using for encryption
-     */
-    publicKey?: Buffer;
-
-    /**
      *
      * @param accountNumber or userId, etc....
      */

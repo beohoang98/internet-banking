@@ -11,7 +11,6 @@ import axios from "axios";
 export class ConnectPgpService implements ConnectAbstractService {
     readonly type = "PGP";
     readonly privateKey = Keys.PGP_PRIVATE;
-    readonly publicKey = Keys.PGP_PUBLIC;
     readonly host = "https://hhbank.herokuapp.com";
     constructor(
         readonly cryptoService: PGPService,
@@ -33,7 +32,7 @@ export class ConnectPgpService implements ConnectAbstractService {
             "PGP_CLIENT_PARTNER_CODE",
         );
 
-        return await this.httpService
+        const res = await this.httpService
             .post(`${this.host}/user-account/info`, body, {
                 headers: {
                     "x-partner-code": partnerCode,
@@ -42,6 +41,7 @@ export class ConnectPgpService implements ConnectAbstractService {
                 },
             })
             .toPromise();
+        return res.data;
     }
 
     async sendMoney(
@@ -52,6 +52,9 @@ export class ConnectPgpService implements ConnectAbstractService {
             "PGP_CLIENT_PARTNER_CODE",
         );
         const passphrase = this.configService.get<string>("PGP_PASSPHRASE");
+        const clientPublicKey = this.configService.get<string>(
+            "PGP_CLIENT_PUBLIC_KEY",
+        );
 
         const data = {
             Number: accountNumber + "",
@@ -62,7 +65,7 @@ export class ConnectPgpService implements ConnectAbstractService {
         const { encrypted } = await this.cryptoService.encrypt(
             JSON.stringify(data),
             this.privateKey,
-            this.publicKey,
+            Buffer.from(clientPublicKey, "base64"),
             passphrase,
         );
 
@@ -78,9 +81,9 @@ export class ConnectPgpService implements ConnectAbstractService {
         const cancelToken = axios.CancelToken.source();
         setTimeout(() => {
             cancelToken.cancel();
-        }, 10000);
+        }, 30000);
 
-        return await this.httpService
+        const res = await this.httpService
             .post(`${this.host}/account-number/add`, body, {
                 headers: {
                     "x-partner-code": partnerCode,
@@ -90,6 +93,14 @@ export class ConnectPgpService implements ConnectAbstractService {
                 cancelToken: cancelToken.token,
             })
             .toPromise();
+
+        const encryptedResponse = res.data;
+        return await this.cryptoService.decrypt(
+            encryptedResponse,
+            this.privateKey,
+            Buffer.from(clientPublicKey, "base64"),
+            passphrase,
+        );
     }
 
     makeHash(body: object): string {

@@ -74,11 +74,36 @@ export class PGPService implements AbstractSignService {
 
         const { data: encrypted, signature } = await pgp.encrypt({
             message: pgp.message.fromText(data),
-            privateKeys: privateKey,
-            publicKeys: publicKey,
+            privateKeys: [privateKey],
+            publicKeys: [publicKey],
             detached,
         });
 
         return { encrypted, signature };
+    }
+
+    async decrypt(
+        data: string,
+        privateKeyBuffer: Buffer,
+        publicKeyBuffer: Buffer,
+        passphrase: string,
+    ) {
+        const { keys: privateKeys } = await pgp.key.readArmored(
+            privateKeyBuffer,
+        );
+
+        const { keys: publicKeys } = await pgp.key.readArmored(publicKeyBuffer);
+
+        const isDecrypted = await privateKeys[0].decrypt(passphrase);
+        if (!isDecrypted) {
+            console.error("Passphrase not match");
+            throw new InternalServerErrorException();
+        }
+
+        return await pgp.decrypt({
+            message: await pgp.message.readArmored(data),
+            privateKeys: privateKeys,
+            publicKeys: publicKeys,
+        });
     }
 }
