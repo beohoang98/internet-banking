@@ -27,8 +27,19 @@ export class ClientRequestMiddleware
             signature,
             Buffer.from(client.publicKey, "base64"),
         );
+
+        console.debug({
+            signature,
+            data,
+            client: client.id,
+        });
+
         if (!isVerify) {
-            throw new ForbiddenException(`signature not match`);
+            throw new ForbiddenException({
+                message: `signature not match`,
+                signature,
+                data,
+            });
         }
         return next();
     }
