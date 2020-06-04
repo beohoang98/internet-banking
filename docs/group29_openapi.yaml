@@ -6,7 +6,7 @@ info:
   contact:
     email: "miketuannguyen@gmail.com"
 servers:
-  - url: "http://internetBanking-service.herokuapp.com"
+  - url: "http://internet-banking-29-service.herokuapp.com"
 tags:
 - name: "user"
   description: "User resources"
@@ -24,7 +24,7 @@ components:
           type: string
           format: date-time
           example: "2020-05-18T08:59:33.170Z"
-          description: "get by new Date(), 60s expiry"
+          description: "get by moment.utc().toISOString(), 60s expiry"
         secureHash:
           type: string
           example: "c0fa1bc00531bd78ef38c628449c5102aeabd49b5dc3a2a516ea6ea959d6658e"
@@ -46,7 +46,7 @@ components:
             signature:
               type: string
               example: "EMad+EgQvLRQM60hEk/SRhfe..."
-              description: "Contact developer for more instructions"
+              description: "privateKey.sign(bodyWithoutSignature, 'base64')"
     user:
       type: object
       properties:
@@ -75,8 +75,8 @@ components:
       type: object
       properties:
         id:
-          type: number
-          example: 1
+          type: string
+          example: 9704880845960482
         userId:
           type: number
           example: 1
@@ -108,19 +108,19 @@ components:
                 type: string
                 example: "Invalid signature"
 paths:
-  /partner/user/{id}:
+  /partner/user/account/{id}:
     get:
       tags:
         - "user"
-      summary: "Query user's information"
+      summary: "Query user's information by accountId"
       parameters:
         - in: path
           name: id
-          description: userId
+          description: accountId
           required: true
           schema:
-            type: number
-            example: 1
+            type: string
+            example: 9704880845960482
         - in: query
           name: partnerCode
           description: "Contact developer to get"
@@ -129,7 +129,7 @@ paths:
             type: string
         - in: query
           name: createdAt
-          description: "get by new Date(), 60s expiry"
+          description: "get by moment.utc().toISOString(), 60s expiry"
           required: true
           schema:
             type: string
@@ -152,9 +152,22 @@ paths:
                 properties:
                   message:
                     type: string
-                    default: "OK"
+                    example: "OK"
                   payload:
-                    $ref: "#/components/schemas/user"
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 9704880845960482
+                      userName:
+                        type: string
+                        example: Felix Zulauf
+                      userEmail:
+                        type: string
+                        example: Jamir.Carroll@yahoo.com
+                      userPhone:
+                        type: string
+                        example: (428) 419-4212 x937
         400:
           description: "Invalid payload or expired request"
           content:
@@ -204,7 +217,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    default: "OK"
+                    example: "OK"
                   payload:
                     $ref: "#/components/schemas/account"
         400:
