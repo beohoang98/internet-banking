@@ -1,29 +1,26 @@
-# client
+# Quasar App (client)
 
-## Project setup
-```
-yarn install
-```
+Internet Banking
 
-### Compiles and hot-reloads for development
-```
-yarn serve
+## Install the dependencies
+```bash
+yarn
 ```
 
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Run your unit tests
-```
-yarn test:unit
+### Start the app in development mode (hot-code reloading, error reporting, etc.)
+```bash
+quasar dev
 ```
 
-### Lints and fixes files
-```
-yarn lint
+### Lint the files
+```bash
+yarn run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Build the app for production
+```bash
+quasar build
+```
+
+### Customize the configuration
+See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
