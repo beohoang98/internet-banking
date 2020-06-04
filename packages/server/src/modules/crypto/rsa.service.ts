@@ -4,10 +4,14 @@ import * as NodeRSA from "node-rsa";
 
 @Injectable()
 export class RSAService implements AbstractSignService {
-    async sign(data: string, privateKeyBuffer: Buffer): Promise<string> {
+    async sign(
+        data: string,
+        privateKeyBuffer: Buffer,
+        encoding = "utf8",
+    ): Promise<string> {
         const key = new NodeRSA(privateKeyBuffer);
         const signature = key.sign(data);
-        return signature.toString("utf8");
+        return signature.toString(encoding);
     }
 
     async verify(
