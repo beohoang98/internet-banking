@@ -23,7 +23,8 @@
             "**/typeorm/**",
             "server/@nestjs/**",
             "server/swagger-ui-express",
-            "client/@vue/cli-plugin-typescript/**"
+            "client/@vue/cli-plugin-typescript/**",
+            "client/@quasar/**"
         ]
     },
     "scripts": {

@@ -11,7 +11,7 @@
 		}
 	],
 	"settings": {
-		"typescript.tsdk": "server/node_modules/typescript/lib",
+		"typescript.tsdk": "internet-banking/node_modules/typescript/lib",
 		"jest.autoEnable": false
 	}
 }
