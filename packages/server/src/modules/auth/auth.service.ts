@@ -24,8 +24,9 @@ export class AuthService {
 
     async verifyUser(usernameOrEmail: string, pass: string) {
         const user = await this.userService.findByEmail(usernameOrEmail);
+        console.debug(user, usernameOrEmail, pass);
         if (!user || !PasswordEncoder.compare(pass, user.password)) {
-            return null;
+            throw new ForbiddenException();
         }
         return classToPlain(user);
     }

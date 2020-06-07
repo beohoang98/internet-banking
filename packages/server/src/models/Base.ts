@@ -15,7 +15,7 @@ export class Base<T = any> {
     @UpdateDateColumn({ name: "updated_at", default: "now()" })
     updatedAt: Date;
 
-    @DeleteDateColumn({ name: "deleted_at", default: "now()" })
+    @DeleteDateColumn({ name: "deleted_at" })
     deletedAt: Date;
 
     constructor(data: Partial<T>) {
