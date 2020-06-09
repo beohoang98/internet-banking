@@ -1,12 +1,12 @@
 import { Injectable } from "@nestjs/common";
-import { User, UserRole } from "@src/models/User";
-import { getRepository } from "typeorm";
-import { PasswordEncoder } from "@src/utils/passwordEncoder";
-import { Command, Console } from "nestjs-console";
-import { Command as _Command } from "commander";
 import { CreateUserDto } from "@src/dto/user.dto";
+import { User } from "@src/models/User";
+import { PasswordEncoder } from "@src/utils/passwordEncoder";
 import { validateOrReject } from "class-validator";
+import { Command as _Command } from "commander";
 import * as crypto from "crypto";
+import { Command, Console } from "nestjs-console";
+import { getRepository } from "typeorm";
 
 @Injectable()
 @Console()
@@ -18,17 +18,11 @@ export class UserService {
         return await getRepository(User).findOne({ email });
     }
 
-    async create(
-        name: string,
-        email: string,
-        password: string,
-        role: UserRole,
-    ) {
+    async create(name: string, email: string, password: string) {
         const user = new User({
             email,
             password: PasswordEncoder.encode(password),
             name,
-            role,
         });
         await getRepository(User).insert(user);
         return user;
@@ -44,11 +38,6 @@ export class UserService {
                 flags: "-e, --email <email>",
             },
             {
-                flags: "-r, --role <role>",
-                description: Object.keys(UserRole).join(", "),
-                defaultValue: UserRole.CUSTOMER,
-            },
-            {
                 flags: "-p, --password <password>",
                 description: "if empty, fill by random string",
             },
@@ -56,11 +45,10 @@ export class UserService {
     })
     async createCommand(command: _Command) {
         console.log(command.opts());
-        const { name, email, role, password } = command.opts();
+        const { name, email, password } = command.opts();
         const user = new CreateUserDto();
         user.name = name;
         user.email = email;
-        user.role = role;
 
         const checkPass = password || crypto.randomBytes(10).toString("utf8");
         user.password = PasswordEncoder.encode(checkPass);

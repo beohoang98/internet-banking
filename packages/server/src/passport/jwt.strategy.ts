@@ -9,13 +9,13 @@ export class JwtStrategy extends PassportStrategy(Strategy, "jwt") {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,
-            secretOrKey: JwtConfig.PUBLIC,
+            secretOrKey: JwtConfig.PRIVATE,
         } as StrategyOptions);
     }
 
     validate(payload: any) {
         return {
-            userId: payload.sub,
+            id: payload.sub,
             role: payload.role,
         };
     }

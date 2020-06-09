@@ -1,8 +1,9 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { IsEmail, IsEnum, IsNotEmpty, IsString } from "class-validator";
 import { Type } from "class-transformer";
-import { IsEmail, IsNotEmpty, IsString } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
+import { AdminRole } from "@src/models/Admin";
 
-export class CreateUserDto {
+export class CreateAdminDto {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
@@ -19,4 +20,8 @@ export class CreateUserDto {
     @IsNotEmpty()
     @Type(() => String)
     password: string;
+
+    @ApiProperty({ enum: AdminRole })
+    @IsEnum(AdminRole)
+    role: AdminRole;
 }

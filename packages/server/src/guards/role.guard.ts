@@ -1,13 +1,10 @@
-import { JwtGuard } from "@src/guards/jwt.guard";
 import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
-import { Request } from "express";
 import { Reflector } from "@nestjs/core";
+import { Request } from "express";
 
 @Injectable()
-export class RoleGuard extends JwtGuard implements CanActivate {
-    constructor(private readonly reflector: Reflector) {
-        super();
-    }
+export class RoleGuard implements CanActivate {
+    constructor(private readonly reflector: Reflector) {}
 
     canActivate(context: ExecutionContext) {
         const request = context.switchToHttp().getRequest<Request>();
@@ -15,10 +12,6 @@ export class RoleGuard extends JwtGuard implements CanActivate {
         const roles =
             this.reflector.get<string[]>("roles", context.getHandler()) || [];
 
-        return (
-            roles.length > 0 &&
-            roles.includes(requestRole) &&
-            super.canActivate(context)
-        );
+        return roles.length > 0 && roles.includes(requestRole);
     }
 }

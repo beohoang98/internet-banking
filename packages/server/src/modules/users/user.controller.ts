@@ -1,34 +1,39 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from "@nestjs/common";
+import {
+    Body,
+    Controller,
+    Get,
+    Post,
+    Req,
+    UseGuards,
+    UseInterceptors,
+    ClassSerializerInterceptor,
+} from "@nestjs/common";
 import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { CreateUserDto } from "@src/dto/user.dto";
-import { RoleGuard } from "@src/guards/role.guard";
+import { JwtGuard } from "@src/guards/jwt.guard";
 import { ForRoles } from "@src/guards/role.decorator";
-import { UserRole } from "@src/models/User";
+import { RoleGuard } from "@src/guards/role.guard";
+import { AdminRole } from "@src/models/Admin";
 import { UserService } from "@src/modules/users/user.service";
 
 @Controller("user")
 @ApiTags("user")
 @ApiBearerAuth()
-@UseGuards(RoleGuard)
+@UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
     constructor(private readonly userService: UserService) {}
 
     @Get("profile")
-    @ForRoles(UserRole.CUSTOMER)
+    @UseGuards(JwtGuard)
     async profile(@Req() req) {
         return req.user;
     }
 
     @Post("/")
-    @ApiConsumes("application/json", "multipart/form-data")
-    @ForRoles(UserRole.ADMIN, UserRole.EMPLOYEE)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    @ApiConsumes("application/json", "application/x-www-form-urlencoded")
+    @UseGuards(JwtGuard, RoleGuard)
+    @ForRoles(AdminRole.ADMIN, AdminRole.EMPLOYEE)
     create(@Body() body: CreateUserDto) {
-        return this.userService.create(
-            body.name,
-            body.email,
-            body.password,
-            body.role,
-        );
+        return this.userService.create(body.name, body.email, body.password);
     }
 }

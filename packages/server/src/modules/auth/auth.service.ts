@@ -3,15 +3,16 @@ import {
     Injectable,
     InternalServerErrorException,
 } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import { JwtConfig } from "@src/config/jwt.config";
+import { AccessTokenDto } from "@src/dto/auth.dto";
+import { AdminService } from "@src/modules/admin/admin.service";
+import { ClientService } from "@src/modules/client/client.service";
+import { RedisService } from "@src/modules/redis/redis.service";
 import { UserService } from "@src/modules/users/user.service";
 import { PasswordEncoder } from "@src/utils/passwordEncoder";
 import { classToPlain } from "class-transformer";
-import { JwtService } from "@nestjs/jwt";
-import { AccessTokenDto } from "@src/dto/auth.dto";
 import { v4 as uuid } from "uuid";
-import { RedisService } from "@src/modules/redis/redis.service";
-import { JwtConfig } from "@src/config/jwt.config";
-import { ClientService } from "@src/modules/client/client.service";
 
 @Injectable()
 export class AuthService {
@@ -20,6 +21,7 @@ export class AuthService {
         private readonly jwtService: JwtService,
         private readonly redisService: RedisService,
         private readonly clientService: ClientService,
+        private readonly adminService: AdminService,
     ) {}
 
     async verifyUser(usernameOrEmail: string, pass: string) {
@@ -31,7 +33,15 @@ export class AuthService {
         return classToPlain(user);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    async verifyAdmin(usernameOrEmail: string, pass: string) {
+        const admin = await this.adminService.findByEmail(usernameOrEmail);
+        console.debug(admin, usernameOrEmail, pass);
+        if (!admin || !PasswordEncoder.compare(pass, admin.password)) {
+            throw new ForbiddenException();
+        }
+        return classToPlain(admin);
+    }
+
     async verifyClient(id: string, secret: string) {
         const client = await this.clientService.findOne({
             where: { id },
@@ -44,8 +54,8 @@ export class AuthService {
 
     async userLogin(userFromReq: any) {
         const payload = {
-            sub: userFromReq.userId,
-            role: userFromReq.role,
+            sub: userFromReq.id,
+            role: "CUSTOMER",
         };
         const refreshToken = uuid();
         const accessToken = this.jwtService.sign(payload);
@@ -53,7 +63,7 @@ export class AuthService {
         await this.redisService.instance.setex(
             `${refreshToken}_${accessToken}`,
             JwtConfig.REFRESH_EXPIRE,
-            userFromReq.userId,
+            userFromReq.id,
         );
 
         return new AccessTokenDto({
@@ -81,12 +91,65 @@ export class AuthService {
 
         const payload = {
             sub: user.id,
-            role: user.role,
+            role: "CUSTOMER",
         };
         const newAccessToken = this.jwtService.sign(payload);
         await this.redisService.instance.rename(
             key,
             `${refreshToken}_${newAccessToken}`,
+        );
+
+        return new AccessTokenDto({
+            accessToken: newAccessToken,
+            refreshToken,
+        });
+    }
+
+    async adminLogin(userFromReq: any) {
+        const payload = {
+            sub: userFromReq.id,
+            role: userFromReq.role,
+        };
+        const refreshToken = uuid();
+        const accessToken = this.jwtService.sign(payload);
+
+        await this.redisService.instance.setex(
+            `admin_${refreshToken}_${accessToken}`,
+            JwtConfig.REFRESH_EXPIRE,
+            userFromReq.id,
+        );
+
+        return new AccessTokenDto({
+            accessToken,
+            refreshToken,
+        });
+    }
+
+    async adminRefresh(oldAccessToken: string, refreshToken: string) {
+        const key = `admin_${refreshToken}_${oldAccessToken}`;
+        const adminIdStr = await this.redisService.instance.get(key);
+        if (!adminIdStr) {
+            throw new ForbiddenException(
+                "Refresh token was expires, login again",
+            );
+        }
+        const userId = +adminIdStr;
+
+        const admin = await this.adminService.findById(userId);
+        if (!admin) {
+            throw new InternalServerErrorException(
+                "Something went wrong when get adminId",
+            );
+        }
+
+        const payload = {
+            sub: admin.id,
+            role: admin.role,
+        };
+        const newAccessToken = this.jwtService.sign(payload);
+        await this.redisService.instance.rename(
+            key,
+            `admin_${refreshToken}_${newAccessToken}`,
         );
 
         return new AccessTokenDto({

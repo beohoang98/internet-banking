@@ -12,6 +12,8 @@ import { ConsoleModule } from "nestjs-console";
 import { CryptoModule } from "@src/modules/crypto/crypto.module";
 import { APP_FILTER } from "@nestjs/core";
 import { AllExceptionsFilter } from "@src/filters/all-http.filter";
+import { AdminModule } from "./modules/admin/admin.module";
+import { MulterModule } from "@nestjs/platform-express";
 
 @Module({
     imports: [
@@ -39,10 +41,12 @@ import { AllExceptionsFilter } from "@src/filters/all-http.filter";
             }),
             global: true,
         },
+        MulterModule.register(),
         CryptoModule.forRoot(),
         AuthModule,
         ClientModule,
         UserModule,
+        AdminModule,
         ConsoleModule,
     ],
     controllers: [],
