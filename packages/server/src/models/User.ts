@@ -19,4 +19,13 @@ export class User extends Base<User> {
     @Column()
     @Exclude()
     password: string;
+
+    @Column({ default: 0 })
+    balance: number;
+
+    @Column()
+    accountNumber: string;
+
+    @Column()
+    phone: string;
 }
