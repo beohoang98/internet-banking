@@ -1,40 +1,62 @@
 <template>
-    <form class="app-auth-form card" @submit="onSubmit">
-        <vs-input label-placeholder="Email" v-model="email" block>
-            <template #icon>
-                <font-awesome-icon
-                    icon="envelope"
+    <div class="app-auth-form card">
+        <form @submit="onSubmit">
+            <validation-provider
+                name="email"
+                rules="required|email"
+                v-slot="{ errors }"
+            >
+                <vs-input
+                    label-placeholder="Email"
                     v-model="email"
-                ></font-awesome-icon>
-            </template>
-        </vs-input>
-        <vs-input
-            block
-            type="password"
-            label-placeholder="Password"
-            v-model="password"
-            :visible-password="visiblePassword"
-        >
-            <template #icon>
-                <font-awesome-icon
-                    icon="lock"
-                    @click="visiblePassword = !visiblePassword"
-                ></font-awesome-icon>
-            </template>
-        </vs-input>
+                    block
+                    :state="errors.length ? 'danger' : ''"
+                >
+                    <template #icon>
+                        <font-awesome-icon
+                            icon="envelope"
+                            v-model="email"
+                        ></font-awesome-icon>
+                    </template>
+                    <template #message-danger>{{ errors[0] }}</template>
+                </vs-input>
+            </validation-provider>
+            <validation-provider
+                name="password"
+                rules="required"
+                v-slot="{ errors }"
+            >
+                <vs-input
+                    block
+                    type="password"
+                    label-placeholder="Password"
+                    v-model="password"
+                    :state="errors.length ? 'danger' : ''"
+                >
+                    <template #icon>
+                        <font-awesome-icon icon="lock"></font-awesome-icon>
+                    </template>
+                    <template #message-danger>{{ errors[0] }}</template>
+                </vs-input>
+            </validation-provider>
 
-        <vs-button :loading="isSubmitting" type="submit" block>Login</vs-button>
-    </form>
+            <vs-button type="submit" block>Login</vs-button>
+        </form>
+        <vs-alert v-model="login_error" danger closable flat dark>
+            {{ login_error }}
+        </vs-alert>
+    </div>
 </template>
 
 <script lang="ts">
     import Vue from "vue";
-    import { Component } from "vue-property-decorator";
+    import { Component, Watch } from "vue-property-decorator";
     import {
         faEnvelope,
         faLock,
         faLockOpen,
     } from "@fortawesome/free-solid-svg-icons";
+    import { Getter } from "vuex-class";
 
     Vue.$fa.add(faEnvelope, faLock, faLockOpen);
 
@@ -44,17 +66,36 @@
     export default class Login extends Vue {
         email = "";
         password = "";
-        visiblePassword = false;
-        isSubmitting = false;
+        login_error = null;
+
+        @Getter("auth/isLogged") isLogged!: boolean;
+
+        @Watch("isLogged")
+        ifIsLogged(logged: boolean) {
+            if (logged) {
+                this.$router.push("/");
+            }
+        }
 
         async onSubmit(ev: Event): Promise<void> {
             ev.preventDefault();
-            // this.isSubmitting = true;
             const loading = this.$vs.loading();
-            this.$store;
-            setTimeout(() => {
+            try {
+                await this.$store.dispatch("auth/login", {
+                    email: this.email,
+                    password: this.password,
+                });
+            } catch (e) {
+                this.login_error = e.message || e + "";
+            } finally {
                 loading.close();
-            }, 1000);
+            }
+        }
+
+        mounted(): void {
+            if (this.isLogged) {
+                this.$router.replace("/");
+            }
         }
     }
 </script>

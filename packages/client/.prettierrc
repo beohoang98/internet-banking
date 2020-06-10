@@ -5,7 +5,7 @@
     "printWidth": 80,
     "semi": true,
     "useTabs": false,
-    "trailingComma": "es5",
+    "trailingComma": "all",
     "tabWidth": 4,
     "singleQuote": false,
     "vueIndentScriptAndStyle": true,
