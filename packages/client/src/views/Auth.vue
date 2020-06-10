@@ -54,11 +54,22 @@
         }
         &-form {
             background-color: white;
+            animation: authFormShow both ease-in-out 0.4s;
             &-title {
                 font-size: 36px;
                 font-weight: bold;
                 margin-bottom: 8px;
             }
+        }
+    }
+    @keyframes authFormShow {
+        0% {
+            transform: scale(0.2);
+            opacity: 0;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
         }
     }
 </style>

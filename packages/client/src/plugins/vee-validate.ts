@@ -1,4 +1,4 @@
 import Vue from "vue";
 import { ValidationProvider } from "vee-validate";
 
-Vue.component("ValidationProvider", ValidationProvider);
+Vue.component("validation-provider", ValidationProvider);
