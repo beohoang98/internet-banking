@@ -62,4 +62,12 @@ export class UserService {
         await getRepository(User).insert(user);
         console.log(user);
     }
+
+    async getProfile(id: number) {
+        return await getRepository(User).findOne({
+            where: {
+                id: id,
+            },
+        });
+    }
 }

@@ -14,6 +14,7 @@ import { APP_FILTER } from "@nestjs/core";
 import { AllExceptionsFilter } from "@src/filters/all-http.filter";
 import { AdminModule } from "./modules/admin/admin.module";
 import { MulterModule } from "@nestjs/platform-express";
+import { TrasnferListModule } from "./modules/transferlist/transferlist.module";
 
 @Module({
     imports: [
@@ -47,6 +48,7 @@ import { MulterModule } from "@nestjs/platform-express";
         ClientModule,
         UserModule,
         AdminModule,
+        TrasnferListModule,
         ConsoleModule,
     ],
     controllers: [],

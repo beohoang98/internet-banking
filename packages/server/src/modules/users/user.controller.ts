@@ -26,7 +26,7 @@ export class UserController {
     @Get("profile")
     @UseGuards(JwtGuard)
     async profile(@Req() req) {
-        return req.user;
+        return this.userService.getProfile(req.user.id);
     }
 
     @Post("/")
