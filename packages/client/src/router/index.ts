@@ -1,10 +1,9 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import Home from "../views/Home.vue";
-import Auth from "@/views/Auth.vue";
 import AppLoad from "@/container/AppLoad.vue";
 import { Component } from "vue-property-decorator";
-import AppStore from '@/store';
+import AppStore from "@/store";
 
 Vue.use(VueRouter);
 Component.registerHooks(["beforeRouteUpdate"]);
@@ -17,7 +16,7 @@ const routes: Array<RouteConfig> = [
         children: [
             {
                 path: "/auth",
-                component: Auth,
+                component: () => import("@/views/Auth.vue"),
                 children: [
                     {
                         path: "",
@@ -44,7 +43,7 @@ const routes: Array<RouteConfig> = [
             {
                 path: "/",
                 name: "Home",
-                component: Home,
+                component: () => import("@/views/Home.vue"),
                 meta: {
                     auth: true,
                 },

@@ -29,12 +29,16 @@ axiosInstance.interceptors.response.use(
         ) {
             lastReq._retry = true;
             return axiosInstance
-                .post<LoginResponse>("auth/refresh", {
-                    accessToken: getAccessToken(),
-                    refreshToken: getRefreshToken(),
-                }, {
-                    _retry: true,
-                })
+                .post<LoginResponse>(
+                    "auth/refresh",
+                    {
+                        accessToken: getAccessToken(),
+                        refreshToken: getRefreshToken(),
+                    },
+                    {
+                        _retry: true,
+                    },
+                )
                 .then((res) => {
                     localStorage.setItem("access_token", res.data.accessToken);
                     axiosInstance.defaults.headers.Authorization = `Bearer ${res.data.accessToken}`;

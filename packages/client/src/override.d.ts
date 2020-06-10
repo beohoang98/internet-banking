@@ -1,18 +1,18 @@
-import {library} from '@fortawesome/fontawesome-svg-core';
-import Vue from 'vue';
-import {AxiosRequestConfig} from 'axios';
+import { library } from "@fortawesome/fontawesome-svg-core";
+import Vue from "vue";
+import { AxiosRequestConfig } from "axios";
 
-declare module 'vue/types/vue' {
+declare module "vue/types/vue" {
     export interface VueConstructor<V extends Vue = Vue> {
         $fa: typeof library;
     }
 
     interface Vue {
-        $vs: Record<string, any | Function>;
+        $vs: Record<string, any>;
     }
 }
 
-declare module 'axios' {
+declare module "axios" {
     interface AxiosRequestConfig {
         _retry?: boolean;
     }

@@ -49,7 +49,9 @@ export const AuthModule: Module<AuthState, any> = {
         },
         async loadProfile({ commit }) {
             try {
-                const { data: profile } = await axiosInstance.get("/user/profile");
+                const { data: profile } = await axiosInstance.get(
+                    "/user/profile",
+                );
                 commit("setProfile", profile);
                 commit("setLogged", true);
             } finally {
