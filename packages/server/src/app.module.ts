@@ -14,7 +14,9 @@ import { APP_FILTER } from "@nestjs/core";
 import { AllExceptionsFilter } from "@src/filters/all-http.filter";
 import { AdminModule } from "./modules/admin/admin.module";
 import { MulterModule } from "@nestjs/platform-express";
-import { TrasnferListModule } from "./modules/transferlist/transferlist.module";
+import { ReceiverListModule } from "./modules/receiverlist/receiverlist.module";
+import { OtpModule } from "./modules/otp/otp.module";
+import { TransactionModule } from "./modules/transaction/transaction.module";
 
 @Module({
     imports: [
@@ -48,7 +50,9 @@ import { TrasnferListModule } from "./modules/transferlist/transferlist.module";
         ClientModule,
         UserModule,
         AdminModule,
-        TrasnferListModule,
+        ReceiverListModule,
+        OtpModule,
+        TransactionModule,
         ConsoleModule,
     ],
     controllers: [],

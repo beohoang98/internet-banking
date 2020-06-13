@@ -17,30 +17,30 @@ import { JwtGuard } from "@src/guards/jwt.guard";
 import { ForRoles } from "@src/guards/role.decorator";
 import { RoleGuard } from "@src/guards/role.guard";
 import { AdminRole } from "@src/models/Admin";
-import { TransferListService } from "@src/modules/transferlist/transferlist.service";
+import { ReceiverListService } from "@src/modules/receiverlist/receiverlist.service";
 import {
-    CreateTransferDto,
-    UpdateTransferDto,
-} from "@src/dto/transferList.dto";
+    CreateReceiverDto,
+    UpdateReceiverDto,
+} from "@src/dto/receiverList.dto";
 
-@Controller("transfer")
-@ApiTags("transfer")
+@Controller("receiver")
+@ApiTags("receiver")
 @ApiBearerAuth()
 @UseInterceptors(ClassSerializerInterceptor)
-export class TransferListController {
-    constructor(private readonly transferListService: TransferListService) {}
+export class ReceiverListController {
+    constructor(private readonly receiverListService: ReceiverListService) {}
 
     @Get()
     @UseGuards(JwtGuard)
     profile(@Req() req) {
-        return this.transferListService.getTransferList(req.user.id);
+        return this.receiverListService.getTransferList(req.user.id);
     }
 
     @Post("/")
     @UseGuards(JwtGuard)
     //@ForRoles(AdminRole.ADMIN, AdminRole.EMPLOYEE)
-    create(@Body() body: CreateTransferDto, @Req() req) {
-        return this.transferListService.addAccount(
+    create(@Body() body: CreateReceiverDto, @Req() req) {
+        return this.receiverListService.addAccount(
             body.desAccountNumber,
             body.name,
             body.bankType,
@@ -51,8 +51,8 @@ export class TransferListController {
     @Put("/:id")
     @UseGuards(JwtGuard)
     //@ForRoles(AdminRole.ADMIN, AdminRole.EMPLOYEE)
-    update(@Body() body: CreateTransferDto, @Param("id") id) {
-        return this.transferListService.updateAccount(
+    update(@Body() body: CreateReceiverDto, @Param("id") id) {
+        return this.receiverListService.updateAccount(
             body.desAccountNumber,
             body.name,
             body.bankType,
@@ -64,6 +64,6 @@ export class TransferListController {
     @UseGuards(JwtGuard)
     //@ForRoles(AdminRole.ADMIN, AdminRole.EMPLOYEE)
     delete(@Param("id") id) {
-        return this.transferListService.deleteAccount(id);
+        return this.receiverListService.deleteAccount(id);
     }
 }

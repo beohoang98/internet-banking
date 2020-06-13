@@ -8,9 +8,9 @@ import {
 import { Type } from "class-transformer";
 import { ApiProperty } from "@nestjs/swagger";
 import { AdminRole } from "@src/models/Admin";
-import { BankTypeEnum } from "@src/models/TransferList";
+import { BankTypeEnum } from "@src/models/ReceiverList";
 
-export class CreateTransferDto {
+export class CreateReceiverDto {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
@@ -27,7 +27,7 @@ export class CreateTransferDto {
     bankType: BankTypeEnum;
 }
 
-export class UpdateTransferDto {
+export class UpdateReceiverDto {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()

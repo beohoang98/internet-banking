@@ -2,14 +2,19 @@ import { Injectable } from "@nestjs/common";
 import { User } from "@src/models/User";
 
 import { getRepository } from "typeorm";
-import { TransferList, BankTypeEnum } from "@src/models/TransferList";
+import { ReceiverList, BankTypeEnum } from "@src/models/ReceiverList";
 
 @Injectable()
-export class TransferListService {
+export class ReceiverListService {
     async getTransferList(id: number) {
-        return await getRepository(TransferList).find({
+        const user = await getRepository(User).findOne({
             where: {
-                id: id,
+                id,
+            },
+        });
+        return await getRepository(ReceiverList).find({
+            where: {
+                user: user,
             },
         });
     }
@@ -26,14 +31,14 @@ export class TransferListService {
             },
         });
 
-        const account = new TransferList({
+        const account = new ReceiverList({
             desAccountNumber,
             name,
             bankType,
             user,
         });
 
-        return await getRepository(TransferList).save(account);
+        return await getRepository(ReceiverList).save(account);
     }
 
     async updateAccount(
@@ -42,7 +47,7 @@ export class TransferListService {
         bankType: BankTypeEnum,
         id: number,
     ) {
-        return await getRepository(TransferList).update(id, {
+        return await getRepository(ReceiverList).update(id, {
             desAccountNumber,
             name,
             bankType,
@@ -50,6 +55,6 @@ export class TransferListService {
     }
 
     async deleteAccount(id: number) {
-        return await getRepository(TransferList).delete(id);
+        return await getRepository(ReceiverList).delete(id);
     }
 }

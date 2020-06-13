@@ -9,9 +9,9 @@ export enum BankTypeEnum {
 }
 
 @Entity({
-    name: "transferlist",
+    name: "receiverlist",
 })
-export class TransferList extends Base<TransferList> {
+export class ReceiverList extends Base<ReceiverList> {
     @Column()
     desAccountNumber: string;
 
