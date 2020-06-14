@@ -23,8 +23,8 @@ export class OtpService {
         otp.code = Math.floor(Math.random() * (9999 - 1000 + 1) + 1000);
         otp.expire = moment().add(5, "minute").toDate();
 
-        await this.sendMail("leonthaibao@gmail.com", otp.code);
-        return await getRepository(OTP).save(otp);
+        await getRepository(OTP).save(otp);
+        return await this.sendMail(user.email, otp.code);
     }
 
     async validateOtp(userId: number, code: number) {

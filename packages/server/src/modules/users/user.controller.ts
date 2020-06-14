@@ -7,6 +7,7 @@ import {
     UseGuards,
     UseInterceptors,
     ClassSerializerInterceptor,
+    Query,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { CreateUserDto } from "@src/dto/user.dto";
@@ -40,5 +41,11 @@ export class UserController {
             body.password,
             body.phone,
         );
+    }
+
+    @Get("profile/accountnumber")
+    @UseGuards(JwtGuard)
+    async getProfileWithAccountNumber(@Query() query) {
+        return this.userService.getProfileWithAccountNumber(query.number);
     }
 }

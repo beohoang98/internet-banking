@@ -70,4 +70,12 @@ export class UserService {
             },
         });
     }
+
+    async getProfileWithAccountNumber(accountNumber: string) {
+        return await getRepository(User).findOne({
+            where: {
+                accountNumber: accountNumber,
+            },
+        });
+    }
 }
