@@ -24,7 +24,7 @@ export class OtpController {
 
     @Get()
     @UseGuards(JwtGuard)
-    profile(@Req() req) {
+    createOTP(@Req() req) {
         return this.otpService.createOtp(req.user.id);
     }
 }
