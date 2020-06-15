@@ -14,6 +14,10 @@ import { APP_FILTER } from "@nestjs/core";
 import { AllExceptionsFilter } from "@src/filters/all-http.filter";
 import { AdminModule } from "./modules/admin/admin.module";
 import { MulterModule } from "@nestjs/platform-express";
+import { ReceiverListModule } from "./modules/receiverlist/receiverlist.module";
+import { OtpModule } from "./modules/otp/otp.module";
+import { TransactionModule } from "./modules/transaction/transaction.module";
+import { DeptRemindModule } from "./modules/deptremind/deptremind.module";
 
 @Module({
     imports: [
@@ -47,6 +51,10 @@ import { MulterModule } from "@nestjs/platform-express";
         ClientModule,
         UserModule,
         AdminModule,
+        ReceiverListModule,
+        OtpModule,
+        TransactionModule,
+        DeptRemindModule,
         ConsoleModule,
     ],
     controllers: [],

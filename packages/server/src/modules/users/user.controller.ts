@@ -7,6 +7,7 @@ import {
     UseGuards,
     UseInterceptors,
     ClassSerializerInterceptor,
+    Query,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { CreateUserDto } from "@src/dto/user.dto";
@@ -26,7 +27,7 @@ export class UserController {
     @Get("profile")
     @UseGuards(JwtGuard)
     async profile(@Req() req) {
-        return req.user;
+        return this.userService.getProfile(req.user.id);
     }
 
     @Post("/")
@@ -34,6 +35,17 @@ export class UserController {
     @UseGuards(JwtGuard, RoleGuard)
     @ForRoles(AdminRole.ADMIN, AdminRole.EMPLOYEE)
     create(@Body() body: CreateUserDto) {
-        return this.userService.create(body.name, body.email, body.password);
+        return this.userService.create(
+            body.name,
+            body.email,
+            body.password,
+            body.phone,
+        );
+    }
+
+    @Get("profile/accountnumber")
+    @UseGuards(JwtGuard)
+    async getProfileWithAccountNumber(@Query() query) {
+        return this.userService.getProfileWithAccountNumber(query.number);
     }
 }

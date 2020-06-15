@@ -18,11 +18,16 @@ export class UserService {
         return await getRepository(User).findOne({ email });
     }
 
-    async create(name: string, email: string, password: string) {
+    async createAccountNumber() {
+        return 10000000 + (await getRepository(User).count());
+    }
+    async create(name: string, email: string, password: string, phone: string) {
         const user = new User({
             email,
             password: PasswordEncoder.encode(password),
             name,
+            phone,
+            accountNumber: (await this.createAccountNumber()).toString(),
         });
         await getRepository(User).insert(user);
         return user;
@@ -56,5 +61,21 @@ export class UserService {
         await validateOrReject(user);
         await getRepository(User).insert(user);
         console.log(user);
+    }
+
+    async getProfile(id: number) {
+        return await getRepository(User).findOne({
+            where: {
+                id: id,
+            },
+        });
+    }
+
+    async getProfileWithAccountNumber(accountNumber: string) {
+        return await getRepository(User).findOne({
+            where: {
+                accountNumber: accountNumber,
+            },
+        });
     }
 }

@@ -1,36 +1,40 @@
 import {
     Body,
     Controller,
+    Get,
     Post,
+    Req,
     UseGuards,
     UseInterceptors,
     ClassSerializerInterceptor,
 } from "@nestjs/common";
-import { CreateAdminDto } from "@src/dto/admin.dto";
-import { JwtGuard } from "@src/guards/jwt.guard";
+import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { ForRoles } from "@src/guards/role.decorator";
-import { RoleGuard } from "@src/guards/role.guard";
+
 import { AdminRole } from "@src/models/Admin";
+import { CreateAdminDto } from "@src/dto/admin.dto";
 import { AdminService } from "./admin.service";
-import { ApiTags, ApiConsumes, ApiBearerAuth } from "@nestjs/swagger";
+import { RoleGuard } from "@src/guards/role.guard";
+import { JwtGuard } from "@src/guards/jwt.guard";
 
 @Controller("admin")
 @ApiTags("admin")
-@ApiBearerAuth()
 @UseInterceptors(ClassSerializerInterceptor)
+@ApiBearerAuth()
+@UseGuards(RoleGuard, JwtGuard)
 export class AdminController {
     constructor(private readonly adminService: AdminService) {}
 
     @Post("/")
-    @UseGuards(JwtGuard, RoleGuard)
+    @ApiConsumes("application/json", "multipart/form-data")
     @ForRoles(AdminRole.ADMIN)
-    @ApiConsumes("application/json", "application/x-www-form-urlencoded")
-    async createAccount(@Body() dto: CreateAdminDto) {
-        return await this.adminService.createEmployee(
-            dto.name,
-            dto.email,
-            dto.password,
-            dto.role,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    create(@Body() body: CreateAdminDto) {
+        return this.adminService.createEmployee(
+            body.name,
+            body.email,
+            body.password,
+            body.role,
         );
     }
 }
