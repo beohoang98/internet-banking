@@ -32,6 +32,8 @@ export class TransactionController {
             body.amount,
             body.note,
             body.otp,
+            body.isDebtPay,
+            body.bankType,
         );
     }
 }

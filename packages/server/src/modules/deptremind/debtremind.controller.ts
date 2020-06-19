@@ -13,23 +13,23 @@ import {
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { JwtGuard } from "@src/guards/jwt.guard";
-import { DeptRemindService } from "@src/modules/deptremind/deptremind.service";
+import { DebtRemindService } from "@src/modules/deptremind/debtremind.service";
 import {
-    CreateDeptRemindDto,
-    DeleteDeptRemindDto,
-} from "@src/dto/deptRemind.dto";
+    CreateDebtRemindDto,
+    DeleteDebtRemindDto,
+} from "@src/dto/debtRemind.dto";
 
 @Controller("dept")
 @ApiTags("dept")
 @ApiBearerAuth()
 @UseGuards(JwtGuard)
 @UseInterceptors(ClassSerializerInterceptor)
-export class DeptRemindController {
-    constructor(private readonly deptRemindService: DeptRemindService) {}
+export class DebtRemindController {
+    constructor(private readonly debtRemindService: DebtRemindService) {}
 
     @Post()
-    createDeptRemind(@Req() req, @Body() body: CreateDeptRemindDto) {
-        return this.deptRemindService.create(
+    createDeptRemind(@Req() req, @Body() body: CreateDebtRemindDto) {
+        return this.debtRemindService.create(
             req.user.id,
             body.desAccount,
             body.amount,
@@ -39,12 +39,12 @@ export class DeptRemindController {
 
     @Get()
     getMyDeptRemind(@Req() req) {
-        return this.deptRemindService.getDeptRemind(req.user.id);
+        return this.debtRemindService.getDeptRemind(req.user.id);
     }
 
     @Delete()
-    deleteDeptRemind(@Req() req, @Body() body: DeleteDeptRemindDto) {
-        return this.deptRemindService.deleteDeptRemind(
+    deleteDeptRemind(@Req() req, @Body() body: DeleteDebtRemindDto) {
+        return this.debtRemindService.deleteDeptRemind(
             req.user.id,
             body.deptId,
             body.completeNote,

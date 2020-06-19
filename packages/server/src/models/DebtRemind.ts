@@ -5,7 +5,7 @@ import { User } from "./User";
 @Entity({
     name: "dept_remind",
 })
-export class DeptRemind extends Base<DeptRemind> {
+export class DebtRemind extends Base<DebtRemind> {
     @Column()
     amount: number;
 

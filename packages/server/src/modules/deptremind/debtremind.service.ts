@@ -2,9 +2,9 @@ import { Injectable, Inject } from "@nestjs/common";
 import { User } from "@src/models/User";
 
 import { getRepository } from "typeorm";
-import { DeptRemind } from "@src/models/DeptRemind";
+import { DebtRemind } from "@src/models/DebtRemind";
 import { MailerService } from "@nestjs-modules/mailer";
-import { GetDeptRemindDto } from "@src/dto/deptRemind.dto";
+import { GetDebtRemindDto } from "@src/dto/debtRemind.dto";
 import { CheckAccountDto } from "@src/dto/client.dto";
 
 enum TemplateEnum {
@@ -13,7 +13,7 @@ enum TemplateEnum {
 }
 
 @Injectable()
-export class DeptRemindService {
+export class DebtRemindService {
     constructor(
         @Inject(MailerService)
         private readonly mailerService: MailerService,
@@ -30,14 +30,14 @@ export class DeptRemindService {
                 accountNumber: desAccountNumber,
             },
         });
-        const dept = new DeptRemind({
+        const dept = new DebtRemind({
             sourceAccount: srcAccount.accountNumber,
             desAccount: desAccount.accountNumber,
             amount: amount,
             remindNote: remindNote,
         });
 
-        await getRepository(DeptRemind).save(dept);
+        await getRepository(DebtRemind).save(dept);
         return await this.sendMail(
             srcAccount.email,
             desAccount.email,
@@ -68,7 +68,7 @@ export class DeptRemindService {
 
     async getDeptRemind(userId: number) {
         const user = await getRepository(User).findOne(userId);
-        const list = await getRepository(DeptRemind).find({
+        const list = await getRepository(DebtRemind).find({
             where: [
                 {
                     desAccount: user.accountNumber,
@@ -79,11 +79,11 @@ export class DeptRemindService {
             ],
         });
 
-        const result: GetDeptRemindDto[] = [];
+        const result: GetDebtRemindDto[] = [];
 
         for (let i = 0; i < list.length; i++) {
             if (list[i].isDone === false) {
-                const dept = new GetDeptRemindDto({
+                const dept = new GetDebtRemindDto({
                     amount: list[i].amount,
                     note: list[i].remindNote,
                     createAt: list[i].createdAt,
@@ -105,13 +105,13 @@ export class DeptRemindService {
     async deleteDeptRemind(userId: number, deptId: number, note: string) {
         const user = await getRepository(User).findOne(userId);
 
-        const deleteDept = await getRepository(DeptRemind).findOne(deptId);
+        const deleteDept = await getRepository(DebtRemind).findOne(deptId);
 
         if (deleteDept.sourceAccount === user.accountNumber) {
             const desAccount = await getRepository(User).findOne({
                 where: { accountNumber: deleteDept.desAccount },
             });
-            await getRepository(DeptRemind).update(deleteDept.id, {
+            await getRepository(DebtRemind).update(deleteDept.id, {
                 isDone: true,
                 completeNote: note,
             });
@@ -128,7 +128,7 @@ export class DeptRemindService {
             const srcAccount = await getRepository(User).findOne({
                 where: { accountNumber: deleteDept.sourceAccount },
             });
-            await getRepository(DeptRemind).update(deleteDept.id, {
+            await getRepository(DebtRemind).update(deleteDept.id, {
                 isDone: true,
                 completeNote: note,
             });

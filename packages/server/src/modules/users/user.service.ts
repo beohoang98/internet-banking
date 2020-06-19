@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, ForbiddenException } from "@nestjs/common";
 import { CreateUserDto } from "@src/dto/user.dto";
 import { User } from "@src/models/User";
 import { PasswordEncoder } from "@src/utils/passwordEncoder";
@@ -7,6 +7,8 @@ import { Command as _Command } from "commander";
 import * as crypto from "crypto";
 import { Command, Console } from "nestjs-console";
 import { getRepository } from "typeorm";
+import { Transaction } from "@src/models/Transaction";
+import { GetMyTransactionDto } from "@src/dto/transaction.dto";
 
 @Injectable()
 @Console()
@@ -76,6 +78,106 @@ export class UserService {
             where: {
                 accountNumber: accountNumber,
             },
+        });
+    }
+
+    async getMySendTransaction(id: number) {
+        const user = await getRepository(User).findOne(id);
+        const getList = await getRepository(Transaction).find({
+            where: {
+                sourceAccount: user.accountNumber,
+                isDebtPay: false,
+            },
+            order: {
+                createdAt: "DESC",
+            },
+        });
+        console.log(user);
+        console.log(getList);
+
+        const resultArr = [];
+        getList.forEach((item) => {
+            const transaction = new GetMyTransactionDto({
+                id: item.id,
+                createAt: item.createdAt,
+                note: item.note,
+                account: item.desAccount,
+                bankType: item.bankType,
+                amount: item.amount,
+            });
+
+            resultArr.push(transaction);
+        });
+
+        return resultArr;
+    }
+
+    async getMyReceiveTransaction(id: number) {
+        const user = await getRepository(User).findOne(id);
+        const getList = await getRepository(Transaction).find({
+            where: {
+                desAccount: user.accountNumber,
+                isDebtPay: false,
+            },
+            order: {
+                createdAt: "DESC",
+            },
+        });
+
+        const resultArr = [];
+        getList.forEach((item) => {
+            const transaction = new GetMyTransactionDto({
+                id: item.id,
+                createAt: item.createdAt,
+                note: item.note,
+                account: item.sourceAccount,
+                bankType: item.bankType,
+                amount: item.amount,
+            });
+
+            resultArr.push(transaction);
+        });
+
+        return resultArr;
+    }
+
+    async getMyDebtPayTransaction(id: number) {
+        const user = await getRepository(User).findOne(id);
+        const getList = await getRepository(Transaction).find({
+            where: {
+                sourceAccount: user.accountNumber,
+                isDebtPay: true,
+            },
+            order: {
+                createdAt: "DESC",
+            },
+        });
+
+        const resultArr = [];
+        getList.forEach((item) => {
+            const transaction = new GetMyTransactionDto({
+                id: item.id,
+                createAt: item.createdAt,
+                note: item.note,
+                account: item.desAccount,
+                bankType: item.bankType,
+                amount: item.amount,
+            });
+
+            resultArr.push(transaction);
+        });
+
+        return resultArr;
+    }
+
+    async changePassword(id: number, oldPassword: string, newPassword: string) {
+        const user = await getRepository(User).findOne(id);
+        if (!user || !PasswordEncoder.compare(oldPassword, user.password)) {
+            throw new ForbiddenException("Wrong password");
+        }
+
+        return await getRepository(User).update(user.id, {
+            password: PasswordEncoder.encode(newPassword),
         });
     }
 }

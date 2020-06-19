@@ -8,9 +8,10 @@ import {
     UseInterceptors,
     ClassSerializerInterceptor,
     Query,
+    Put,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
-import { CreateUserDto } from "@src/dto/user.dto";
+import { CreateUserDto, ChangPasswordDto } from "@src/dto/user.dto";
 import { JwtGuard } from "@src/guards/jwt.guard";
 import { ForRoles } from "@src/guards/role.decorator";
 import { RoleGuard } from "@src/guards/role.guard";
@@ -47,5 +48,33 @@ export class UserController {
     @UseGuards(JwtGuard)
     async getProfileWithAccountNumber(@Query() query) {
         return this.userService.getProfileWithAccountNumber(query.number);
+    }
+
+    @Get("transaction/send")
+    @UseGuards(JwtGuard)
+    getMySendTransaction(@Req() req) {
+        return this.userService.getMySendTransaction(req.user.id);
+    }
+
+    @Get("transaction/receive")
+    @UseGuards(JwtGuard)
+    getMyReceiveTransaction(@Req() req) {
+        return this.userService.getMyReceiveTransaction(req.user.id);
+    }
+
+    @Get("transaction/debt")
+    @UseGuards(JwtGuard)
+    getMyDebtPayTransaction(@Req() req) {
+        return this.userService.getMyDebtPayTransaction(req.user.id);
+    }
+
+    @Put("password")
+    @UseGuards(JwtGuard)
+    changePassword(@Req() req, @Body() body: ChangPasswordDto) {
+        return this.userService.changePassword(
+            req.user.id,
+            body.oldPassword,
+            body.newPassword,
+        );
     }
 }

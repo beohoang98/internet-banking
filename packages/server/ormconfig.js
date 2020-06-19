@@ -21,4 +21,5 @@ module.exports = {
         subscribersDir: path.resolve(__dirname, "src/subscribers"),
         entitiesDir: path.resolve(__dirname, "src/models"),
     },
+    database: "internet_banking",
 };

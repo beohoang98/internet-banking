@@ -20,6 +20,8 @@ export class TransactionService {
         amount: number,
         note: string,
         otp: number,
+        isDebtPay: boolean,
+        bankType: BankTypeEnum = BankTypeEnum.LOCAL,
     ) {
         if ((await this.otpService.validateOtp(id, otp)) === true) {
             const srcAccount = await getRepository(User).findOne({
@@ -64,12 +66,13 @@ export class TransactionService {
                 desAccount: desAccount.accountNumber,
                 sourceAccount: srcAccount.accountNumber,
                 amount: amount,
-                bankType: BankTypeEnum.LOCAL,
+                bankType: bankType,
+                isDebtPay: isDebtPay,
             });
 
             return await getRepository(Transaction).save(transactionData);
         } else {
-            throw new ForbiddenException("Otp isvalid");
+            throw new ForbiddenException("Otp is invalid");
         }
     }
 }

@@ -25,3 +25,15 @@ export class CreateUserDto {
     @IsString()
     phone: string;
 }
+
+export class ChangPasswordDto {
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    oldPassword: string;
+
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    newPassword: string;
+}
