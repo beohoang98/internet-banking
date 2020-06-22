@@ -15,7 +15,11 @@ import {
     CheckAccountDto,
     SendMoneyDto,
     SendMoneyRequestDto,
+    SendMoneyDtoV2,
+    SendMoneyRequestV2Dto,
 } from "@src/dto/client.dto";
+import { async } from "rxjs/internal/scheduler/async";
+import { UserService } from "../users/user.service";
 
 require("dotenv").config();
 
@@ -61,6 +65,10 @@ describe("ClientController", () => {
         );
     };
 
+    const createUser = async () => {
+        const user = app.get(UserService);
+        return await user.create("bao", "bao@gmail.com", "123456", "123456");
+    };
     async function createSignBody(sendData: SendMoneyDto) {
         const pgpClient = app.get(PGPService);
         const signature = await pgpClient.sign(
@@ -243,5 +251,45 @@ describe("ClientController", () => {
             .send(body);
 
         expect(res.status).toBe(403);
+    });
+
+    test("partner-send-ok", async () => {
+        await createUser();
+        await app
+            .get(ClientService)
+            .create("PGP", testClient.secret, testClient.publicKey);
+        const pgpClient = app.get(PGPService);
+        const sendData: SendMoneyDtoV2 = {
+            amount: 500000,
+            accountNumber: 10000000,
+            sourceAccount: "123456789",
+            note: "dance",
+        };
+
+        const signature = await pgpClient.sign(
+            JSON.stringify(sendData),
+            readFileSync(resolve(__dirname, "../../keys/test-private.asc")),
+            testPGPPassphrase,
+        );
+
+        const body: SendMoneyRequestV2Dto = {
+            data: sendData,
+            signature,
+        };
+
+        const hash = crypto
+            .createHmac("md5", hashSecret)
+            .update(JSON.stringify(body))
+            .digest("hex");
+
+        const res = await request(app.getHttpServer())
+            .post("/partner/sendv2")
+            .set("x-partner-time", moment().unix().toString())
+            .set("x-partner-hash", hash)
+            .auth("PGP", testClient.secret)
+            .send(body);
+        console.log(res);
+
+        expect(res.status).toBe(200);
     });
 });

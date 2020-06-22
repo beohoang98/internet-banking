@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from "@nestjs/common";
+import {
+    ConflictException,
+    Injectable,
+    ForbiddenException,
+} from "@nestjs/common";
 import { CreateAdminDto } from "@src/dto/admin.dto";
 import { Admin, AdminRole } from "@src/models/Admin";
 import { PasswordEncoder } from "@src/utils/passwordEncoder";
@@ -7,6 +11,9 @@ import { Command as _Command } from "commander";
 import * as crypto from "crypto";
 import { Command, Console } from "nestjs-console";
 import { getRepository } from "typeorm";
+import { User } from "@src/models/User";
+import { Transaction } from "@src/models/Transaction";
+import { BankTypeEnum } from "@src/models/ReceiverList";
 
 @Injectable()
 @Console()
@@ -72,5 +79,57 @@ export class AdminService {
         await validateOrReject(admin);
         await getRepository(Admin).insert(admin);
         console.log(admin);
+    }
+
+    async depositUserAccout(accountNumber: string, amount: number) {
+        const user = await getRepository(User).findOne({
+            where: {
+                accountNumber: accountNumber,
+            },
+        });
+
+        if (!user) {
+            throw new ForbiddenException("Cant find user account");
+        }
+
+        const transaction = new Transaction({
+            note: "Deposit",
+            sourceAccount: "Group 28 Local Bank",
+            desAccount: user.accountNumber,
+            amount: amount,
+            bankType: BankTypeEnum.LOCAL,
+            isDebtPay: false,
+        });
+
+        await getRepository(User).update(user.id, {
+            balance: +user.balance + amount,
+        });
+
+        return await getRepository(Transaction).save(transaction);
+    }
+
+    async getListEmployee() {
+        return await getRepository(Admin).find({
+            where: {
+                role: AdminRole.EMPLOYEE,
+            },
+        });
+    }
+
+    async updateEmployee(
+        id: number,
+        name: string,
+        email: string,
+        password: string,
+    ) {
+        return await getRepository(Admin).update(id, {
+            name: name,
+            email: email,
+            password: PasswordEncoder.encode(password),
+        });
+    }
+
+    async deleteEmployee(id: number) {
+        return await getRepository(Admin).delete(id);
     }
 }

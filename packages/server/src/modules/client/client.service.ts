@@ -1,11 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import { randomBytes } from "crypto";
-import { FindOneOptions, Repository } from "typeorm";
+import { FindOneOptions, Repository, getRepository } from "typeorm";
 import { Client } from "@src/models/Client";
 import { PasswordEncoder } from "@src/utils/passwordEncoder";
 import { Command, Console } from "nestjs-console";
 import { Command as CommandClass } from "commander";
 import { InjectRepository } from "@nestjs/typeorm";
+import { BankTypeEnum } from "@src/models/ReceiverList";
+import { Transaction } from "@src/models/Transaction";
 
 @Injectable()
 @Console()
@@ -47,5 +49,28 @@ export class ClientService {
 
     findOne(args: FindOneOptions<Client>) {
         return this.clientRepository.findOne(args);
+    }
+
+    async createTransaction(
+        clientId: BankTypeEnum,
+        accountNumber: string,
+        sourceAccount: string,
+        note: string,
+        amount: number,
+    ) {
+        const transaction = new Transaction({
+            sourceAccount: sourceAccount,
+            desAccount: accountNumber,
+            note: note,
+            amount: amount,
+            isMyBankSend: false,
+            isDebtPay: false,
+        });
+
+        if (clientId === BankTypeEnum.RSA)
+            transaction.bankType = BankTypeEnum.RSA;
+        if (clientId === BankTypeEnum.PGP)
+            transaction.bankType = BankTypeEnum.PGP;
+        await getRepository(Transaction).save(transaction);
     }
 }

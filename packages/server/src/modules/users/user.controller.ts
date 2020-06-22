@@ -11,7 +11,11 @@ import {
     Put,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
-import { CreateUserDto, ChangPasswordDto } from "@src/dto/user.dto";
+import {
+    CreateUserDto,
+    ChangePasswordDto,
+    ResetPasswordDto,
+} from "@src/dto/user.dto";
 import { JwtGuard } from "@src/guards/jwt.guard";
 import { ForRoles } from "@src/guards/role.decorator";
 import { RoleGuard } from "@src/guards/role.guard";
@@ -50,31 +54,23 @@ export class UserController {
         return this.userService.getProfileWithAccountNumber(query.number);
     }
 
-    @Get("transaction/send")
-    @UseGuards(JwtGuard)
-    getMySendTransaction(@Req() req) {
-        return this.userService.getMySendTransaction(req.user.id);
-    }
-
-    @Get("transaction/receive")
-    @UseGuards(JwtGuard)
-    getMyReceiveTransaction(@Req() req) {
-        return this.userService.getMyReceiveTransaction(req.user.id);
-    }
-
-    @Get("transaction/debt")
-    @UseGuards(JwtGuard)
-    getMyDebtPayTransaction(@Req() req) {
-        return this.userService.getMyDebtPayTransaction(req.user.id);
-    }
-
     @Put("password")
     @UseGuards(JwtGuard)
-    changePassword(@Req() req, @Body() body: ChangPasswordDto) {
+    changePassword(@Req() req, @Body() body: ChangePasswordDto) {
         return this.userService.changePassword(
             req.user.id,
             body.oldPassword,
             body.newPassword,
+        );
+    }
+
+    @Put("reset-password")
+    @UseGuards(JwtGuard)
+    resetPassword(@Req() req, @Body() body: ResetPasswordDto) {
+        return this.userService.resetPassword(
+            req.user.id,
+            body.otp,
+            body.password,
         );
     }
 }

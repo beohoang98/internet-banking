@@ -24,4 +24,7 @@ export class Transaction extends Base<Transaction> {
 
     @Column()
     isDebtPay: boolean;
+
+    @Column({ nullable: true })
+    isMyBankSend: boolean;
 }

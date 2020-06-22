@@ -4,6 +4,7 @@ import {
     Post,
     UseGuards,
     UseInterceptors,
+    Req,
 } from "@nestjs/common";
 import {
     ApiAcceptedResponse,
@@ -21,8 +22,10 @@ import {
     CheckAccountDto,
     CheckAccountResponseDto,
     SendMoneyRequestDto,
+    SendMoneyRequestV2Dto,
 } from "@src/dto/client.dto";
 import { ClientRequestInterceptor } from "@src/middlewares/client-request.interceptor";
+import { ClientService } from "./client.service";
 
 @Controller("partner")
 @ApiTags("partner")
@@ -49,6 +52,7 @@ import { ClientRequestInterceptor } from "@src/middlewares/client-request.interc
 })
 @ApiNotFoundResponse({ description: "Account not found" })
 export class ClientController {
+    constructor(private readonly clientService: ClientService) {}
     @Post("check-account")
     @ApiCreatedResponse({ type: CheckAccountResponseDto })
     checkAccountInfo(@Body() body: CheckAccountDto) {
@@ -58,7 +62,21 @@ export class ClientController {
     @Post("send")
     @ApiAcceptedResponse({ description: "Accepted send request" })
     @UseInterceptors(ClientRequestInterceptor)
-    makeTransaction(@Body() body: SendMoneyRequestDto) {
+    makeTransaction(@Body() body: SendMoneyRequestDto, @Req() req) {
+        return body;
+    }
+
+    @Post("sendv2")
+    @ApiAcceptedResponse({ description: "Accepted send request" })
+    @UseInterceptors(ClientRequestInterceptor)
+    makeTransactionv2(@Body() body: SendMoneyRequestV2Dto, @Req() req) {
+        this.clientService.createTransaction(
+            body.data.bankType,
+            body.data.accountNumber.toString(),
+            body.data.sourceAccount,
+            body.data.note,
+            body.data.amount,
+        );
         return body;
     }
 }

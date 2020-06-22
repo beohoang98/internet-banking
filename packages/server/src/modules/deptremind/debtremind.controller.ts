@@ -19,8 +19,8 @@ import {
     DeleteDebtRemindDto,
 } from "@src/dto/debtRemind.dto";
 
-@Controller("dept")
-@ApiTags("dept")
+@Controller("debt")
+@ApiTags("debt")
 @ApiBearerAuth()
 @UseGuards(JwtGuard)
 @UseInterceptors(ClassSerializerInterceptor)
