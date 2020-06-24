@@ -64,6 +64,8 @@ jobs:
                 working_directory: ~/project/packages/server
                 name: test
                 command: yarn test:cov
+            - store_test_results:
+                path: ./server/coverage
     build_client:
         executor: node
         steps:
