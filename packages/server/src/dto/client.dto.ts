@@ -1,11 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
 import {
+    IsEnum,
     IsInt,
     IsNotEmpty,
+    IsOptional,
     IsString,
     Min,
-    IsOptional,
-    IsEnum,
 } from "class-validator";
 import { Type } from "class-transformer";
 import { BankTypeEnum } from "@src/models/ReceiverList";

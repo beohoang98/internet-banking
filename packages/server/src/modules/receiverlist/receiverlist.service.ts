@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { User } from "@src/models/User";
 
 import { getRepository } from "typeorm";
-import { ReceiverList, BankTypeEnum } from "@src/models/ReceiverList";
+import { BankTypeEnum, ReceiverList } from "@src/models/ReceiverList";
 
 @Injectable()
 export class ReceiverListService {

@@ -1,7 +1,7 @@
 import {
     ConflictException,
-    Injectable,
     ForbiddenException,
+    Injectable,
 } from "@nestjs/common";
 import { CreateAdminDto } from "@src/dto/admin.dto";
 import { Admin, AdminRole } from "@src/models/Admin";

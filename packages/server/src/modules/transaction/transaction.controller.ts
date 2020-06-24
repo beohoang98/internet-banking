@@ -1,17 +1,14 @@
 import {
     Body,
+    ClassSerializerInterceptor,
     Controller,
     Get,
     Post,
     Req,
     UseGuards,
     UseInterceptors,
-    ClassSerializerInterceptor,
-    Put,
-    Delete,
-    Param,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { JwtGuard } from "@src/guards/jwt.guard";
 import { TransactionService } from "@src/modules/transaction/transaction.service";
 import {
@@ -19,7 +16,6 @@ import {
     CreateTransactionInterbankDto,
     GetInfoInterbankDto,
 } from "@src/dto/transaction.dto";
-import { BankTypeEnum } from "@src/models/ReceiverList";
 
 @Controller("transaction")
 @ApiTags("transaction")

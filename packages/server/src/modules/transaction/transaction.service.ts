@@ -1,11 +1,11 @@
 import {
-    Injectable,
     ForbiddenException,
+    Injectable,
     NotAcceptableException,
 } from "@nestjs/common";
 import { User } from "@src/models/User";
 
-import { getRepository, Between, Not } from "typeorm";
+import { Between, getRepository, Not } from "typeorm";
 import { OTP } from "@src/models/Otp";
 import { OtpService } from "@src/modules/otp/otp.service";
 import { BankTypeEnum } from "@src/models/ReceiverList";
@@ -13,7 +13,6 @@ import { Transaction } from "@src/models/Transaction";
 import { GetMyTransactionDto } from "@src/dto/transaction.dto";
 import { ConnectPgpService } from "../connect/connect-pgp.service";
 import { ConnectRSAService } from "../connect/connect-rsa.service";
-import { getRounds } from "bcrypt";
 import * as moment from "moment";
 
 @Injectable()

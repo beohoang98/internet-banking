@@ -1,19 +1,19 @@
 import {
     Body,
+    ClassSerializerInterceptor,
     Controller,
     Get,
     Post,
+    Put,
+    Query,
     Req,
     UseGuards,
     UseInterceptors,
-    ClassSerializerInterceptor,
-    Query,
-    Put,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import {
-    CreateUserDto,
     ChangePasswordDto,
+    CreateUserDto,
     ResetPasswordDto,
 } from "@src/dto/user.dto";
 import { JwtGuard } from "@src/guards/jwt.guard";

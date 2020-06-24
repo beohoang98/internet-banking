@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { randomBytes } from "crypto";
-import { FindOneOptions, Repository, getRepository } from "typeorm";
+import { FindOneOptions, getRepository, Repository } from "typeorm";
 import { Client } from "@src/models/Client";
 import { PasswordEncoder } from "@src/utils/passwordEncoder";
 import { Command, Console } from "nestjs-console";
@@ -71,6 +71,6 @@ export class ClientService {
             transaction.bankType = BankTypeEnum.RSA;
         if (clientId === BankTypeEnum.PGP)
             transaction.bankType = BankTypeEnum.PGP;
-        await getRepository(Transaction).save(transaction);
+        return await getRepository(Transaction).save(transaction);
     }
 }

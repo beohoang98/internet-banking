@@ -1,4 +1,4 @@
-import { Injectable, HttpService } from "@nestjs/common";
+import { HttpService, Injectable } from "@nestjs/common";
 import { ConnectAbstractService } from "./connect-abstract.service";
 import { Keys } from "@src/config/keys.config";
 import { RSAService } from "../crypto/rsa.service";

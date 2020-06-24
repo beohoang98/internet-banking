@@ -1,11 +1,11 @@
 import {
     Body,
+    ClassSerializerInterceptor,
     Controller,
     Post,
     Req,
     UseGuards,
     UseInterceptors,
-    ClassSerializerInterceptor,
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { ApiBasicAuth, ApiTags } from "@nestjs/swagger";

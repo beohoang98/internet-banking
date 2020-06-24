@@ -2,10 +2,10 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import {
     IsEmail,
-    IsNotEmpty,
-    IsString,
-    IsOptional,
     IsInt,
+    IsNotEmpty,
+    IsOptional,
+    IsString,
 } from "class-validator";
 
 export class CreateUserDto {

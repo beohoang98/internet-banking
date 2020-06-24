@@ -1,11 +1,10 @@
 import {
-    IsString,
-    IsInt,
-    IsOptional,
-    IsIn,
     IsBoolean,
     IsEnum,
+    IsInt,
     IsNotEmpty,
+    IsOptional,
+    IsString,
 } from "class-validator";
 import { BankTypeEnum } from "@src/models/ReceiverList";
 

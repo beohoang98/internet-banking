@@ -9,7 +9,7 @@ const config = {
 
 module.exports = {
     name: "default",
-    type: config.TYPEORM_TYPE || "postgres",
+    type: config.DATABASE_URL.split("://")[0],
     url: config.DATABASE_URL,
     migrations: [path.resolve(__dirname, "dist/migrations/*{.ts,.js}")],
     subscribers: [path.resolve(__dirname, "dist/subscribers/*{.ts,.js}")],

@@ -1,4 +1,4 @@
-import { Injectable, Inject } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { User } from "@src/models/User";
 
 import { getRepository } from "typeorm";

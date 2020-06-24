@@ -1,11 +1,4 @@
-import {
-    IsEmail,
-    IsEnum,
-    IsNotEmpty,
-    IsString,
-    IsInt,
-    IsOptional,
-} from "class-validator";
+import { IsEmail, IsEnum, IsInt, IsNotEmpty, IsString } from "class-validator";
 import { Type } from "class-transformer";
 import { ApiProperty } from "@nestjs/swagger";
 import { AdminRole } from "@src/models/Admin";

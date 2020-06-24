@@ -1,6 +1,5 @@
-import { Column, Entity, ManyToOne } from "typeorm";
+import { Column, Entity } from "typeorm";
 import { Base } from "./Base";
-import { User } from "./User";
 
 @Entity({
     name: "dept_remind",

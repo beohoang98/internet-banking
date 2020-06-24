@@ -1,4 +1,4 @@
-import { Injectable, ForbiddenException } from "@nestjs/common";
+import { ForbiddenException, Injectable } from "@nestjs/common";
 import { CreateUserDto } from "@src/dto/user.dto";
 import { User } from "@src/models/User";
 import { PasswordEncoder } from "@src/utils/passwordEncoder";
@@ -6,24 +6,30 @@ import { validateOrReject } from "class-validator";
 import { Command as _Command } from "commander";
 import * as crypto from "crypto";
 import { Command, Console } from "nestjs-console";
-import { getRepository } from "typeorm";
+import { getRepository, Repository } from "typeorm";
 
 import { OtpService } from "../otp/otp.service";
 import { OTP } from "@src/models/Otp";
+import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
 @Console()
 export class UserService {
-    constructor(private readonly otpService: OtpService) {}
+    constructor(
+        private readonly otpService: OtpService,
+
+        @InjectRepository(User)
+        private readonly userRepo: Repository<User>,
+    ) {}
     async findById(id: number) {
-        return await getRepository(User).findOne(id);
+        return await this.userRepo.findOne(id);
     }
     async findByEmail(email: string) {
-        return await getRepository(User).findOne({ email });
+        return await this.userRepo.findOne({ email });
     }
 
     async createAccountNumber() {
-        return 10000000 + (await getRepository(User).count());
+        return 10000000 + (await this.userRepo.count());
     }
     async create(name: string, email: string, password: string, phone: string) {
         const user = new User({
@@ -33,7 +39,7 @@ export class UserService {
             phone,
             accountNumber: (await this.createAccountNumber()).toString(),
         });
-        await getRepository(User).insert(user);
+        await this.userRepo.insert(user);
         return user;
     }
 
@@ -63,12 +69,12 @@ export class UserService {
         user.password = PasswordEncoder.encode(checkPass);
 
         await validateOrReject(user);
-        await getRepository(User).insert(user);
+        await this.userRepo.insert(user);
         console.log(user);
     }
 
     async getProfile(id: number) {
-        return await getRepository(User).findOne({
+        return await this.userRepo.findOne({
             where: {
                 id: id,
             },
@@ -76,7 +82,7 @@ export class UserService {
     }
 
     async getProfileWithAccountNumber(accountNumber: string) {
-        return await getRepository(User).findOne({
+        return await this.userRepo.findOne({
             where: {
                 accountNumber: accountNumber,
             },
@@ -84,19 +90,19 @@ export class UserService {
     }
 
     async changePassword(id: number, oldPassword: string, newPassword: string) {
-        const user = await getRepository(User).findOne(id);
+        const user = await this.userRepo.findOne(id);
         if (!user || !PasswordEncoder.compare(oldPassword, user.password)) {
             throw new ForbiddenException("Wrong password");
         }
 
-        return await getRepository(User).update(user.id, {
+        return await this.userRepo.update(user.id, {
             password: PasswordEncoder.encode(newPassword),
         });
     }
 
     async resetPassword(userId: number, otp: number, newPassword: string) {
         if ((await this.otpService.validateOtp(userId, otp)) === true) {
-            const user = await getRepository(User).findOne(userId);
+            const user = await this.userRepo.findOne(userId);
             if (!user) {
                 throw new ForbiddenException("Cant find user");
             } else {
@@ -105,7 +111,7 @@ export class UserService {
                     { isUsed: true },
                 );
 
-                return await getRepository(User).update(user.id, {
+                return await this.userRepo.update(user.id, {
                     password: PasswordEncoder.encode(newPassword),
                 });
             }

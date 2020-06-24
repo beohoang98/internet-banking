@@ -4,7 +4,6 @@ import {
     Post,
     UseGuards,
     UseInterceptors,
-    Req,
 } from "@nestjs/common";
 import {
     ApiAcceptedResponse,
@@ -62,21 +61,20 @@ export class ClientController {
     @Post("send")
     @ApiAcceptedResponse({ description: "Accepted send request" })
     @UseInterceptors(ClientRequestInterceptor)
-    makeTransaction(@Body() body: SendMoneyRequestDto, @Req() req) {
+    makeTransaction(@Body() body: SendMoneyRequestDto) {
         return body;
     }
 
-    @Post("sendv2")
+    @Post("send/v2")
     @ApiAcceptedResponse({ description: "Accepted send request" })
     @UseInterceptors(ClientRequestInterceptor)
-    makeTransactionv2(@Body() body: SendMoneyRequestV2Dto, @Req() req) {
-        this.clientService.createTransaction(
+    makeTransactionV2(@Body() body: SendMoneyRequestV2Dto) {
+        return this.clientService.createTransaction(
             body.data.bankType,
             body.data.accountNumber.toString(),
             body.data.sourceAccount,
             body.data.note,
             body.data.amount,
         );
-        return body;
     }
 }
