@@ -1,6 +1,6 @@
 <template>
     <div class="app-auth-form card">
-        <form @submit="onSubmit">
+        <form @submit.prevent="onSubmit">
             <validation-provider
                 name="email"
                 rules="required|email"
@@ -39,7 +39,12 @@
                     <template #message-danger>{{ errors[0] }}</template>
                 </vs-input>
             </validation-provider>
-
+            <vue-recaptcha
+                ref="captcha"
+                :sitekey="siteKey"
+                loadRecaptchaScript
+                size="invisible"
+            />
             <vs-button type="submit" block>Login</vs-button>
         </form>
         <vs-alert v-model="login_error" danger closable flat dark>
@@ -57,11 +62,13 @@
         faLockOpen,
     } from "@fortawesome/free-solid-svg-icons";
     import { Getter } from "vuex-class";
+    import VueRecaptcha from "vue-recaptcha";
 
     Vue.$fa.add(faEnvelope, faLock, faLockOpen);
 
     @Component({
         name: "Login",
+        components: { VueRecaptcha },
     })
     export default class Login extends Vue {
         email = "";
@@ -70,6 +77,10 @@
 
         @Getter("auth/isLogged") isLogged!: boolean;
 
+        get siteKey(): string {
+            return process.env.VUE_APP_RECAPTCHA_SITE_KEY;
+        }
+
         @Watch("isLogged")
         ifIsLogged(logged: boolean) {
             if (logged) {
@@ -77,10 +88,10 @@
             }
         }
 
-        async onSubmit(ev: Event): Promise<void> {
-            ev.preventDefault();
+        async onSubmit(): Promise<void> {
             const loading = this.$vs.loading();
             try {
+                (this.$refs.captcha as any).execute();
                 await this.$store.dispatch("auth/login", {
                     email: this.email,
                     password: this.password,

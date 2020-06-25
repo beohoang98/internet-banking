@@ -1,6 +1,6 @@
 import {
-    Injectable,
     ForbiddenException,
+    Injectable,
     NotAcceptableException,
 } from "@nestjs/common";
 import { User } from "@src/models/User";

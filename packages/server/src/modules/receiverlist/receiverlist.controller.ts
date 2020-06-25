@@ -1,27 +1,20 @@
 import {
     Body,
+    ClassSerializerInterceptor,
     Controller,
+    Delete,
     Get,
+    Param,
     Post,
+    Put,
     Req,
     UseGuards,
     UseInterceptors,
-    ClassSerializerInterceptor,
-    Put,
-    Delete,
-    Param,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
-import { CreateUserDto } from "@src/dto/user.dto";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { JwtGuard } from "@src/guards/jwt.guard";
-import { ForRoles } from "@src/guards/role.decorator";
-import { RoleGuard } from "@src/guards/role.guard";
-import { AdminRole } from "@src/models/Admin";
 import { ReceiverListService } from "@src/modules/receiverlist/receiverlist.service";
-import {
-    CreateReceiverDto,
-    UpdateReceiverDto,
-} from "@src/dto/receiverList.dto";
+import { CreateReceiverDto } from "@src/dto/receiverList.dto";
 
 @Controller("receiver")
 @ApiTags("receiver")

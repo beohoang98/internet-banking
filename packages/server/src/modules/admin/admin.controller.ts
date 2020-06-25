@@ -1,12 +1,10 @@
 import {
     Body,
+    ClassSerializerInterceptor,
     Controller,
-    Get,
     Post,
-    Req,
     UseGuards,
     UseInterceptors,
-    ClassSerializerInterceptor,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { ForRoles } from "@src/guards/role.decorator";

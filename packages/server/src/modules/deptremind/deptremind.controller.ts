@@ -1,17 +1,15 @@
 import {
     Body,
+    ClassSerializerInterceptor,
     Controller,
+    Delete,
     Get,
     Post,
     Req,
     UseGuards,
     UseInterceptors,
-    ClassSerializerInterceptor,
-    Put,
-    Delete,
-    Param,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { JwtGuard } from "@src/guards/jwt.guard";
 import { DeptRemindService } from "@src/modules/deptremind/deptremind.service";
 import {

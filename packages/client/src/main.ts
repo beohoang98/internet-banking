@@ -9,6 +9,9 @@ Vue.config.productionTip = false;
 import "./plugins/vee-validate";
 import "./plugins/font-awesome";
 import "./plugins/vuesax";
+import "./plugins/element-ui";
+
+import "@/filters";
 
 new Vue({
     router,
