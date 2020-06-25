@@ -42,6 +42,7 @@ axiosInstance.interceptors.response.use(
                 .then((res) => {
                     localStorage.setItem("access_token", res.data.accessToken);
                     axiosInstance.defaults.headers.Authorization = `Bearer ${res.data.accessToken}`;
+                    lastReq.headers.Authorization = `Bearer ${res.data.accessToken}`;
                     return Axios(lastReq);
                 });
         }
