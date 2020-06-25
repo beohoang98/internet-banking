@@ -1,4 +1,4 @@
-import { hashSync, compareSync } from "bcrypt";
+import { compareSync, hashSync } from "bcrypt";
 
 export class PasswordEncoder {
     static round = 5;
