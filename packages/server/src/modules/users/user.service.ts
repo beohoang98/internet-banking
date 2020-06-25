@@ -46,21 +46,33 @@ export class UserService {
                 flags: "-p, --password <password>",
                 description: "if empty, fill by random string",
             },
+            {
+                flags: "--acc-number <accountNumber>",
+            },
+            {
+                flags: "--phone <phone>",
+            },
         ],
     })
     async createCommand(command: _Command) {
-        console.log(command.opts());
-        const { name, email, password } = command.opts();
-        const user = new CreateUserDto();
-        user.name = name;
-        user.email = email;
+        try {
+            console.log(command.opts());
+            const { name, email, password, accNumber, phone } = command.opts();
+            const user = new CreateUserDto();
+            user.name = name;
+            user.email = email;
+            user.accountNumber = accNumber;
+            user.phone = phone;
 
-        const checkPass = password || crypto.randomBytes(10).toString("utf8");
-        user.password = PasswordEncoder.encode(checkPass);
+            const checkPass = password || crypto.randomBytes(10).toString("utf8");
+            user.password = PasswordEncoder.encode(checkPass);
 
-        await validateOrReject(user);
-        await getRepository(User).insert(user);
-        console.log(user);
+            await validateOrReject(user);
+            await getRepository(User).insert(user);
+            console.log(user);
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     async getProfile(id: number) {
