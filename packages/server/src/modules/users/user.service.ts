@@ -64,7 +64,8 @@ export class UserService {
             user.accountNumber = accNumber;
             user.phone = phone;
 
-            const checkPass = password || crypto.randomBytes(10).toString("utf8");
+            const checkPass =
+                password || crypto.randomBytes(10).toString("utf8");
             user.password = PasswordEncoder.encode(checkPass);
 
             await validateOrReject(user);
