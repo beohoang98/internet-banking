@@ -18,6 +18,7 @@ import { ReceiverListModule } from "./modules/receiverlist/receiverlist.module";
 import { OtpModule } from "./modules/otp/otp.module";
 import { TransactionModule } from "./modules/transaction/transaction.module";
 import { DebtRemindModule } from "./modules/deptremind/debtremind.module";
+import { SavingAccountModule } from "./modules/savingAccount/savingAccount.module";
 
 @Module({
     imports: [
@@ -55,6 +56,7 @@ import { DebtRemindModule } from "./modules/deptremind/debtremind.module";
         OtpModule,
         TransactionModule,
         DebtRemindModule,
+        SavingAccountModule,
         ConsoleModule,
     ],
     controllers: [],
