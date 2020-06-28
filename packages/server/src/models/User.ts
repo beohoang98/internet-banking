@@ -1,6 +1,6 @@
 import { Column, Entity } from "typeorm";
 import { Base } from "./Base";
-import { Exclude } from "class-transformer";
+import { Exclude, Expose } from "class-transformer";
 
 export enum UserRole {
     CUSTOMER = "CUSTOMER",
@@ -14,6 +14,8 @@ export class User extends Base<User> {
     name: string;
 
     @Column({ unique: true })
+    @Exclude()
+    @Expose({ groups: ["internal"] })
     email: string;
 
     @Column()
@@ -21,11 +23,15 @@ export class User extends Base<User> {
     password: string;
 
     @Column({ default: 0 })
+    @Exclude()
+    @Expose({ groups: ["internal"] })
     balance: number;
 
     @Column()
     accountNumber: string;
 
     @Column()
+    @Exclude()
+    @Expose({ groups: ["internal"] })
     phone: string;
 }

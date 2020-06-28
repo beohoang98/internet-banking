@@ -25,6 +25,7 @@ import {
 } from "@src/dto/client.dto";
 import { ClientRequestInterceptor } from "@src/middlewares/client-request.interceptor";
 import { ClientService } from "./client.service";
+import { TransformClassToPlain } from "class-transformer";
 
 @Controller("partner")
 @ApiTags("partner")
@@ -52,10 +53,12 @@ import { ClientService } from "./client.service";
 @ApiNotFoundResponse({ description: "Account not found" })
 export class ClientController {
     constructor(private readonly clientService: ClientService) {}
+
     @Post("check-account")
     @ApiCreatedResponse({ type: CheckAccountResponseDto })
+    @TransformClassToPlain({ groups: ["partner"] })
     checkAccountInfo(@Body() body: CheckAccountDto) {
-        return body;
+        return this.clientService.checkProfile(body.accountNumber + "");
     }
 
     @Post("send")

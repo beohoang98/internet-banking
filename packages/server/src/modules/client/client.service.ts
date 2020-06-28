@@ -8,6 +8,7 @@ import { Command as CommandClass } from "commander";
 import { InjectRepository } from "@nestjs/typeorm";
 import { BankTypeEnum } from "@src/models/ReceiverList";
 import { Transaction } from "@src/models/Transaction";
+import { UserService } from "@src/modules/users/user.service";
 
 @Injectable()
 @Console()
@@ -15,6 +16,8 @@ export class ClientService {
     constructor(
         @InjectRepository(Client)
         private readonly clientRepository: Repository<Client>,
+
+        private readonly userService: UserService,
     ) {}
     /**
      * create new client
@@ -49,6 +52,10 @@ export class ClientService {
 
     findOne(args: FindOneOptions<Client>) {
         return this.clientRepository.findOne(args);
+    }
+
+    checkProfile(accountNumber: string) {
+        return this.userService.findByAccountNumber(accountNumber);
     }
 
     async createTransaction(

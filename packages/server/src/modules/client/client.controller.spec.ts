@@ -89,11 +89,12 @@ describe("ClientController", () => {
     });
 
     test("partner-check-info", async () => {
+        const user = await createUser();
         await app
             .get(ClientService)
             .create(testClient.id, testClient.secret, testClient.publicKey);
         const body: CheckAccountDto = {
-            accountNumber: 1234567890,
+            accountNumber: +user.accountNumber,
         };
 
         const hash = crypto
@@ -101,13 +102,18 @@ describe("ClientController", () => {
             .update(JSON.stringify(body))
             .digest("hex");
 
-        return request(app.getHttpServer())
+        const res = await request(app.getHttpServer())
             .post("/partner/check-account")
             .set("x-partner-time", moment().unix().toString())
             .set("x-partner-hash", hash)
             .auth(testClient.id, testClient.secret)
-            .send(body)
-            .expect(201);
+            .send(body);
+
+        expect(res.status).toEqual(201);
+        expect(res.body.accountNumber).toEqual(user.accountNumber);
+        expect(res.body.name).toEqual(user.name);
+        expect(res.body.email).toBeUndefined();
+        expect(res.body.password).toBeUndefined();
     });
 
     test("partner-check-info-expires", async () => {

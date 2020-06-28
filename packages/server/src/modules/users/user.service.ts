@@ -22,10 +22,13 @@ export class UserService {
         private readonly userRepo: Repository<User>,
     ) {}
     async findById(id: number) {
-        return await this.userRepo.findOne(id);
+        return await this.userRepo.findOne({ id });
     }
     async findByEmail(email: string) {
-        return await this.userRepo.findOne({ email });
+        return await this.userRepo.findOne({ where: { email } });
+    }
+    async findByAccountNumber(accountNumber: string) {
+        return await this.userRepo.findOne({ where: { accountNumber } });
     }
 
     async createAccountNumber() {
