@@ -2,7 +2,6 @@ import {
     Body,
     ClassSerializerInterceptor,
     Controller,
-    Get,
     Post,
     Req,
     UseGuards,

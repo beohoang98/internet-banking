@@ -1,17 +1,22 @@
 <template>
     <div class="home">
-        <img alt="Vue logo" src="/logo.png" />
-        <HelloWorld msg="Welcome to Your Vue.js App" />
+        <app-payment-account />
     </div>
 </template>
 
 <script>
-    import HelloWorld from "@/components/HelloWorld.vue";
+    import Vue from "vue";
+    import AppPaymentAccount from "@/components/BankAccountList/PaymentAccount";
+    import { Aside, Container, Main } from "element-ui";
+
+    Vue.component(Container.name, Container);
+    Vue.component(Aside.name, Aside);
+    Vue.component(Main.name, Main);
 
     export default {
         name: "Home",
         components: {
-            HelloWorld,
+            AppPaymentAccount,
         },
     };
 </script>

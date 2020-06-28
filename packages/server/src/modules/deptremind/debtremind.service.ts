@@ -7,8 +7,8 @@ import { MailerService } from "@nestjs-modules/mailer";
 import { GetDebtRemindDto } from "@src/dto/debtRemind.dto";
 
 enum TemplateEnum {
-    REMIND_DEPT = "remindDept",
-    DELETE_REMIND_DEPT = "deleteRemindDept",
+    REMIND_DEBT = "remindDept",
+    DELETE_REMIND_DEBT = "deleteRemindDept",
 }
 
 @Injectable()
@@ -42,7 +42,7 @@ export class DebtRemindService {
             desAccount.email,
             amount,
             remindNote,
-            TemplateEnum.REMIND_DEPT,
+            TemplateEnum.REMIND_DEBT,
         );
     }
     async sendMail(
@@ -119,7 +119,7 @@ export class DebtRemindService {
                 desAccount.email,
                 deleteDept.amount,
                 note,
-                TemplateEnum.DELETE_REMIND_DEPT,
+                TemplateEnum.DELETE_REMIND_DEBT,
             );
         }
 
@@ -136,7 +136,7 @@ export class DebtRemindService {
                 srcAccount.email,
                 deleteDept.amount,
                 note,
-                TemplateEnum.DELETE_REMIND_DEPT,
+                TemplateEnum.DELETE_REMIND_DEBT,
             );
         }
     }

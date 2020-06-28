@@ -29,7 +29,9 @@
     },
     "scripts": {
         "version": "lerna-changelog",
-        "build": "yarn workspace client build & yarn workspace server build"
+        "build:client": "yarn workspace client build",
+        "build:server": "yarn workspace server build",
+        "build": "yarn build:client & yarn build:server"
     },
     "changelog": {
         "labels": {
