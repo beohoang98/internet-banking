@@ -17,7 +17,8 @@ import { MulterModule } from "@nestjs/platform-express";
 import { ReceiverListModule } from "./modules/receiverlist/receiverlist.module";
 import { OtpModule } from "./modules/otp/otp.module";
 import { TransactionModule } from "./modules/transaction/transaction.module";
-import { DeptRemindModule } from "./modules/deptremind/deptremind.module";
+import { DebtRemindModule } from "./modules/deptremind/debtremind.module";
+import { SavingAccountModule } from "./modules/savingAccount/savingAccount.module";
 
 @Module({
     imports: [
@@ -54,7 +55,8 @@ import { DeptRemindModule } from "./modules/deptremind/deptremind.module";
         ReceiverListModule,
         OtpModule,
         TransactionModule,
-        DeptRemindModule,
+        DebtRemindModule,
+        SavingAccountModule,
         ConsoleModule,
     ],
     controllers: [],

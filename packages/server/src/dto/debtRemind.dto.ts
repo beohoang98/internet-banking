@@ -1,6 +1,6 @@
 import { IsInt, IsString } from "class-validator";
 
-export class CreateDeptRemindDto {
+export class CreateDebtRemindDto {
     @IsString()
     desAccount: string;
 
@@ -11,7 +11,7 @@ export class CreateDeptRemindDto {
     remindNote: string;
 }
 
-export class GetDeptRemindDto {
+export class GetDebtRemindDto {
     account: string;
 
     isMyDept: boolean;
@@ -22,11 +22,11 @@ export class GetDeptRemindDto {
 
     createAt: Date;
 
-    constructor(data: Partial<GetDeptRemindDto>) {
+    constructor(data: Partial<GetDebtRemindDto>) {
         Object.assign(this, data);
     }
 }
-export class DeleteDeptRemindDto {
+export class DeleteDebtRemindDto {
     @IsInt()
     deptId: number;
 
