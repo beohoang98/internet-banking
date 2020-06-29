@@ -1,19 +1,12 @@
 <template>
     <div class="app-receivers">
-        <el-button round icon="el-icon-circle-plus" type="primary">
-            New Receiver
-        </el-button>
+        <el-button round icon="el-icon-circle-plus" type="primary">New Receiver</el-button>
         <hr />
         <el-table border fit show-header :data="tableData">
             <el-table-column prop="id" label="#" />
             <el-table-column prop="name" label="Name" />
             <el-table-column prop="accountNumber" label="Account Number" />
-            <el-table-column
-                fixed="right"
-                width="auto"
-                label="Actions"
-                align="right"
-            >
+            <el-table-column fixed="right" width="auto" label="Actions" align="right">
                 <template slot-scope="{ row }">
                     <el-button
                         size="small"
@@ -33,53 +26,60 @@
                 </template>
             </el-table-column>
         </el-table>
+        <p>{{data}}</p>
     </div>
 </template>
 
 <script lang="ts">
-    import Vue from "vue";
-    import { Component } from "vue-property-decorator";
-    import {
-        Button,
-        Container,
-        Table,
-        TableColumn,
-        Icon,
-        Popconfirm,
-    } from "element-ui";
+import Vue from "vue";
+import { Component } from "vue-property-decorator";
+import {
+    Button,
+    Container,
+    Table,
+    TableColumn,
+    Icon,
+    Popconfirm,
+} from "element-ui";
+import { Getter } from "vuex-class";
 
-    Vue.component(Container.name, Container);
-    Vue.component(Table.name, Table);
-    Vue.component(TableColumn.name, TableColumn);
-    Vue.component(Button.name, Button);
-    Vue.component(Popconfirm.name, Popconfirm);
-    Vue.component(Icon.name, Icon);
+Vue.component(Container.name, Container);
+Vue.component(Table.name, Table);
+Vue.component(TableColumn.name, TableColumn);
+Vue.component(Button.name, Button);
+Vue.component(Popconfirm.name, Popconfirm);
+Vue.component(Icon.name, Icon);
 
-    @Component({
-        name: "app-receivers",
-    })
-    export default class ReceiversPage extends Vue {
-        get tableData() {
-            return [
-                {
-                    id: 0,
-                    name: "Test 1",
-                    accountNumber: "123456789",
-                },
-                {
-                    id: 1,
-                    name: "Test 2",
-                    accountNumber: "987654321",
-                },
-            ];
-        }
-
-        handleEdit(row: any) {
-            alert(row.name);
-        }
-
-        handleDelete(row: any) {
-            alert("Delete " + row.name);
-        }
+@Component({
+    name: "app-receivers",
+})
+export default class ReceiversPage extends Vue {
+    @Getter("receiver/data") data!: any;
+    get tableData() {
+        return [
+            {
+                id: 0,
+                name: "Test 1",
+                accountNumber: "123456789",
+            },
+            {
+                id: 1,
+                name: "Test 2",
+                accountNumber: "987654321",
+            },
+        ];
     }
+
+    handleEdit(row: any) {
+        alert(row.name);
+    }
+
+    handleDelete(row: any) {
+        alert("Delete " + row.name);
+    }
+
+    mounted(): void {
+        this.$store.dispatch("receiver/loadReceiverList");
+    }
+}
 </script>

@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import { AuthModule } from "@/store/auth";
+import { ReceiverModule } from "./receiver";
 
 Vue.use(Vuex);
 
@@ -12,6 +13,7 @@ const AppStore = new Vuex.Store<any>({
     actions: {},
     modules: {
         auth: AuthModule,
+        receiver: ReceiverModule,
     },
 });
 

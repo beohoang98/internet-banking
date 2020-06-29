@@ -4,9 +4,10 @@
             <el-col :md="8">
                 <el-card shadow="always">
                     <template #header>Payment Account</template>
-                    <h1>{{ 100000 | vndFormat }}</h1>
+                    <h1>{{ profile.balance | vndFormat }}</h1>
                     <p>
-                        <strong>No:</strong>10000000
+                        <strong>Account Number:</strong>
+                        {{profile.accountNumber}}
                     </p>
                 </el-card>
             </el-col>
@@ -72,6 +73,7 @@ import {
     Option,
     InputNumber,
 } from "element-ui";
+import { Getter } from "vuex-class";
 
 Vue.component(Card.name, Card);
 Vue.component(Row.name, Row);
@@ -100,6 +102,7 @@ export default class PaymentAccount extends Vue {
     region = "";
     labelWidth = "120px";
     num = 0;
+    @Getter("auth/profile") profile!: any;
 }
 </script>
 

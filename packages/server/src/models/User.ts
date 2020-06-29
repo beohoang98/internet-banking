@@ -23,8 +23,6 @@ export class User extends Base<User> {
     password: string;
 
     @Column({ default: 0 })
-    @Exclude()
-    @Expose({ groups: ["internal"] })
     balance: number;
 
     @Column()
