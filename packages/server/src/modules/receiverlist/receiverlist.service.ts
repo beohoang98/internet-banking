@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, ForbiddenException } from "@nestjs/common";
 import { User } from "@src/models/User";
 
 import { getRepository } from "typeorm";
@@ -31,6 +31,18 @@ export class ReceiverListService {
             },
         });
 
+        const desAcc = await getRepository(User).findOne({
+            where: {
+                accountNumber: desAccountNumber,
+            },
+        });
+
+        if (!desAcc) {
+            throw new ForbiddenException("Cant find accountnumber");
+        }
+        if (!name) {
+            name = desAcc.name;
+        }
         const account = new ReceiverList({
             desAccountNumber,
             name,
