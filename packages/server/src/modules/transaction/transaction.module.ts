@@ -6,9 +6,14 @@ import { TransactionController } from "./transaction.controller";
 import { OTP } from "@src/models/Otp";
 import { Transaction } from "@src/models/Transaction";
 import { OtpModule } from "../otp/otp.module";
+import { ConnectPartnerModule } from "../connect/connect-partner.module";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([User, OTP, Transaction]), OtpModule],
+    imports: [
+        TypeOrmModule.forFeature([User, OTP, Transaction]),
+        OtpModule,
+        ConnectPartnerModule,
+    ],
     providers: [TransactionService],
     exports: [TypeOrmModule, TransactionService],
     controllers: [TransactionController],

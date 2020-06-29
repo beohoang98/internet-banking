@@ -21,8 +21,11 @@ import {
     CheckAccountDto,
     CheckAccountResponseDto,
     SendMoneyRequestDto,
+    SendMoneyRequestV2Dto,
 } from "@src/dto/client.dto";
 import { ClientRequestInterceptor } from "@src/middlewares/client-request.interceptor";
+import { ClientService } from "./client.service";
+import { TransformClassToPlain } from "class-transformer";
 
 @Controller("partner")
 @ApiTags("partner")
@@ -49,10 +52,13 @@ import { ClientRequestInterceptor } from "@src/middlewares/client-request.interc
 })
 @ApiNotFoundResponse({ description: "Account not found" })
 export class ClientController {
+    constructor(private readonly clientService: ClientService) {}
+
     @Post("check-account")
     @ApiCreatedResponse({ type: CheckAccountResponseDto })
+    @TransformClassToPlain({ groups: ["partner"] })
     checkAccountInfo(@Body() body: CheckAccountDto) {
-        return body;
+        return this.clientService.checkProfile(body.accountNumber + "");
     }
 
     @Post("send")
@@ -60,5 +66,18 @@ export class ClientController {
     @UseInterceptors(ClientRequestInterceptor)
     makeTransaction(@Body() body: SendMoneyRequestDto) {
         return body;
+    }
+
+    @Post("send/v2")
+    @ApiAcceptedResponse({ description: "Accepted send request" })
+    @UseInterceptors(ClientRequestInterceptor)
+    makeTransactionV2(@Body() body: SendMoneyRequestV2Dto) {
+        return this.clientService.createTransaction(
+            body.data.bankType,
+            body.data.accountNumber.toString(),
+            body.data.sourceAccount,
+            body.data.note,
+            body.data.amount,
+        );
     }
 }

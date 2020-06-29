@@ -2,7 +2,7 @@ import * as moment from "moment";
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { Client } from "@src/models/Client";
+import { BankTypeEnum, Client } from "@src/models";
 import * as request from "supertest";
 import { ClientService } from "@src/modules/client/client.service";
 import { MockTypeORMConfig } from "@src/utils/typeorm-mock";
@@ -14,8 +14,11 @@ import * as crypto from "crypto";
 import {
     CheckAccountDto,
     SendMoneyDto,
+    SendMoneyDtoV2,
     SendMoneyRequestDto,
+    SendMoneyRequestV2Dto,
 } from "@src/dto/client.dto";
+import { UserService } from "../users/user.service";
 
 require("dotenv").config();
 
@@ -34,7 +37,7 @@ describe("ClientController", () => {
         ).toString("base64"),
     };
 
-    beforeAll(async () => {
+    beforeAll(async (done) => {
         const module = await Test.createTestingModule({
             imports: [
                 TypeOrmModule.forRootAsync({
@@ -46,6 +49,7 @@ describe("ClientController", () => {
 
         app = module.createNestApplication();
         await app.init();
+        done();
     });
 
     afterAll(() => {
@@ -61,6 +65,10 @@ describe("ClientController", () => {
         );
     };
 
+    const createUser = async () => {
+        const user = app.get(UserService);
+        return await user.create("bao", "bao@gmail.com", "123456", "123456");
+    };
     async function createSignBody(sendData: SendMoneyDto) {
         const pgpClient = app.get(PGPService);
         const signature = await pgpClient.sign(
@@ -81,11 +89,12 @@ describe("ClientController", () => {
     });
 
     test("partner-check-info", async () => {
+        const user = await createUser();
         await app
             .get(ClientService)
             .create(testClient.id, testClient.secret, testClient.publicKey);
         const body: CheckAccountDto = {
-            accountNumber: 1234567890,
+            accountNumber: +user.accountNumber,
         };
 
         const hash = crypto
@@ -93,13 +102,18 @@ describe("ClientController", () => {
             .update(JSON.stringify(body))
             .digest("hex");
 
-        return request(app.getHttpServer())
+        const res = await request(app.getHttpServer())
             .post("/partner/check-account")
             .set("x-partner-time", moment().unix().toString())
             .set("x-partner-hash", hash)
             .auth(testClient.id, testClient.secret)
-            .send(body)
-            .expect(201);
+            .send(body);
+
+        expect(res.status).toEqual(201);
+        expect(res.body.accountNumber).toEqual(user.accountNumber);
+        expect(res.body.name).toEqual(user.name);
+        expect(res.body.email).toBeUndefined();
+        expect(res.body.password).toBeUndefined();
     });
 
     test("partner-check-info-expires", async () => {
@@ -243,5 +257,46 @@ describe("ClientController", () => {
             .send(body);
 
         expect(res.status).toBe(403);
+    });
+
+    test("partner-send-ok", async () => {
+        await createUser();
+        await app
+            .get(ClientService)
+            .create(testClient.id, testClient.secret, testClient.publicKey);
+        const pgpClient = app.get(PGPService);
+        const sendData: SendMoneyDtoV2 = {
+            amount: 500000,
+            accountNumber: 10000000,
+            sourceAccount: "123456789",
+            note: "dance",
+            bankType: BankTypeEnum.PGP,
+        };
+
+        const signature = await pgpClient.sign(
+            JSON.stringify(sendData),
+            readFileSync(resolve(__dirname, "../../keys/test-private.asc")),
+            testPGPPassphrase,
+        );
+
+        const body: SendMoneyRequestV2Dto = {
+            data: sendData,
+            signature,
+        };
+
+        const hash = crypto
+            .createHmac("md5", hashSecret)
+            .update(JSON.stringify(body))
+            .digest("hex");
+
+        const res = await request(app.getHttpServer())
+            .post("/partner/send/v2")
+            .set("x-partner-time", moment().unix().toString())
+            .set("x-partner-hash", hash)
+            .auth(testClient.id, testClient.secret)
+            .send(body);
+        // console.log(res);
+
+        expect(res.status).toBe(201);
     });
 });

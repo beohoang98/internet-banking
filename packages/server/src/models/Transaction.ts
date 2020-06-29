@@ -20,4 +20,10 @@ export class Transaction extends Base<Transaction> {
 
     @Column({ type: "enum", enum: BankTypeEnum })
     bankType: BankTypeEnum;
+
+    @Column()
+    isDebtPay: boolean;
+
+    @Column({ nullable: true })
+    isMyBankSend: boolean;
 }
