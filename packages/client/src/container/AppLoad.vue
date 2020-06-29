@@ -1,6 +1,6 @@
 <template>
     <div id="app-loader">
-        <router-view v-if="isLoaded" />
+        <router-view v-if="isLocalLoaded" />
         <app-loading v-else />
     </div>
 </template>
@@ -23,6 +23,8 @@
         @Getter("auth/isLogged") isLogged!: boolean;
         @Action("auth/loadProfile") loadProfile!: () => Promise<void>;
 
+        isLocalLoaded = false;
+
         async loadValidate() {
             const { messages } = await import(
                 "vee-validate/dist/locale/en.json"
@@ -38,7 +40,32 @@
             }
         }
 
+        watchIsLoaded(this: this, after: any[], before: any[]) {
+            if (after[0] && !this.isLocalLoaded) {
+                console.debug("Count me");
+                if (this.isLogged) {
+                    this.isLocalLoaded = after[0];
+                } else {
+                    const to = this.$route;
+                    if (to.matched.some((record) => !!record.meta.auth)) {
+                        this.$router.replace({ name: "login" });
+                    } else {
+                        this.isLocalLoaded = after[0];
+                    }
+                }
+            }
+        }
+
         async mounted(): Promise<void> {
+            this.$watch<any[]>(
+                function () {
+                    return [this.isLoaded, this.$route];
+                },
+                this.watchIsLoaded,
+                {
+                    immediate: true,
+                },
+            );
             if (!this.isLoaded) {
                 try {
                     await this.loadValidate();
