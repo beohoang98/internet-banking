@@ -16,7 +16,6 @@ import {
     SendMoneyDto,
     SendMoneyDtoV2,
     SendMoneyRequestDto,
-    SendMoneyRequestV2Dto,
 } from "@src/dto/client.dto";
 import { UserService } from "../users/user.service";
 
@@ -67,7 +66,13 @@ describe("ClientController", () => {
 
     const createUser = async () => {
         const user = app.get(UserService);
-        return await user.create("bao", "bao@gmail.com", "123456", "123456");
+        const random = crypto.randomBytes(10).toString("hex") + Date.now();
+        return await user.create(
+            random,
+            `${random}@gmail.com`,
+            "123456",
+            "123456",
+        );
     };
     async function createSignBody(sendData: SendMoneyDto) {
         const pgpClient = app.get(PGPService);
@@ -260,29 +265,19 @@ describe("ClientController", () => {
     });
 
     test("partner-send-ok", async () => {
-        await createUser();
+        const user = await createUser();
         await app
             .get(ClientService)
             .create(testClient.id, testClient.secret, testClient.publicKey);
-        const pgpClient = app.get(PGPService);
         const sendData: SendMoneyDtoV2 = {
             amount: 500000,
-            accountNumber: 10000000,
+            accountNumber: +user.accountNumber,
             sourceAccount: "123456789",
             note: "dance",
             bankType: BankTypeEnum.PGP,
         };
 
-        const signature = await pgpClient.sign(
-            JSON.stringify(sendData),
-            readFileSync(resolve(__dirname, "../../keys/test-private.asc")),
-            testPGPPassphrase,
-        );
-
-        const body: SendMoneyRequestV2Dto = {
-            data: sendData,
-            signature,
-        };
+        const body = await createSignBody(sendData);
 
         const hash = crypto
             .createHmac("md5", hashSecret)
@@ -295,8 +290,37 @@ describe("ClientController", () => {
             .set("x-partner-hash", hash)
             .auth(testClient.id, testClient.secret)
             .send(body);
-        // console.log(res);
 
         expect(res.status).toBe(201);
+    });
+
+    test("partner-send-failed-because-account-not-exist", async () => {
+        const user = await createUser();
+        await app
+            .get(ClientService)
+            .create(testClient.id, testClient.secret, testClient.publicKey);
+        const sendData: SendMoneyDtoV2 = {
+            amount: 500000,
+            accountNumber: +user.accountNumber + 1000,
+            sourceAccount: "123456789",
+            note: "dance",
+            bankType: BankTypeEnum.PGP,
+        };
+
+        const body = await createSignBody(sendData);
+
+        const hash = crypto
+            .createHmac("md5", hashSecret)
+            .update(JSON.stringify(body))
+            .digest("hex");
+
+        const res = await request(app.getHttpServer())
+            .post("/partner/send/v2")
+            .set("x-partner-time", moment().unix().toString())
+            .set("x-partner-hash", hash)
+            .auth(testClient.id, testClient.secret)
+            .send(body);
+
+        expect(res.status).toBe(400);
     });
 });
