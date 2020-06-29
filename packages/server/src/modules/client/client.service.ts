@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { randomBytes } from "crypto";
 import { FindOneOptions, getRepository, Repository } from "typeorm";
 import { Client } from "@src/models/Client";
@@ -65,6 +65,13 @@ export class ClientService {
         note: string,
         amount: number,
     ) {
+        const user = await this.userService.findByAccountNumber(accountNumber);
+        if (!user) {
+            throw new BadRequestException(
+                "Account not exists: " + accountNumber,
+            );
+        }
+
         const transaction = new Transaction({
             sourceAccount: sourceAccount,
             desAccount: accountNumber,

@@ -1,16 +1,27 @@
 import { readFileSync } from "fs";
 import * as path from "path";
 
-const DevKeys = () => ({
-    PGP_PUBLIC: readFileSync(path.resolve(__dirname, "../keys/nhom28-pub.asc")),
-    PGP_PRIVATE: readFileSync(
-        path.resolve(__dirname, "../keys/nhom28-pgp.asc"),
-    ),
-    RSA_PUBLIC: readFileSync(path.resolve(__dirname, "../keys/nhom28-rsa.pub")),
-    RSA_PRIVATE: readFileSync(
-        path.resolve(__dirname, "../keys/nhom28-rsa.pem"),
-    ),
-});
+const DevKeys = () => {
+    try {
+        return {
+            PGP_PUBLIC: readFileSync(
+                path.resolve(__dirname, "../keys/nhom28-pub.asc"),
+            ),
+            PGP_PRIVATE: readFileSync(
+                path.resolve(__dirname, "../keys/nhom28-pgp.asc"),
+            ),
+            RSA_PUBLIC: readFileSync(
+                path.resolve(__dirname, "../keys/nhom28-rsa.pub"),
+            ),
+            RSA_PRIVATE: readFileSync(
+                path.resolve(__dirname, "../keys/nhom28-rsa.pem"),
+            ),
+        };
+    } catch (e) {
+        console.warn(e);
+        return {};
+    }
+};
 const ProdKeys = () => ({
     PGP_PUBLIC: Buffer.from(process.env.PUBLIC_PGP_KEY, "base64"),
     RSA_PUBLIC: Buffer.from(process.env.PUBLIC_RSA_KEY, "base64"),
