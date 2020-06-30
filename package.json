@@ -5,32 +5,13 @@
         "url": "https://github.com/beohoang98/internet-banking"
     },
     "devDependencies": {
-        "lerna": "^3.20.2",
-        "lerna-changelog": "^1.0.1",
-        "typescript": "^3.9.2"
-    },
-    "workspaces": {
-        "packages": [
-            "packages/*"
-        ],
-        "nohoist": [
-            "**/ts-jest",
-            "**/ts-jest/**",
-            "**/@typescript-eslint/**",
-            "**/eslint-config-*",
-            "**/eslint",
-            "**/typeorm",
-            "**/typeorm/**",
-            "server/@nestjs/**",
-            "server/swagger-ui-express",
-            "client/@vue/cli-plugin-typescript/**",
-            "client/@quasar/**"
-        ]
+        "conventional-changelog-cli": "^2.0.34"
     },
     "scripts": {
-        "version": "lerna-changelog",
-        "build:client": "yarn workspace client build",
-        "build:server": "yarn workspace server build",
+        "version": "yarn changelog && git add CHANGELOG.md",
+        "changelog": "conventional-changelog -g angular -i CHANGELOG.md -s",
+        "build:client": "cd packages/client/ && yarn build",
+        "build:server": "cd packages/server && yarn build",
         "build": "yarn build:client & yarn build:server"
     },
     "changelog": {

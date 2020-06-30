@@ -16,5 +16,19 @@ module.exports = {
         if (config.NO_TS) {
             config.plugins.delete("fork-ts-checker");
         }
+        return config;
+    },
+    pages: {
+        index: {
+            entry: "src/main.ts",
+            template: "public/index.html",
+            filename: "index.html",
+        },
+        admin: {
+            entry: "src/admin.ts",
+            template: "public/admin.html",
+            filename: "admin/index.html",
+            title: "Admin",
+        },
     },
 };

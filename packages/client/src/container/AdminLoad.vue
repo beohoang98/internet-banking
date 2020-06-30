@@ -13,15 +13,15 @@ import AppLoading from "@/components/AppLoading.vue";
 import { extend } from "vee-validate";
 
 @Component({
-    name: "app-load",
+    name: "admin-load",
     components: {
         AppLoading,
     },
 })
-export default class AppLoad extends Vue {
+export default class AdminLoad extends Vue {
     @Getter("auth/isLoaded") isLoaded!: boolean;
     @Getter("auth/isLogged") isLogged!: boolean;
-    @Action("auth/loadProfile") loadProfile!: () => Promise<void>;
+    @Action("auth/fetchProfile") loadProfile!: () => Promise<void>;
 
     isLocalLoaded = false;
 
