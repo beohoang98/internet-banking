@@ -50,7 +50,11 @@
                         <el-option label="RSA" value="RSA"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="Account number" :label-width="labelWidth">
+                <el-form-item
+                    label="Account number"
+                    :label-width="labelWidth"
+                    v-on:change.native="getName()"
+                >
                     <el-input
                         v-model="form.accountNumber"
                         autocomplete="off"
@@ -89,6 +93,7 @@ import {
     Message,
 } from "element-ui";
 import { Getter } from "vuex-class";
+import { axiosInstance } from "../utils/axios";
 
 Vue.component(Container.name, Container);
 Vue.component(Table.name, Table);
@@ -147,6 +152,62 @@ export default class ReceiversPage extends Vue {
         this.id = row.id;
     }
 
+    async getName() {
+        try {
+            if (this.form.bankType === "LOCAL") {
+                const { data: data } = await axiosInstance.get(
+                    "user/profile/accountnumber?number=" +
+                        this.form.accountNumber,
+                );
+                this.form.name = data.name;
+            }
+            if (this.form.bankType === "PGP") {
+                const { data: data } = await axiosInstance.get(
+                    "transaction/interbank/info",
+                    {
+                        params: {
+                            accountNumber: this.form.accountNumber,
+                            bankType: "PGP",
+                        },
+                    },
+                );
+                if (data.success === false) {
+                    Message({
+                        showClose: true,
+                        message: data.message,
+                        type: "error",
+                    });
+                }
+                this.form.name = data.data;
+            }
+
+            if (this.form.bankType === "RSA") {
+                const { data: data } = await axiosInstance.get(
+                    "transaction/interbank/info",
+                    {
+                        params: {
+                            accountNumber: this.form.accountNumber,
+                            bankType: "RSA",
+                        },
+                    },
+                );
+                if (data.success === false) {
+                    Message({
+                        showClose: true,
+                        message: data.message,
+                        type: "error",
+                    });
+                }
+                this.form.name = data.payload.userName;
+            }
+        } catch (e) {
+            Message({
+                showClose: true,
+                message: e,
+                type: "error",
+            });
+        }
+    }
     async handleDelete(row: any) {
         try {
             await this.$store.dispatch("receiver/deleteReceiver", {
