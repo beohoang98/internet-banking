@@ -8,7 +8,7 @@
         >New Receiver</el-button>
         <hr />
         <el-table border fit show-header :data="data">
-            <el-table-column prop="id" label="#" />
+            <el-table-column type="index" label="#" />
             <el-table-column prop="name" label="Name" />
             <el-table-column prop="desAccountNumber" label="Account Number" />
             <el-table-column prop="bankType" label="Bank" />
@@ -22,42 +22,48 @@
                         icon="el-icon-edit"
                         @click="() => handleEdit(row)"
                     ></el-button>
-                    <el-button
-                        slot="reference"
-                        circle
-                        size="small"
-                        type="danger"
-                        icon="el-icon-delete"
-                        @click="() => handleDelete(row)"
-                    ></el-button>
+                    <el-popconfirm
+                        title="Are you sure to delete this?"
+                        @onConfirm="() => handleDelete(row)"
+                    >
+                        <el-button
+                            slot="reference"
+                            circle
+                            size="small"
+                            type="danger"
+                            icon="el-icon-delete"
+                        ></el-button>
+                    </el-popconfirm>
                 </template>
             </el-table-column>
         </el-table>
-        <el-dialog title="ADD NEW RECEIVER" :visible.sync="dialogFormVisible">
+        <el-dialog :title="titleDialog" :visible.sync="dialogFormVisible" @close="closeForm()">
             <el-form :model="form" ref="form">
                 <el-form-item label="Bank" :label-width="labelWidth">
-                    <el-select v-model="form.bankType" placeholder="Please select a bank type">
+                    <el-select
+                        v-model="form.bankType"
+                        placeholder="Please select a bank type"
+                        :disabled="disableUpdateInput"
+                    >
                         <el-option label="LOCAL" value="LOCAL"></el-option>
                         <el-option label="PGP" value="PGP"></el-option>
                         <el-option label="RSA" value="RSA"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item
-                    label="Account number"
-                    :label-width="labelWidth"
-                    :rules="[
-                     { required: true, message: 'age is required'}
-                     ]"
-                >
-                    <el-input v-model="form.accountNumber" autocomplete="off"></el-input>
+                <el-form-item label="Account number" :label-width="labelWidth">
+                    <el-input
+                        v-model="form.accountNumber"
+                        autocomplete="off"
+                        :disabled="disableUpdateInput"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="Name" :label-width="labelWidth">
                     <el-input v-model="form.name" autocomplete="off"></el-input>
                 </el-form-item>
-            </el-form>s
+            </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">Cancel</el-button>
-                <el-button type="submit" @click="submitForm('form')">Confirm</el-button>
+                <el-button @click="closeForm()">Cancel</el-button>
+                <el-button type="submit" @click="submitForm()">Confirm</el-button>
             </span>
         </el-dialog>
     </div>
@@ -98,6 +104,7 @@ Vue.component(Select.name, Select);
 Vue.component(Option.name, Option);
 Vue.component(InputNumber.name, InputNumber);
 Vue.component(Message.name, Message);
+Vue.component(Popconfirm.name, Popconfirm);
 
 @Component({
     name: "app-receivers",
@@ -108,6 +115,10 @@ export default class ReceiversPage extends Vue {
     name = "";
     bankType = "";
     labelWidth = "150px";
+    disableUpdateInput = false;
+    titleDialog = "ADD NEW RECEIVER";
+    index = -1;
+    id = -1;
 
     form = {
         name: "",
@@ -117,28 +128,98 @@ export default class ReceiversPage extends Vue {
     num = 0;
     @Getter("receiver/data") data!: any;
 
-    handleEdit(row: any) {
-        alert(row.name);
+    closeForm() {
+        this.titleDialog = "ADD NEW RECEIVER";
+        this.dialogFormVisible = false;
+        this.form.name = "";
+        this.form.accountNumber = "";
+        this.form.bankType = "";
+        this.disableUpdateInput = false;
+    }
+    async handleEdit(row: any) {
+        this.titleDialog = "UPDATE RECEIVER";
+        this.disableUpdateInput = true;
+        this.dialogFormVisible = true;
+        this.form.name = row.name;
+        this.form.accountNumber = row.desAccountNumber;
+        this.form.bankType = row.bankType;
+        this.index = this.data.indexOf(row);
+        this.id = row.id;
     }
 
-    handleDelete(row: any) {
-        alert("Delete " + row.name);
-    }
-
-    async submitForm() {
+    async handleDelete(row: any) {
         try {
-            await this.$store.dispatch("receiver/addReceiver", {
-                desAccountNumber: this.form.accountNumber,
-                name: this.form.name,
-                bankType: this.form.bankType,
+            await this.$store.dispatch("receiver/deleteReceiver", {
+                id: row.id,
+                index: this.data.indexOf(row),
             });
             Message({
                 showClose: true,
-                message: "Add new receiver successful",
+                message: "Delete receiver successful",
                 type: "success",
             });
         } catch (e) {
-            alert(e);
+            Message({
+                showClose: true,
+                message: e,
+                type: "error",
+            });
+        }
+    }
+
+    async submitForm() {
+        if (this.disableUpdateInput === false) {
+            try {
+                await this.$store.dispatch("receiver/addReceiver", {
+                    desAccountNumber: this.form.accountNumber,
+                    name: this.form.name,
+                    bankType: this.form.bankType,
+                });
+                this.closeForm();
+                //this.dialogFormVisible = false;
+                //this.form.name = "";
+                //this.form.accountNumber = "";
+                //this.form.bankType = "";
+                Message({
+                    showClose: true,
+                    message: "Add new receiver successful",
+                    type: "success",
+                });
+            } catch (e) {
+                console.log(e);
+                Message({
+                    showClose: true,
+                    message: e,
+                    type: "error",
+                });
+            }
+        } else {
+            try {
+                await this.$store.dispatch("receiver/updateReceiver", {
+                    id: this.id,
+                    desAccountNumber: this.form.accountNumber,
+                    name: this.form.name,
+                    bankType: this.form.bankType,
+                    index: this.index,
+                });
+                Message({
+                    showClose: true,
+                    message: "Update receiver successful",
+                    type: "success",
+                });
+                //this.dialogFormVisible = false;
+                //this.form.name = "";
+                //this.form.accountNumber = "";
+                //this.form.bankType = "";
+                this.closeForm();
+            } catch (e) {
+                console.log({ error: e });
+                Message({
+                    showClose: true,
+                    message: e,
+                    type: "error",
+                });
+            }
         }
     }
 

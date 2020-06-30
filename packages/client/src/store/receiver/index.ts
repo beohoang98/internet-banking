@@ -2,7 +2,7 @@ import { Module } from "vuex";
 import { axiosInstance } from "@/utils/axios";
 
 export interface ReceiverState {
-    data?: any[];
+    data: any[];
     isLoading: boolean;
     isLoaded: boolean;
 }
@@ -11,11 +11,23 @@ export interface CreateReceiver {
     name: string;
     bankType: string;
 }
+export interface DeleteReceiver {
+    id: number;
+    index: number;
+}
+export interface UpdateReceiver {
+    desAccountNumber: string;
+    name: string;
+    bankType: string;
+    id: number;
+    index: number;
+}
+
 export const ReceiverModule: Module<ReceiverState, any> = {
     namespaced: true,
     state() {
         return {
-            data: undefined,
+            data: [{}],
             isLoading: false,
             isLoaded: false,
         };
@@ -57,6 +69,42 @@ export const ReceiverModule: Module<ReceiverState, any> = {
                 const cloneData = state.data;
                 cloneData?.push(data);
                 commit("setData", cloneData);
+            } finally {
+                commit("setLoading", false);
+                commit("setLoaded", true);
+            }
+        },
+        async deleteReceiver(
+            { commit, state },
+            deleteReceiver: DeleteReceiver,
+        ) {
+            try {
+                commit("setLoading", true);
+                const { data: data } = await axiosInstance.delete(
+                    "/receiver/" + deleteReceiver.id,
+                );
+                const cloneData = state.data;
+                cloneData?.splice(deleteReceiver.index, 1);
+                commit("setData", cloneData);
+            } finally {
+                commit("setLoading", false);
+                commit("setLoaded", true);
+            }
+        },
+        async updateReceiver(
+            { commit, state },
+            updateReceiver: UpdateReceiver,
+        ) {
+            try {
+                commit("setLoading", true);
+                await axiosInstance.put("/receiver/" + updateReceiver.id, {
+                    name: updateReceiver.name,
+                    desAccountNumber: updateReceiver.desAccountNumber,
+                    bankType: updateReceiver.bankType,
+                });
+                const cloneData = state.data;
+                cloneData[updateReceiver.index].name = updateReceiver.name;
+                commit("setDada", cloneData);
             } finally {
                 commit("setLoading", false);
                 commit("setLoaded", true);

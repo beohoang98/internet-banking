@@ -31,18 +31,21 @@ export class ReceiverListService {
             },
         });
 
-        const desAcc = await getRepository(User).findOne({
-            where: {
-                accountNumber: desAccountNumber,
-            },
-        });
+        if (bankType === BankTypeEnum.LOCAL) {
+            const desAcc = await getRepository(User).findOne({
+                where: {
+                    accountNumber: desAccountNumber,
+                },
+            });
 
-        if (!desAcc) {
-            throw new ForbiddenException("Cant find accountnumber");
+            if (!desAcc) {
+                throw new ForbiddenException("Cant find accountnumber");
+            }
+            if (!name) {
+                name = desAcc.name;
+            }
         }
-        if (!name) {
-            name = desAcc.name;
-        }
+
         const account = new ReceiverList({
             desAccountNumber,
             name,

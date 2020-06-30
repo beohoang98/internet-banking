@@ -63,6 +63,16 @@ const routes: Array<RouteConfig> = [
                         component: () => import("@/views/Receivers.vue"),
                     },
                     {
+                        path: "change-password",
+                        name: "ChangePassword",
+                        component: () => import("@/views/ChangePassword.vue"),
+                    },
+                    {
+                        path: "reset-password",
+                        name: "ResetPassword",
+                        component: () => import("@/views/ResetPassword.vue"),
+                    },
+                    {
                         path: "*",
                         component: NotFound,
                     },
