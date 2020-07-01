@@ -21,6 +21,7 @@ import { ForRoles } from "@src/guards/role.decorator";
 import { RoleGuard } from "@src/guards/role.guard";
 import { AdminRole } from "@src/models/Admin";
 import { UserService } from "@src/modules/users/user.service";
+import { classToPlain, TransformClassToPlain } from "class-transformer";
 
 @Controller("user")
 @ApiTags("user")
@@ -48,10 +49,19 @@ export class UserController {
         );
     }
 
-    @Get("profile/accountnumber")
-    @UseGuards(JwtGuard)
-    async getProfileWithAccountNumber(@Query() query) {
-        return this.userService.getProfileWithAccountNumber(query.number);
+    @Get("profile/account-number")
+    @UseGuards(JwtGuard, RoleGuard)
+    @ForRoles(AdminRole.ADMIN, AdminRole.EMPLOYEE)
+    getProfileWithAccountNumber(@Query("number") accountNumber: string) {
+        return this.userService.getProfileWithAccountNumber(accountNumber);
+    }
+
+    @Get("search")
+    @UseGuards(JwtGuard, RoleGuard)
+    @ForRoles(AdminRole.ADMIN, AdminRole.EMPLOYEE)
+    @TransformClassToPlain({ groups: ["internal"] })
+    searchUser(@Query("q") query: string) {
+        return this.userService.search(query);
     }
 
     @Put("password")

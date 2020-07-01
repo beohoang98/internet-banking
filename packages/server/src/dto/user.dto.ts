@@ -30,10 +30,10 @@ export class CreateUserDto {
     @ApiProperty()
     @IsPhoneNumber("VN")
     phone: string;
-
-    @ApiProperty()
-    @IsNumberString()
-    accountNumber: string;
+    //
+    // @ApiProperty()
+    // @IsNumberString()
+    // accountNumber: string;
 }
 
 export class ChangePasswordDto {

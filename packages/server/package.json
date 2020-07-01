@@ -44,6 +44,7 @@
     "moment": "^2.27.0",
     "mysql": "^2.18.1",
     "nestjs-console": "^3.0.6",
+    "nestjs-typeorm-paginate": "^2.0.3",
     "node-rsa": "^1.0.8",
     "nodemailer": "^6.4.10",
     "openpgp": "^4.10.4",

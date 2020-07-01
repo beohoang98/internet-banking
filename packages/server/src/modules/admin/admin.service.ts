@@ -1,7 +1,8 @@
 import {
     ConflictException,
-    ForbiddenException,
     Injectable,
+    InternalServerErrorException,
+    UnprocessableEntityException,
 } from "@nestjs/common";
 import { CreateAdminDto } from "@src/dto/admin.dto";
 import { Admin, AdminRole } from "@src/models/Admin";
@@ -10,16 +11,24 @@ import { validateOrReject } from "class-validator";
 import { Command as _Command } from "commander";
 import * as crypto from "crypto";
 import { Command, Console } from "nestjs-console";
-import { getRepository } from "typeorm";
+import { getConnectionManager, getRepository, Like, Repository } from "typeorm";
 import { User } from "@src/models/User";
 import { Transaction } from "@src/models/Transaction";
 import { BankTypeEnum } from "@src/models/ReceiverList";
+import { InjectRepository } from "@nestjs/typeorm";
+import { DepositLog } from "@src/models/DepositLog";
+import { IPaginationOptions, paginate } from "nestjs-typeorm-paginate/index";
 
 @Injectable()
 @Console()
 export class AdminService {
+    constructor(
+        @InjectRepository(Admin)
+        private readonly adminRepo: Repository<Admin>,
+    ) {}
+
     async findById(id: number) {
-        return await getRepository(Admin).findOne(id);
+        return await getRepository(Admin).findOne({ id });
     }
     async findByEmail(email: string) {
         return await getRepository(Admin).findOne({ email });
@@ -81,7 +90,20 @@ export class AdminService {
         console.log(admin);
     }
 
-    async depositUserAccout(accountNumber: string, amount: number) {
+    async depositUserAccout(
+        accountNumber: string,
+        amount: number,
+        password: string,
+        employeeId: number,
+    ) {
+        const employee = await getRepository(Admin).findOne({ id: employeeId });
+        if (!employee)
+            throw new InternalServerErrorException("Something went wrong");
+
+        if (!PasswordEncoder.compare(password, employee.password)) {
+            throw new UnprocessableEntityException("Wrong password");
+        }
+
         const user = await getRepository(User).findOne({
             where: {
                 accountNumber: accountNumber,
@@ -89,23 +111,44 @@ export class AdminService {
         });
 
         if (!user) {
-            throw new ForbiddenException("Cant find user account");
+            throw new UnprocessableEntityException("Cant find user account");
         }
 
-        const transaction = new Transaction({
-            note: "Deposit",
-            sourceAccount: "Group 28 Local Bank",
-            desAccount: user.accountNumber,
-            amount: amount,
-            bankType: BankTypeEnum.LOCAL,
-            isDebtPay: false,
-        });
+        const runner = getConnectionManager().get().createQueryRunner();
+        await runner.startTransaction();
+        try {
+            const transaction = new Transaction({
+                note: "Deposit",
+                sourceAccount: "Group 28 Local Bank",
+                desAccount: user.accountNumber,
+                amount: amount,
+                bankType: BankTypeEnum.LOCAL,
+                isDebtPay: false,
+            });
 
-        await getRepository(User).update(user.id, {
-            balance: +user.balance + amount,
-        });
+            await runner.manager.increment(
+                User,
+                {
+                    id: user.id,
+                },
+                "balance",
+                +amount,
+            );
 
-        return await getRepository(Transaction).save(transaction);
+            await runner.manager.insert(Transaction, transaction);
+            const depositLog = new DepositLog({
+                transaction,
+                by: employee,
+            });
+            await runner.manager.insert(DepositLog, depositLog);
+            await runner.commitTransaction();
+
+            return transaction;
+        } catch (e) {
+            await runner.rollbackTransaction();
+        } finally {
+            await runner.release();
+        }
     }
 
     async getListEmployee() {
@@ -114,6 +157,24 @@ export class AdminService {
                 role: AdminRole.EMPLOYEE,
             },
         });
+    }
+
+    async paginateEmployee(name = "", options: IPaginationOptions) {
+        const { page = 1, limit = 20 } = options;
+        return await paginate(
+            this.adminRepo,
+            {
+                page,
+                limit,
+                route: "/api/admin/employee",
+            },
+            {
+                where: {
+                    role: AdminRole.EMPLOYEE,
+                    name: Like(`${name}%`),
+                },
+            },
+        );
     }
 
     async updateEmployee(
@@ -130,6 +191,6 @@ export class AdminService {
     }
 
     async deleteEmployee(id: number) {
-        return await getRepository(Admin).delete(id);
+        return await getRepository(Admin).softDelete(id);
     }
 }

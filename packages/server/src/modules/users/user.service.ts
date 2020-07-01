@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable } from "@nestjs/common";
+import {
+    ForbiddenException,
+    Injectable,
+    NotFoundException,
+} from "@nestjs/common";
 import { CreateUserDto } from "@src/dto/user.dto";
 import { User } from "@src/models/User";
 import { PasswordEncoder } from "@src/utils/passwordEncoder";
@@ -6,7 +10,7 @@ import { validateOrReject } from "class-validator";
 import { Command as _Command } from "commander";
 import * as crypto from "crypto";
 import { Command, Console } from "nestjs-console";
-import { getRepository, Repository } from "typeorm";
+import { getRepository, Like, Repository } from "typeorm";
 
 import { OtpService } from "../otp/otp.service";
 import { OTP } from "@src/models/Otp";
@@ -29,6 +33,16 @@ export class UserService {
     }
     async findByAccountNumber(accountNumber: string) {
         return await this.userRepo.findOne({ where: { accountNumber } });
+    }
+    search(search: string) {
+        return this.userRepo.find({
+            where: [
+                { accountNumber: Like(`%${search}%`) },
+                { email: Like(`%${search}%`) },
+                { phone: Like(`%${search}%`) },
+            ],
+            take: 10,
+        });
     }
 
     async createAccountNumber() {
@@ -60,9 +74,6 @@ export class UserService {
                 description: "if empty, fill by random string",
             },
             {
-                flags: "--acc-number <accountNumber>",
-            },
-            {
                 flags: "--phone <phone>",
             },
         ],
@@ -70,11 +81,10 @@ export class UserService {
     async createCommand(command: _Command) {
         try {
             console.log(command.opts());
-            const { name, email, password, accNumber, phone } = command.opts();
+            const { name, email, password, phone } = command.opts();
             const user = new CreateUserDto();
             user.name = name;
             user.email = email;
-            user.accountNumber = accNumber;
             user.phone = phone;
 
             const checkPass =
@@ -98,11 +108,15 @@ export class UserService {
     }
 
     async getProfileWithAccountNumber(accountNumber: string) {
-        return await this.userRepo.findOne({
+        const user = await this.userRepo.findOne({
             where: {
                 accountNumber: accountNumber,
             },
         });
+        if (!user) {
+            throw new NotFoundException(`${accountNumber} not found`);
+        }
+        return user;
     }
 
     async changePassword(id: number, oldPassword: string, newPassword: string) {

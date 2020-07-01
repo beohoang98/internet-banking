@@ -23,13 +23,30 @@ const projectConfig: ProjectOptions = {
             "..",
             "server/src",
         );
+        // config.entryPoints.delete('app');
+        // config.entry('app')
+        //     .add({
+        //         entry: 'src/main.ts',
+        //         template: 'public/app.html',
+        //         filename: 'app/index.html',
+        //     })
+        //     .end()
+        //     .entry('admin')
+        //     .add({
+        //         entry: 'src/admin.ts',
+        //         template: 'public/admin.html',
+        //         filename: 'admin/index.html',
+        //     })
+        //     .end();
+
         return config;
     },
     pages: {
-        index: {
+        app: {
             entry: "src/main.ts",
-            template: "public/index.html",
-            filename: "index.html",
+            template: "public/app.html",
+            filename: "app/index.html",
+            title: "Client",
         },
         admin: {
             entry: "src/admin.ts",

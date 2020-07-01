@@ -9,29 +9,28 @@ export enum UserRole {
 @Entity({
     name: "users",
 })
+@Exclude()
 export class User extends Base<User> {
     @Column()
+    @Expose()
     name: string;
 
     @Column({ unique: true })
-    @Exclude()
     @Expose({ groups: ["internal"] })
     email: string;
 
     @Column()
-    @Exclude()
     password: string;
 
     @Column({ default: 0 })
-    @Exclude()
     @Expose({ groups: ["internal"] })
     balance: number;
 
-    @Column()
+    @Column({ unique: true })
+    @Expose()
     accountNumber: string;
 
     @Column()
-    @Exclude()
     @Expose({ groups: ["internal"] })
     phone: string;
 }

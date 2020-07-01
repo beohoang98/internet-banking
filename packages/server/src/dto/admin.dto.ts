@@ -35,6 +35,11 @@ export class DepositToUserAccount {
     @ApiProperty()
     @IsInt()
     amount: number;
+
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    password: string;
 }
 
 export class UpdateEmployeeDto {
