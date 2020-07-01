@@ -5,14 +5,19 @@
         "url": "https://github.com/beohoang98/internet-banking"
     },
     "devDependencies": {
-        "conventional-changelog-cli": "^2.0.34"
+        "conventional-changelog-cli": "^2.0.34",
+        "husky": "^4.2.5",
+        "lint-staged": "^10.2.11"
     },
     "scripts": {
         "version": "yarn changelog && git add CHANGELOG.md",
         "changelog": "conventional-changelog -g angular -i CHANGELOG.md -s",
         "build:client": "cd packages/client/ && yarn build",
+        "lint:client": "cd packages/client/ && lint-staged",
         "build:server": "cd packages/server && yarn build",
-        "build": "yarn build:client & yarn build:server"
+        "lint:server": "cd packages/server && lint-staged",
+        "build": "yarn build:client & yarn build:server",
+        "lint": "yarn lint:client & yarn lint:server"
     },
     "changelog": {
         "labels": {
@@ -22,6 +27,11 @@
             "chore": "Chore",
             "migration": "Migration",
             "upgrade": "Upgrade"
+        }
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "yarn lint"
         }
     },
     "version": "0.0.2"
