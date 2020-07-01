@@ -91,5 +91,15 @@
     "ts-node": "^8.10.1",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^3.9.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "{*.ts,*.js}": [
+      "yarn lint"
+    ]
   }
 }
