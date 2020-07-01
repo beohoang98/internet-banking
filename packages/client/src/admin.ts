@@ -1,17 +1,19 @@
 import Vue from "vue";
+import ElementUI from "element-ui";
+import VRole from "@/plugins/v-role";
 import App from "./App.vue";
 import "./registerServiceWorker";
 import router from "./router/admin";
 import store from "./admins/store";
-Vue.config.productionTip = false;
-
 import "./plugins/vee-validate";
 import "./plugins/font-awesome";
 
-import ElementUI from 'element-ui';
-Vue.use(ElementUI);
-
 import "@/filters";
+
+Vue.config.productionTip = false;
+
+Vue.use(ElementUI);
+Vue.use(VRole);
 
 new Vue({
     router,

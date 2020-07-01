@@ -1,3 +1,5 @@
+import { resolve } from "path";
+import { ProjectOptions } from "@vue/cli-service";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { parsed = {} } = require("dotenv").config();
 
@@ -10,12 +12,17 @@ const config = {
     ...process.env,
 };
 
-module.exports = {
+const projectConfig: ProjectOptions = {
     lintOnSave: !config.NO_ESLINT,
     chainWebpack(config) {
         if (config.NO_TS) {
             config.plugins.delete("fork-ts-checker");
         }
+        config.resolve.alias["@backend"] = resolve(
+            __dirname,
+            "..",
+            "server/src",
+        );
         return config;
     },
     pages: {
@@ -32,3 +39,5 @@ module.exports = {
         },
     },
 };
+
+module.exports = projectConfig;

@@ -1,10 +1,11 @@
-import {Module} from 'vuex';
-import {axiosInstance} from '@/utils/axios';
-import {LoginRequest} from '@/admins/store/auth/types';
-import {LoginResponse} from '@/store/auth/actions';
+import { Module } from "vuex";
+import { axiosInstance } from "@/utils/axios";
+import { LoginRequest } from "@/admins/store/auth/types";
+import { LoginResponse } from "@/store/auth/actions";
+import { Admin, User } from "@backend/src/models";
 
 export interface AdminAuthState {
-    user?: any;
+    user?: Admin;
     isLogged: boolean;
     isLoaded: boolean;
 }
@@ -16,9 +17,10 @@ export const AdminAuthModule: Module<AdminAuthState, any> = {
         isLogged: false,
     },
     getters: {
-        isLoaded: state => state.isLoaded,
-        isLogged: state => state.isLogged,
-        user: state => state.user,
+        isLoaded: (state) => state.isLoaded,
+        isLogged: (state) => state.isLogged,
+        user: (state) => state.user,
+        role: (state) => state.user?.role,
     },
     mutations: {
         setUser(state, user) {
@@ -33,26 +35,30 @@ export const AdminAuthModule: Module<AdminAuthState, any> = {
     },
     actions: {
         async fetchProfile({ commit }) {
-            commit('setLoaded');
+            commit("setLoaded");
             try {
                 const { data } = await axiosInstance.get("/user/profile");
-                commit('setUser', data);
-                commit('setLogged', true);
+                commit("setUser", data);
+                commit("setLogged", true);
             } finally {
-                commit('setLoaded', true);
+                commit("setLoaded", true);
             }
         },
         async login({ commit, dispatch }, payload: LoginRequest) {
-            const { data } = await axiosInstance.post<LoginResponse>("/auth/admin/login", {}, {
-                auth: {
-                    username: payload.email,
-                    password: payload.password,
-                }
-            });
+            const { data } = await axiosInstance.post<LoginResponse>(
+                "/auth/admin/login",
+                {},
+                {
+                    auth: {
+                        username: payload.email,
+                        password: payload.password,
+                    },
+                },
+            );
             axiosInstance.defaults.headers.Authorization = `Bearer ${data.accessToken}`;
-            localStorage.setItem('access_token', data.accessToken);
-            localStorage.setItem('refresh_token', data.refreshToken);
-            dispatch('fetchProfile');
+            localStorage.setItem("access_token", data.accessToken);
+            localStorage.setItem("refresh_token", data.refreshToken);
+            dispatch("fetchProfile");
         },
     },
 };

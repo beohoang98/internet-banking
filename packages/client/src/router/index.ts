@@ -1,9 +1,9 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import NotFound from "../views/NotFound.vue";
 import AppLoad from "@/container/AppLoad.vue";
 import { Component } from "vue-property-decorator";
 import AppStore from "@/store";
+import NotFound from "../views/NotFound.vue";
 
 Vue.use(VueRouter);
 Component.registerHooks(["beforeRouteUpdate"]);

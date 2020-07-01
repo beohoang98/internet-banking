@@ -21,6 +21,9 @@
         "paths": {
             "@/*": [
                 "src/*"
+            ],
+            "@backend/*": [
+                "../server/*"
             ]
         },
         "lib": [
@@ -39,5 +42,10 @@
     ],
     "exclude": [
         "node_modules"
+    ],
+    "references": [
+        {
+            "path": "../server"
+        }
     ]
 }

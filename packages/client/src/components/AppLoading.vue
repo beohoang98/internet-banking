@@ -5,19 +5,19 @@
 </template>
 
 <script lang="ts">
-    import Vue from "vue";
+import Vue from "vue";
 
-    export default Vue.extend({
-        name: "app-loading",
-    });
+export default Vue.extend({
+    name: "app-loading",
+});
 </script>
 
 <style>
-    .app-loading {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        width: 100vw;
-    }
+.app-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+}
 </style>
