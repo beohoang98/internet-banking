@@ -1,6 +1,5 @@
-import { resolve } from "path";
-import { ProjectOptions } from "@vue/cli-service";
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+/* eslint-disable @typescript-eslint/no-var-requires */
+const { resolve } = require("path");
 const { parsed = {} } = require("dotenv").config();
 
 /**
@@ -12,7 +11,11 @@ const config = {
     ...process.env,
 };
 
-const projectConfig: ProjectOptions = {
+/**
+ *
+ * @type { import("@vue/cli-service").ProjectOptions }
+ */
+const projectConfig = {
     lintOnSave: !config.NO_ESLINT,
     chainWebpack(config) {
         if (config.NO_TS) {

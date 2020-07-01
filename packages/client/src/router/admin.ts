@@ -4,7 +4,6 @@ import { Component } from "vue-property-decorator";
 import AdminLogin from "@/components/Auth/AdminLogin.vue";
 import AdminStore from "@/admins/store";
 import AdminLoad from "@/container/AdminLoad.vue";
-import { AdminRole } from "@backend/src/models";
 import NotFound from "../views/NotFound.vue";
 
 Vue.use(VueRouter);
@@ -25,17 +24,31 @@ const routes: Array<RouteConfig> = [
                 component: () => import("@/admins/pages/Home.vue"),
                 children: [
                     {
-                        path: "/admin",
-                        name: "admin-home",
+                        path: "",
+                        redirect: "users",
+                    },
+                    {
+                        path: "users",
+                        name: "user-management",
+                        component: () => import("@/admins/pages/UserManagement.vue"),
                         meta: {
-                            role: AdminRole.ADMIN,
+                            role: ["EMPLOYEE", "ADMIN"],
                         },
                     },
                     {
-                        path: "/employee",
-                        name: "admin-home",
+                        path: "employees",
+                        name: "employee-management",
+                        component: () => import("@/admins/pages/EmployeeManagement.vue"),
                         meta: {
-                            role: AdminRole.EMPLOYEE,
+                            role: ["ADMIN"],
+                        },
+                    },
+                    {
+                        path: "partner",
+                        name: "partner-management",
+                        component: () => import("@/admins/pages/UserManagement.vue"),
+                        meta: {
+                            role: ["ADMIN"],
                         },
                     },
                 ],
@@ -62,14 +75,26 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     if (to.matched.some((record) => !!record.meta.auth)) {
-        if (
-            AdminStore.getters["auth/isLogged"] ||
-            !AdminStore.getters["auth/isLoaded"]
-        ) {
+        if (!AdminStore.getters["auth/isLoaded"]) {
             return next();
-        } else {
+        }
+        if (!AdminStore.getters["auth/isLogged"]) {
             return next({ name: "login" });
         }
+        const role = AdminStore.getters["auth/role"];
+        if (
+            to.matched.some(
+                (record) =>
+                    Array.isArray(record.meta.role) &&
+                    !record.meta.role.includes(role),
+            )
+        ) {
+            if (role === "ADMIN") {
+                return next({ name: "employee-management" });
+            }
+            return next({ name: "user-management" });
+        }
+        return next();
     }
     next();
 });

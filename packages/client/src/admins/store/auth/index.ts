@@ -2,7 +2,6 @@ import { Module } from "vuex";
 import { axiosInstance } from "@/utils/axios";
 import { LoginRequest } from "@/admins/store/auth/types";
 import { LoginResponse } from "@/store/auth/actions";
-import { Admin, User } from "@backend/src/models";
 
 export interface AdminAuthState {
     user?: Admin;
@@ -37,7 +36,7 @@ export const AdminAuthModule: Module<AdminAuthState, any> = {
         async fetchProfile({ commit }) {
             commit("setLoaded");
             try {
-                const { data } = await axiosInstance.get("/user/profile");
+                const { data } = await axiosInstance.get("/admin/profile");
                 commit("setUser", data);
                 commit("setLogged", true);
             } finally {

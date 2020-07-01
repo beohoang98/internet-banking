@@ -7,8 +7,17 @@ function VRole(Vue: VueConstructor) {
                 return;
             }
             if (
+                typeof binding.value === "string" &&
                 binding.value !==
-                vnode.componentInstance?.$store.getters["auth/role"]
+                    vnode.componentInstance?.$store.getters["auth/role"]
+            ) {
+                el.remove();
+            }
+            if (
+                Array.isArray(binding.value) &&
+                !binding.value.includes(
+                    vnode.componentInstance?.$store.getters["auth/role"],
+                )
             ) {
                 el.remove();
             }
