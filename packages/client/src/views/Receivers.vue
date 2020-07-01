@@ -1,5 +1,19 @@
 <template>
     <div class="app-receivers">
+        <Transfer
+            :accountNumber="addTransAccountNumber"
+            :name="addTransName"
+            :bankType="addTransBankType"
+            :isChoose="isChoose"
+            :visible="dialogTransferVisible"
+            v-on:close-dialog="closeTransfer()"
+        />
+        <el-button
+            round
+            icon="el-icon-circle-plus"
+            type="primary"
+            @click="dialogTransferVisible = true"
+        >New Transfer</el-button>
         <el-button
             round
             icon="el-icon-circle-plus"
@@ -14,7 +28,7 @@
             <el-table-column prop="bankType" label="Bank" />
             <el-table-column fixed="right" width="auto" label="Actions" align="right">
                 <template slot-scope="{ row }">
-                    <el-button type="success">Send Money</el-button>
+                    <el-button type="success" @click="() => handleSend(row)">Send Money</el-button>
                     <el-button
                         size="small"
                         type="primary"
@@ -94,6 +108,7 @@ import {
 } from "element-ui";
 import { Getter } from "vuex-class";
 import { axiosInstance } from "../utils/axios";
+import Transfer from "@/components/Transfer/Transfer.vue";
 
 Vue.component(Container.name, Container);
 Vue.component(Table.name, Table);
@@ -113,6 +128,9 @@ Vue.component(Popconfirm.name, Popconfirm);
 
 @Component({
     name: "app-receivers",
+    components: {
+        Transfer,
+    },
 })
 export default class ReceiversPage extends Vue {
     dialogFormVisible = false;
@@ -124,6 +142,12 @@ export default class ReceiversPage extends Vue {
     titleDialog = "ADD NEW RECEIVER";
     index = -1;
     id = -1;
+    dialogTransferVisible = false;
+
+    addTransAccountNumber = "";
+    addTransName = "";
+    addTransBankType = "";
+    isChoose = false;
 
     form = {
         name: "",
@@ -133,6 +157,14 @@ export default class ReceiversPage extends Vue {
     num = 0;
     @Getter("receiver/data") data!: any;
 
+    closeTransfer() {
+        this.dialogTransferVisible = false;
+        this.addTransAccountNumber = "";
+        this.addTransName = "";
+        this.addTransBankType = "";
+        this.isChoose = false;
+    }
+
     closeForm() {
         this.titleDialog = "ADD NEW RECEIVER";
         this.dialogFormVisible = false;
@@ -141,6 +173,15 @@ export default class ReceiversPage extends Vue {
         this.form.bankType = "";
         this.disableUpdateInput = false;
     }
+
+    async handleSend(row: any) {
+        this.addTransAccountNumber = row.desAccountNumber;
+        this.addTransName = row.name;
+        this.addTransBankType = row.bankType;
+        this.isChoose = true;
+        this.dialogTransferVisible = true;
+    }
+
     async handleEdit(row: any) {
         this.titleDialog = "UPDATE RECEIVER";
         this.disableUpdateInput = true;
@@ -159,6 +200,13 @@ export default class ReceiversPage extends Vue {
                     "user/profile/accountnumber?number=" +
                         this.form.accountNumber,
                 );
+                if (!data) {
+                    Message({
+                        showClose: true,
+                        message: "Cant find account number",
+                        type: "error",
+                    });
+                }
                 this.form.name = data.name;
             }
             if (this.form.bankType === "PGP") {
