@@ -7,11 +7,11 @@
         },
         {
             "source": "/app/(.*)",
-            "destination": "/app/"
+            "destination": "/app"
         },
         {
             "source": "/admin/(.*)",
-            "destination": "/admin/"
+            "destination": "/admin"
         }
     ]
 }
