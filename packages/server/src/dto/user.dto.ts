@@ -4,9 +4,10 @@ import {
     IsEmail,
     IsInt,
     IsNotEmpty,
-    IsNumberString,
+    IsOptional,
     IsPhoneNumber,
     IsString,
+    Length,
 } from "class-validator";
 
 export class CreateUserDto {
@@ -30,10 +31,10 @@ export class CreateUserDto {
     @ApiProperty()
     @IsPhoneNumber("VN")
     phone: string;
-
-    @ApiProperty()
-    @IsNumberString()
-    accountNumber: string;
+    //
+    // @ApiProperty()
+    // @IsNumberString()
+    // accountNumber: string;
 }
 
 export class ChangePasswordDto {
@@ -57,4 +58,22 @@ export class ResetPasswordDto {
     @IsString()
     @IsNotEmpty()
     password: string;
+}
+
+export class UserUpdateDto {
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsString()
+    @Length(6)
+    name: string;
+
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsEmail()
+    email: string;
+
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsPhoneNumber("VN")
+    phone: string;
 }

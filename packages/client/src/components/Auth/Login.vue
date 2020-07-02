@@ -54,59 +54,59 @@
 </template>
 
 <script lang="ts">
-    import Vue from "vue";
-    import { Component, Watch } from "vue-property-decorator";
-    import {
-        faEnvelope,
-        faLock,
-        faLockOpen,
-    } from "@fortawesome/free-solid-svg-icons";
-    import { Getter } from "vuex-class";
-    import VueRecaptcha from "vue-recaptcha";
+import Vue from "vue";
+import { Component, Watch } from "vue-property-decorator";
+import {
+    faEnvelope,
+    faLock,
+    faLockOpen,
+} from "@fortawesome/free-solid-svg-icons";
+import { Getter } from "vuex-class";
+import VueRecaptcha from "vue-recaptcha";
 
-    Vue.$fa.add(faEnvelope, faLock, faLockOpen);
+Vue.$fa.add(faEnvelope, faLock, faLockOpen);
 
-    @Component({
-        name: "Login",
-        components: { VueRecaptcha },
-    })
-    export default class Login extends Vue {
-        email = "";
-        password = "";
-        login_error = null;
+@Component({
+    name: "Login",
+    components: { VueRecaptcha },
+})
+export default class Login extends Vue {
+    email = "";
+    password = "";
+    login_error = null;
 
-        @Getter("auth/isLogged") isLogged!: boolean;
+    @Getter("auth/isLogged") isLogged!: boolean;
 
-        get siteKey(): string {
-            return process.env.VUE_APP_RECAPTCHA_SITE_KEY;
-        }
+    get siteKey(): string {
+        return process.env.VUE_APP_RECAPTCHA_SITE_KEY;
+    }
 
-        @Watch("isLogged")
-        ifIsLogged(logged: boolean) {
-            if (logged) {
-                this.$router.push("/");
-            }
-        }
-
-        async onSubmit(): Promise<void> {
-            const loading = this.$vs.loading();
-            try {
-                (this.$refs.captcha as any).execute();
-                await this.$store.dispatch("auth/login", {
-                    email: this.email,
-                    password: this.password,
-                });
-            } catch (e) {
-                this.login_error = e.message || e + "";
-            } finally {
-                loading.close();
-            }
-        }
-
-        mounted(): void {
-            if (this.isLogged) {
-                this.$router.replace("/");
-            }
+    @Watch("isLogged")
+    ifIsLogged(logged: boolean) {
+        if (logged) {
+            this.$router.push("/");
         }
     }
+
+    async onSubmit(): Promise<void> {
+        const loading = this.$vs.loading();
+        try {
+            (this.$refs.captcha as any).execute();
+            await this.$store.dispatch("auth/login", {
+                email: this.email,
+                password: this.password,
+            });
+        } catch (e) {
+            this.login_error = e.message || e + "";
+        } finally {
+            loading.close();
+        }
+    }
+
+    mounted(): void {
+        if (this.isLogged) {
+            this.$router.replace("/");
+        }
+    }
+}
 </script>

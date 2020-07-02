@@ -4,6 +4,8 @@
         "module": "esnext",
         "strict": true,
         "jsx": "preserve",
+        "pretty": true,
+        "strictPropertyInitialization": false,
         "importHelpers": true,
         "moduleResolution": "node",
         "experimentalDecorators": true,
@@ -13,6 +15,7 @@
         "resolveJsonModule": true,
         "incremental": true,
         "sourceMap": true,
+        "skipLibCheck": true,
         "baseUrl": ".",
         "types": [
             "webpack-env",
@@ -21,6 +24,9 @@
         "paths": {
             "@/*": [
                 "src/*"
+            ],
+            "@backend/*": [
+                "../server/src/*"
             ]
         },
         "lib": [
@@ -28,6 +34,10 @@
             "dom",
             "dom.iterable",
             "scripthost"
+        ],
+        "typeRoots": [
+            "node_modules/@types",
+            "src/types"
         ]
     },
     "include": [

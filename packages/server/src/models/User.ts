@@ -23,10 +23,10 @@ export class User extends Base<User> {
     password: string;
 
     @Column({ default: 0 })
-    @Expose()
+    @Expose({ groups: ["internal"] })
     balance: number;
 
-    @Column()
+    @Column({ unique: true })
     @Expose()
     accountNumber: string;
 
