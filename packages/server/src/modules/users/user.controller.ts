@@ -9,7 +9,6 @@ import {
     Req,
     UseGuards,
     UseInterceptors,
-    SerializeOptions,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import {
@@ -33,8 +32,7 @@ export class UserController {
 
     @Get("profile")
     @UseGuards(JwtGuard)
-    //@TransformClassToPlain({ groups: ["internal"] })
-    @SerializeOptions({ groups: ["internal"] })
+    @TransformClassToPlain({ groups: ["internal"] })
     async profile(@Req() req) {
         return this.userService.getProfile(req.user.id);
     }

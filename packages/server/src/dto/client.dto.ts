@@ -16,7 +16,7 @@ export class CheckAccountDto {
         example: 1234567890,
     })
     @IsInt()
-    @Min(10 ** 10) // 10 digits
+    @Min(10 ** 9) // 10 digits
     accountNumber: number;
 }
 export class CheckAccountResponseDto {
