@@ -5,8 +5,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit --passWithNoTests",
-    "lint": "vue-cli-service lint",
-    "format": "prettier --write src/**/*.ts src/**/*.vue"
+    "lint": "vue-cli-service lint --fix",
+    "format": "prettier --write --ext .js,.ts,.vue"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.29",
@@ -67,7 +67,7 @@
   "lint-staged": {
     "*.{js,jsx,vue,ts,tsx}": [
       "yarn format",
-      "vue-cli-service lint --fix"
+      "yarn lint"
     ]
   }
 }

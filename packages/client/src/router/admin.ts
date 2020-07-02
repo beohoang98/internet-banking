@@ -30,7 +30,8 @@ const routes: Array<RouteConfig> = [
                     {
                         path: "users",
                         name: "user-management",
-                        component: () => import("@/admins/pages/UserManagement.vue"),
+                        component: () =>
+                            import("@/admins/pages/UserManagement.vue"),
                         meta: {
                             role: ["EMPLOYEE", "ADMIN"],
                         },
@@ -38,7 +39,8 @@ const routes: Array<RouteConfig> = [
                     {
                         path: "employees",
                         name: "employee-management",
-                        component: () => import("@/admins/pages/EmployeeManagement.vue"),
+                        component: () =>
+                            import("@/admins/pages/EmployeeManagement.vue"),
                         meta: {
                             role: ["ADMIN"],
                         },
@@ -46,7 +48,8 @@ const routes: Array<RouteConfig> = [
                     {
                         path: "partner",
                         name: "partner-management",
-                        component: () => import("@/admins/pages/UserManagement.vue"),
+                        component: () =>
+                            import("@/admins/pages/UserManagement.vue"),
                         meta: {
                             role: ["ADMIN"],
                         },

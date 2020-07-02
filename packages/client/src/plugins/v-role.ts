@@ -1,10 +1,10 @@
-import {VNode, VueConstructor} from 'vue';
+import { VNode, VueConstructor } from "vue";
 
 function VRole(Vue: VueConstructor) {
     function commentNode(el: HTMLElement, vnode: VNode) {
         const commentEl = document.createComment("not in role");
         vnode.elm = commentEl;
-        vnode.text = '';
+        vnode.text = "";
         vnode.isComment = true;
         el.parentNode?.replaceChild(commentEl, el);
     }
