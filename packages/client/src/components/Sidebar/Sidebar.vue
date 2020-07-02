@@ -17,12 +17,20 @@
                 <template #title>Receiver List</template>
             </el-menu-item>
             <el-menu-item index="/history">
-                <font-awesome-icon fixed-width style="width: 24px;" icon="exchange-alt" />
+                <font-awesome-icon
+                    fixed-width
+                    style="width: 24px;"
+                    icon="exchange-alt"
+                />
                 <template #title>History</template>
             </el-menu-item>
             <el-submenu index="/transfer">
                 <template #title>
-                    <font-awesome-icon fixed-width style="width: 24px;" icon="share" />
+                    <font-awesome-icon
+                        fixed-width
+                        style="width: 24px;"
+                        icon="share"
+                    />
                     <span>Transfer</span>
                 </template>
                 <el-menu-item index="/transfer/internal">
@@ -35,7 +43,11 @@
                 </el-menu-item>
             </el-submenu>
             <el-menu-item index="/debt">
-                <font-awesome-icon fixed-width style="width: 24px;" icon="hand-holding-usd" />
+                <font-awesome-icon
+                    fixed-width
+                    style="width: 24px;"
+                    icon="hand-holding-usd"
+                />
                 <template #title>Debt</template>
             </el-menu-item>
         </el-menu>

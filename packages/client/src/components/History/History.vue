@@ -1,6 +1,10 @@
 <template>
     <div class="history">
-        <el-select v-model="type" placeholder="Please select a type" @change="resetList()">
+        <el-select
+            v-model="type"
+            placeholder="Please select a type"
+            @change="resetList()"
+        >
             <el-option label="SEND" value="send"></el-option>
             <el-option label="RECEIVE" value="receive"></el-option>
             <el-option label="DEBT" value="debt"></el-option>

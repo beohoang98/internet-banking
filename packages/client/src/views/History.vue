@@ -5,13 +5,13 @@
 </template>
 
 <script>
-    import Vue from "vue";
-    import History from "@/components/History/History.vue";
+import Vue from "vue";
+import History from "@/components/History/History.vue";
 
-    export default {
-        name: "history",
-        components: {
-            History,
-        },
-    };
+export default {
+    name: "history",
+    components: {
+        History,
+    },
+};
 </script>

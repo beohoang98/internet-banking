@@ -1,6 +1,12 @@
 <template>
     <div class="debt-home">
-        <el-button round icon="el-icon-circle-plus" type="primary" @click="openAddDebt()">New Debt</el-button>
+        <el-button
+            round
+            icon="el-icon-circle-plus"
+            type="primary"
+            @click="openAddDebt()"
+            >New Debt</el-button
+        >
         <hr />
         <el-table border fit show-header :data="data">
             <el-table-column type="index" label="#" />
@@ -15,18 +21,30 @@
                             scope.row.isMyDebt === true ? 'success' : 'danger'
                         "
                         disable-transitions
-                    >{{ scope.row.isMyDebt }}</el-tag>
+                        >{{ scope.row.isMyDebt }}</el-tag
+                    >
                 </template>
             </el-table-column>
-            <el-table-column fixed="right" width="auto" label="Actions" align="right">
+            <el-table-column
+                fixed="right"
+                width="auto"
+                label="Actions"
+                align="right"
+            >
                 <template slot-scope="{ row }">
                     <el-button
                         v-if="row.isMyDebt === true"
                         type="success"
                         @click="() => handleSend(row)"
-                    >Paid</el-button>
+                        >Paid</el-button
+                    >
 
-                    <el-button size="small" type="primary" circle icon="el-icon-edit"></el-button>
+                    <el-button
+                        size="small"
+                        type="primary"
+                        circle
+                        icon="el-icon-edit"
+                    ></el-button>
 
                     <el-button
                         slot="reference"
@@ -40,7 +58,11 @@
             </el-table-column>
         </el-table>
         <AddDebt :visible="addDebtVisible" v-on:close-dialog="closeAddDebt()" />
-        <el-dialog title="Delete Debt" :visible.sync="deleteDebtVisible" @close="handleClose()">
+        <el-dialog
+            title="Delete Debt"
+            :visible.sync="deleteDebtVisible"
+            @close="handleClose()"
+        >
             <h1>Are you sure to delete this</h1>
             <el-form :model="form" ref="form">
                 <el-form-item label="Note" :label-width="labelWidth">
@@ -49,10 +71,16 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="handleClose()">Close</el-button>
-                <el-button type="primary" @click="deleteDebt()">Submit</el-button>
+                <el-button type="primary" @click="deleteDebt()"
+                    >Submit</el-button
+                >
             </span>
         </el-dialog>
-        <el-dialog title="Paid Debt" :visible.sync="paidDebtVisible" @close="handleClose()">
+        <el-dialog
+            title="Paid Debt"
+            :visible.sync="paidDebtVisible"
+            @close="handleClose()"
+        >
             <el-form :model="form" ref="form">
                 <el-form-item label="OTP" :label-width="labelWidth">
                     <el-input v-model="form.otp" autocomplete="off"></el-input>

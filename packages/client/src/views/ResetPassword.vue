@@ -5,12 +5,12 @@
 </template>
 
 <script>
-    import ResetPassword from "@/components/Password/ResetPassword";
+import ResetPassword from "@/components/Password/ResetPassword";
 
-    export default {
-        name: "resetPassword",
-        components: {
-            ResetPassword,
-        },
-    };
+export default {
+    name: "resetPassword",
+    components: {
+        ResetPassword,
+    },
+};
 </script>

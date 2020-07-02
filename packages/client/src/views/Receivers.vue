@@ -117,206 +117,261 @@
 </template>
 
 <script lang="ts">
-    import Vue from "vue";
-    import { Component } from "vue-property-decorator";
-    import {
-        Button,
-        Container,
-        Table,
-        TableColumn,
-        Icon,
-        Popconfirm,
-        Dialog,
-        Form,
-        FormItem,
-        Input,
-        InputNumber,
-        Select,
-        Option,
-        Message,
-    } from "element-ui";
-    import { Getter } from "vuex-class";
-    import { axiosInstance } from "../utils/axios";
-    import Transfer from "@/components/Transfer/Transfer.vue";
-    import AddDebt from "@/components/Debt/AddDebt.vue";
+import Vue from "vue";
+import { Component } from "vue-property-decorator";
+import {
+    Button,
+    Container,
+    Table,
+    TableColumn,
+    Icon,
+    Popconfirm,
+    Dialog,
+    Form,
+    FormItem,
+    Input,
+    InputNumber,
+    Select,
+    Option,
+    Message,
+} from "element-ui";
+import { Getter } from "vuex-class";
+import Transfer from "@/components/Transfer/Transfer.vue";
+import AddDebt from "@/components/Debt/AddDebt.vue";
+import { axiosInstance } from "../utils/axios";
 
-    Vue.component(Container.name, Container);
-    Vue.component(Table.name, Table);
-    Vue.component(TableColumn.name, TableColumn);
-    Vue.component(Button.name, Button);
-    Vue.component(Popconfirm.name, Popconfirm);
-    Vue.component(Icon.name, Icon);
-    Vue.component(Dialog.name, Dialog);
-    Vue.component(Form.name, Form);
-    Vue.component(FormItem.name, FormItem);
-    Vue.component(Input.name, Input);
-    Vue.component(Select.name, Select);
-    Vue.component(Option.name, Option);
-    Vue.component(InputNumber.name, InputNumber);
-    Vue.component(Message.name, Message);
-    Vue.component(Popconfirm.name, Popconfirm);
+Vue.component(Container.name, Container);
+Vue.component(Table.name, Table);
+Vue.component(TableColumn.name, TableColumn);
+Vue.component(Button.name, Button);
+Vue.component(Popconfirm.name, Popconfirm);
+Vue.component(Icon.name, Icon);
+Vue.component(Dialog.name, Dialog);
+Vue.component(Form.name, Form);
+Vue.component(FormItem.name, FormItem);
+Vue.component(Input.name, Input);
+Vue.component(Select.name, Select);
+Vue.component(Option.name, Option);
+Vue.component(InputNumber.name, InputNumber);
+Vue.component(Message.name, Message);
+Vue.component(Popconfirm.name, Popconfirm);
 
-    @Component({
-        name: "app-receivers",
-        components: {
-            Transfer,
-            AddDebt,
-        },
-    })
-    export default class ReceiversPage extends Vue {
-        dialogFormVisible = false;
-        accountNumber = "";
-        name = "";
-        bankType = "";
-        labelWidth = "150px";
-        disableUpdateInput = false;
-        titleDialog = "ADD NEW RECEIVER";
-        index = -1;
-        id = -1;
-        dialogTransferVisible = false;
+@Component({
+    name: "app-receivers",
+    components: {
+        Transfer,
+        AddDebt,
+    },
+})
+export default class ReceiversPage extends Vue {
+    dialogFormVisible = false;
+    accountNumber = "";
+    name = "";
+    bankType = "";
+    labelWidth = "150px";
+    disableUpdateInput = false;
+    titleDialog = "ADD NEW RECEIVER";
+    index = -1;
+    id = -1;
+    dialogTransferVisible = false;
 
-        addTransAccountNumber = "";
-        addTransName = "";
-        addTransBankType = "";
-        isChoose = false;
+    addTransAccountNumber = "";
+    addTransName = "";
+    addTransBankType = "";
+    isChoose = false;
 
-        dialogDebtVisible = false;
-        addDebtAccountNumber = "";
-        addDebtName = "";
+    dialogDebtVisible = false;
+    addDebtAccountNumber = "";
+    addDebtName = "";
 
-        form = {
-            name: "",
-            bankType: "",
-            accountNumber: "",
-        };
-        num = 0;
-        @Getter("receiver/data") data!: any;
+    form = {
+        name: "",
+        bankType: "",
+        accountNumber: "",
+    };
+    num = 0;
+    @Getter("receiver/data") data!: any;
 
-        closeTransfer() {
-            this.dialogTransferVisible = false;
-            this.addTransAccountNumber = "";
-            this.addTransName = "";
-            this.addTransBankType = "";
-            this.isChoose = false;
-        }
+    closeTransfer() {
+        this.dialogTransferVisible = false;
+        this.addTransAccountNumber = "";
+        this.addTransName = "";
+        this.addTransBankType = "";
+        this.isChoose = false;
+    }
 
-        closeAddDebt() {
-            this.dialogDebtVisible = false;
-            this.addDebtAccountNumber = "";
-            this.addTransName = "";
-            this.isChoose = false;
-        }
+    closeAddDebt() {
+        this.dialogDebtVisible = false;
+        this.addDebtAccountNumber = "";
+        this.addTransName = "";
+        this.isChoose = false;
+    }
 
-        closeForm() {
-            this.titleDialog = "ADD NEW RECEIVER";
-            this.dialogFormVisible = false;
-            this.form.name = "";
-            this.form.accountNumber = "";
-            this.form.bankType = "";
-            this.disableUpdateInput = false;
-        }
+    closeForm() {
+        this.titleDialog = "ADD NEW RECEIVER";
+        this.dialogFormVisible = false;
+        this.form.name = "";
+        this.form.accountNumber = "";
+        this.form.bankType = "";
+        this.disableUpdateInput = false;
+    }
 
-        handleCreateDebt(row: any) {
-            this.addDebtAccountNumber = row.desAccountNumber;
-            this.addDebtName = row.name;
-            this.isChoose = true;
-            this.dialogDebtVisible = true;
-        }
+    handleCreateDebt(row: any) {
+        this.addDebtAccountNumber = row.desAccountNumber;
+        this.addDebtName = row.name;
+        this.isChoose = true;
+        this.dialogDebtVisible = true;
+    }
 
-        async handleSend(row: any) {
-            this.addTransAccountNumber = row.desAccountNumber;
-            this.addTransName = row.name;
-            this.addTransBankType = row.bankType;
-            this.isChoose = true;
-            this.dialogTransferVisible = true;
-        }
+    async handleSend(row: any) {
+        this.addTransAccountNumber = row.desAccountNumber;
+        this.addTransName = row.name;
+        this.addTransBankType = row.bankType;
+        this.isChoose = true;
+        this.dialogTransferVisible = true;
+    }
 
-        async handleEdit(row: any) {
-            this.titleDialog = "UPDATE RECEIVER";
-            this.disableUpdateInput = true;
-            this.dialogFormVisible = true;
-            this.form.name = row.name;
-            this.form.accountNumber = row.desAccountNumber;
-            this.form.bankType = row.bankType;
-            this.index = this.data.indexOf(row);
-            this.id = row.id;
-        }
+    async handleEdit(row: any) {
+        this.titleDialog = "UPDATE RECEIVER";
+        this.disableUpdateInput = true;
+        this.dialogFormVisible = true;
+        this.form.name = row.name;
+        this.form.accountNumber = row.desAccountNumber;
+        this.form.bankType = row.bankType;
+        this.index = this.data.indexOf(row);
+        this.id = row.id;
+    }
 
-        async getName() {
-            try {
-                if (this.form.bankType === "LOCAL") {
-                    const { data: data } = await axiosInstance.get(
-                        "user/profile/accountnumber?number=" +
-                            this.form.accountNumber,
-                    );
-                    if (!data) {
-                        Message({
-                            showClose: true,
-                            message: "Cant find account number",
-                            type: "error",
-                        });
-                    }
-                    this.form.name = data.name;
+    async getName() {
+        try {
+            if (this.form.bankType === "LOCAL") {
+                const { data: data } = await axiosInstance.get(
+                    "user/profile/accountnumber?number=" +
+                        this.form.accountNumber,
+                );
+                if (!data) {
+                    Message({
+                        showClose: true,
+                        message: "Cant find account number",
+                        type: "error",
+                    });
                 }
-                if (this.form.bankType === "PGP") {
-                    const { data: data } = await axiosInstance.get(
-                        "transaction/interbank/info",
-                        {
-                            params: {
-                                accountNumber: this.form.accountNumber,
-                                bankType: "PGP",
-                            },
-                        },
-                    );
-                    if (data.success === false) {
-                        Message({
-                            showClose: true,
-                            message: data.message,
-                            type: "error",
-                        });
-                    }
-                    this.form.name = data.data;
-                }
-
-                if (this.form.bankType === "RSA") {
-                    const { data: data } = await axiosInstance.get(
-                        "transaction/interbank/info",
-                        {
-                            params: {
-                                accountNumber: this.form.accountNumber,
-                                bankType: "RSA",
-                            },
-                        },
-                    );
-                    if (data.success === false) {
-                        Message({
-                            showClose: true,
-                            message: data.message,
-                            type: "error",
-                        });
-                    }
-                    this.form.name = data.payload.userName;
-                }
-            } catch (e) {
-                Message({
-                    showClose: true,
-                    message: e,
-                    type: "error",
-                });
+                this.form.name = data.name;
             }
+            if (this.form.bankType === "PGP") {
+                const { data: data } = await axiosInstance.get(
+                    "transaction/interbank/info",
+                    {
+                        params: {
+                            accountNumber: this.form.accountNumber,
+                            bankType: "PGP",
+                        },
+                    },
+                );
+                if (data.success === false) {
+                    Message({
+                        showClose: true,
+                        message: data.message,
+                        type: "error",
+                    });
+                }
+                this.form.name = data.data;
+            }
+
+            if (this.form.bankType === "RSA") {
+                const { data: data } = await axiosInstance.get(
+                    "transaction/interbank/info",
+                    {
+                        params: {
+                            accountNumber: this.form.accountNumber,
+                            bankType: "RSA",
+                        },
+                    },
+                );
+                if (data.success === false) {
+                    Message({
+                        showClose: true,
+                        message: data.message,
+                        type: "error",
+                    });
+                }
+                this.form.name = data.payload.userName;
+            }
+        } catch (e) {
+            Message({
+                showClose: true,
+                message: e,
+                type: "error",
+            });
         }
-        async handleDelete(row: any) {
+    }
+    async handleDelete(row: any) {
+        try {
+            await this.$store.dispatch("receiver/deleteReceiver", {
+                id: row.id,
+                index: this.data.indexOf(row),
+            });
+            Message({
+                showClose: true,
+                message: "Delete receiver successful",
+                type: "success",
+            });
+        } catch (e) {
+            Message({
+                showClose: true,
+                message: e,
+                type: "error",
+            });
+        }
+    }
+
+    async submitForm() {
+        if (this.disableUpdateInput === false) {
             try {
-                await this.$store.dispatch("receiver/deleteReceiver", {
-                    id: row.id,
-                    index: this.data.indexOf(row),
+                await this.$store.dispatch("receiver/addReceiver", {
+                    desAccountNumber: this.form.accountNumber,
+                    name: this.form.name,
+                    bankType: this.form.bankType,
                 });
+                this.closeForm();
+                //this.dialogFormVisible = false;
+                //this.form.name = "";
+                //this.form.accountNumber = "";
+                //this.form.bankType = "";
                 Message({
                     showClose: true,
-                    message: "Delete receiver successful",
+                    message: "Add new receiver successful",
                     type: "success",
                 });
             } catch (e) {
+                console.log(e);
+                Message({
+                    showClose: true,
+                    message: e,
+                    type: "error",
+                });
+            }
+        } else {
+            try {
+                await this.$store.dispatch("receiver/updateReceiver", {
+                    id: this.id,
+                    desAccountNumber: this.form.accountNumber,
+                    name: this.form.name,
+                    bankType: this.form.bankType,
+                    index: this.index,
+                });
+                Message({
+                    showClose: true,
+                    message: "Update receiver successful",
+                    type: "success",
+                });
+                //this.dialogFormVisible = false;
+                //this.form.name = "";
+                //this.form.accountNumber = "";
+                //this.form.bankType = "";
+                this.closeForm();
+            } catch (e) {
+                console.log({ error: e });
                 Message({
                     showClose: true,
                     message: e,
@@ -324,65 +379,10 @@
                 });
             }
         }
-
-        async submitForm() {
-            if (this.disableUpdateInput === false) {
-                try {
-                    await this.$store.dispatch("receiver/addReceiver", {
-                        desAccountNumber: this.form.accountNumber,
-                        name: this.form.name,
-                        bankType: this.form.bankType,
-                    });
-                    this.closeForm();
-                    //this.dialogFormVisible = false;
-                    //this.form.name = "";
-                    //this.form.accountNumber = "";
-                    //this.form.bankType = "";
-                    Message({
-                        showClose: true,
-                        message: "Add new receiver successful",
-                        type: "success",
-                    });
-                } catch (e) {
-                    console.log(e);
-                    Message({
-                        showClose: true,
-                        message: e,
-                        type: "error",
-                    });
-                }
-            } else {
-                try {
-                    await this.$store.dispatch("receiver/updateReceiver", {
-                        id: this.id,
-                        desAccountNumber: this.form.accountNumber,
-                        name: this.form.name,
-                        bankType: this.form.bankType,
-                        index: this.index,
-                    });
-                    Message({
-                        showClose: true,
-                        message: "Update receiver successful",
-                        type: "success",
-                    });
-                    //this.dialogFormVisible = false;
-                    //this.form.name = "";
-                    //this.form.accountNumber = "";
-                    //this.form.bankType = "";
-                    this.closeForm();
-                } catch (e) {
-                    console.log({ error: e });
-                    Message({
-                        showClose: true,
-                        message: e,
-                        type: "error",
-                    });
-                }
-            }
-        }
-
-        mounted(): void {
-            this.$store.dispatch("receiver/loadReceiverList");
-        }
     }
+
+    mounted(): void {
+        this.$store.dispatch("receiver/loadReceiverList");
+    }
+}
 </script>

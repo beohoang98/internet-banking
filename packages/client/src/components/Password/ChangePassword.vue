@@ -39,54 +39,54 @@
     </div>
 </template>
 <script lang="ts">
-    import Vue from "vue";
-    import { Component } from "vue-property-decorator";
-    import { Button, Form, FormItem, Input, Message } from "element-ui";
-    import { axiosInstance } from "../../utils/axios";
-    Vue.component(Form.name, Form);
-    Vue.component(FormItem.name, FormItem);
-    Vue.component(Input.name, Input);
-    Vue.component(Button.name, Button);
+import Vue from "vue";
+import { Component } from "vue-property-decorator";
+import { Button, Form, FormItem, Input, Message } from "element-ui";
+import { axiosInstance } from "../../utils/axios";
+Vue.component(Form.name, Form);
+Vue.component(FormItem.name, FormItem);
+Vue.component(Input.name, Input);
+Vue.component(Button.name, Button);
 
-    @Component({
-        name: "ChangePassword",
-    })
-    export default class ChangePassword extends Vue {
-        form = {
-            newPass: "",
-            checkPass: "",
-            oldPass: "",
-        };
+@Component({
+    name: "ChangePassword",
+})
+export default class ChangePassword extends Vue {
+    form = {
+        newPass: "",
+        checkPass: "",
+        oldPass: "",
+    };
 
-        async submitForm() {
-            console.log(this.form.oldPass, this.form.checkPass);
-            if (this.form.newPass !== this.form.checkPass) {
-                throw Message({
-                    showClose: true,
-                    message: "Password doesn't match",
-                    type: "error",
-                });
-            }
-            try {
-                await axiosInstance.put("/user/password", {
-                    oldPassword: this.form.oldPass,
-                    newPassword: this.form.newPass,
-                });
-                Message({
-                    showClose: true,
-                    message: "Change password successful",
-                    type: "success",
-                });
-                this.form.newPass = "";
-                this.form.oldPass = "";
-                this.form.checkPass = "";
-            } catch (e) {
-                Message({
-                    showClose: true,
-                    message: e,
-                    type: "error",
-                });
-            }
+    async submitForm() {
+        console.log(this.form.oldPass, this.form.checkPass);
+        if (this.form.newPass !== this.form.checkPass) {
+            throw Message({
+                showClose: true,
+                message: "Password doesn't match",
+                type: "error",
+            });
+        }
+        try {
+            await axiosInstance.put("/user/password", {
+                oldPassword: this.form.oldPass,
+                newPassword: this.form.newPass,
+            });
+            Message({
+                showClose: true,
+                message: "Change password successful",
+                type: "success",
+            });
+            this.form.newPass = "";
+            this.form.oldPass = "";
+            this.form.checkPass = "";
+        } catch (e) {
+            Message({
+                showClose: true,
+                message: e,
+                type: "error",
+            });
         }
     }
+}
 </script>

@@ -76,52 +76,52 @@
 </template>
 
 <script lang="ts">
-    import Vue from "vue";
-    import { Component } from "vue-property-decorator";
-    import {
-        Card,
-        Row,
-        Col,
-        Button,
-        Dialog,
-        Form,
-        FormItem,
-        Input,
-        Select,
-        Option,
-        InputNumber,
-    } from "element-ui";
-    import { Getter } from "vuex-class";
+import Vue from "vue";
+import { Component } from "vue-property-decorator";
+import {
+    Card,
+    Row,
+    Col,
+    Button,
+    Dialog,
+    Form,
+    FormItem,
+    Input,
+    Select,
+    Option,
+    InputNumber,
+} from "element-ui";
+import { Getter } from "vuex-class";
 
-    Vue.component(Card.name, Card);
-    Vue.component(Row.name, Row);
-    Vue.component(Col.name, Col);
-    Vue.component(Button.name, Button);
-    Vue.component(Dialog.name, Dialog);
-    Vue.component(Form.name, Form);
-    Vue.component(FormItem.name, FormItem);
-    Vue.component(Input.name, Input);
-    Vue.component(Select.name, Select);
-    Vue.component(Option.name, Option);
-    Vue.component(InputNumber.name, InputNumber);
+Vue.component(Card.name, Card);
+Vue.component(Row.name, Row);
+Vue.component(Col.name, Col);
+Vue.component(Button.name, Button);
+Vue.component(Dialog.name, Dialog);
+Vue.component(Form.name, Form);
+Vue.component(FormItem.name, FormItem);
+Vue.component(Input.name, Input);
+Vue.component(Select.name, Select);
+Vue.component(Option.name, Option);
+Vue.component(InputNumber.name, InputNumber);
 
-    @Component({
-        name: "app-payment-account",
-    })
-    export default class PaymentAccount extends Vue {
-        testAccounts = [
-            {
-                accountNumber: "123456789",
-                balance: 10 ** 6,
-            },
-        ];
-        dialogFormVisible = false;
-        name = "";
-        region = "";
-        labelWidth = "120px";
-        num = 0;
-        @Getter("auth/profile") profile!: any;
-    }
+@Component({
+    name: "app-payment-account",
+})
+export default class PaymentAccount extends Vue {
+    testAccounts = [
+        {
+            accountNumber: "123456789",
+            balance: 10 ** 6,
+        },
+    ];
+    dialogFormVisible = false;
+    name = "";
+    region = "";
+    labelWidth = "120px";
+    num = 0;
+    @Getter("auth/profile") profile!: any;
+}
 </script>
 
 <style lang="scss"></style>
