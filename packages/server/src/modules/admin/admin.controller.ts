@@ -40,13 +40,13 @@ import { PaginateQueryDto, PaginationDto } from "@src/dto/paginate.dto";
 export class AdminController {
     constructor(private readonly adminService: AdminService) {}
 
-    @Get("/profile")
+    @Get("profile")
     @ForRoles(AdminRole.ADMIN, AdminRole.EMPLOYEE)
     profile(@Req() req: Request) {
         return this.adminService.findById(req.user.id);
     }
 
-    @Post("/employee")
+    @Post("employee")
     @ApiConsumes("application/json", "multipart/form-data")
     @ForRoles(AdminRole.ADMIN)
     create(@Body() body: CreateAdminDto) {
@@ -58,7 +58,7 @@ export class AdminController {
         );
     }
 
-    @Post("/deposit")
+    @Post("deposit")
     @ForRoles(AdminRole.ADMIN, AdminRole.EMPLOYEE)
     deposit(@Body() body: DepositToUserAccount, @Req() req: Request) {
         return this.adminService.depositUserAccout(
@@ -69,7 +69,7 @@ export class AdminController {
         );
     }
 
-    @Get("/employee")
+    @Get("employee")
     @ForRoles(AdminRole.ADMIN)
     @ApiOkResponse({ type: PaginationDto })
     getEmployeeList(@Query() query: PaginateQueryDto) {
@@ -79,18 +79,13 @@ export class AdminController {
         });
     }
 
-    @Put("/employee/:id(\\d+)")
+    @Put("employee/:id(\\d+)")
     @ForRoles(AdminRole.ADMIN)
     updateEmployee(@Param("id") id: number, @Body() body: UpdateEmployeeDto) {
-        return this.adminService.updateEmployee(
-            id,
-            body.name,
-            body.email,
-            body.password,
-        );
+        return this.adminService.updateEmployee(id, body.name, body.email);
     }
 
-    @Delete("/employee/:id(\\d+)")
+    @Delete("employee/:id(\\d+)")
     @ForRoles(AdminRole.ADMIN)
     deleteEmployee(@Param("id") id: number) {
         return this.adminService.deleteEmployee(id);

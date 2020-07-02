@@ -177,16 +177,10 @@ export class AdminService {
         );
     }
 
-    async updateEmployee(
-        id: number,
-        name: string,
-        email: string,
-        password: string,
-    ) {
+    async updateEmployee(id: number, name: string, email: string) {
         return await getRepository(Admin).update(id, {
-            name: name,
-            email: email,
-            password: PasswordEncoder.encode(password),
+            name,
+            email,
         });
     }
 

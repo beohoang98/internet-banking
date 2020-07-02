@@ -3,7 +3,7 @@ import {
     Injectable,
     NotFoundException,
 } from "@nestjs/common";
-import { CreateUserDto } from "@src/dto/user.dto";
+import { CreateUserDto, UserUpdateDto } from "@src/dto/user.dto";
 import { User } from "@src/models/User";
 import { PasswordEncoder } from "@src/utils/passwordEncoder";
 import { validateOrReject } from "class-validator";
@@ -37,8 +37,7 @@ export class UserService {
     search(search: string) {
         return this.userRepo.find({
             where: [
-                { accountNumber: Like(`%${search}%`) },
-                { email: Like(`%${search}%`) },
+                { accountNumber: Like(`${search}%`) },
                 { phone: Like(`%${search}%`) },
             ],
             take: 10,
@@ -148,5 +147,13 @@ export class UserService {
         } else {
             throw new ForbiddenException("Otp is invalid");
         }
+    }
+
+    async updateProfile(id: number, dto: UserUpdateDto) {
+        return await this.userRepo.update(id, {
+            name: dto.name,
+            email: dto.email,
+            phone: dto.phone,
+        });
     }
 }

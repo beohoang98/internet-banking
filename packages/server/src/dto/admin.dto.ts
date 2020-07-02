@@ -1,4 +1,11 @@
-import { IsEmail, IsEnum, IsInt, IsNotEmpty, IsString } from "class-validator";
+import {
+    IsEmail,
+    IsEnum,
+    IsInt,
+    IsNotEmpty,
+    IsOptional,
+    IsString,
+} from "class-validator";
 import { Type } from "class-transformer";
 import { ApiProperty } from "@nestjs/swagger";
 import { AdminRole } from "@src/models/Admin";
@@ -21,9 +28,10 @@ export class CreateAdminDto {
     @Type(() => String)
     password: string;
 
-    @ApiProperty({ enum: AdminRole })
+    @ApiProperty({ enum: AdminRole, required: false })
+    @IsOptional()
     @IsEnum(AdminRole)
-    role: AdminRole;
+    role: AdminRole = AdminRole.EMPLOYEE;
 }
 
 export class DepositToUserAccount {
@@ -43,20 +51,22 @@ export class DepositToUserAccount {
 }
 
 export class UpdateEmployeeDto {
-    @ApiProperty()
+    @ApiProperty({ required: false })
     @IsString()
+    @IsOptional()
     @IsNotEmpty()
     @Type(() => String)
-    name: string;
+    name?: string;
 
-    @ApiProperty()
+    @ApiProperty({ required: false })
     @IsEmail()
+    @IsOptional()
     @Type(() => String)
-    email: string;
+    email?: string;
 
-    @ApiProperty()
-    @IsString()
-    @IsNotEmpty()
-    @Type(() => String)
-    password: string;
+    // @ApiProperty()
+    // @IsString()
+    // @IsNotEmpty()
+    // @Type(() => String)
+    // password: string;
 }
