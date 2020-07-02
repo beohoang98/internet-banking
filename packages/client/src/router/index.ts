@@ -73,6 +73,16 @@ const routes: Array<RouteConfig> = [
                         component: () => import("@/views/ResetPassword.vue"),
                     },
                     {
+                        path: "debt",
+                        name: "Debt",
+                        component: () => import("@/views/Debt.vue"),
+                    },
+                    {
+                        path: "history",
+                        name: "History",
+                        component: () => import("@/views/History.vue"),
+                    },
+                    {
                         path: "*",
                         component: NotFound,
                     },

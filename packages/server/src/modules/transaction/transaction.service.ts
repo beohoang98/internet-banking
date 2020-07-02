@@ -15,6 +15,8 @@ import { ConnectPgpService } from "../connect/connect-pgp.service";
 import { ConnectRSAService } from "../connect/connect-rsa.service";
 import * as moment from "moment";
 
+const CHARGE = 1100;
+
 @Injectable()
 export class TransactionService {
     constructor(
@@ -29,6 +31,7 @@ export class TransactionService {
         note: string,
         otp: number,
         isDebtPay: boolean,
+        isCharge: boolean,
         bankType: BankTypeEnum = BankTypeEnum.LOCAL,
     ) {
         if ((await this.otpService.validateOtp(id, otp)) === true) {
@@ -38,8 +41,21 @@ export class TransactionService {
                 },
             });
 
-            if (srcAccount.balance < amount) {
+            let remitterAmount = amount;
+            let receiverAmount = amount;
+
+            if (isCharge === true) {
+                remitterAmount += CHARGE;
+            } else {
+                receiverAmount -= CHARGE;
+            }
+            console.log(receiverAmount, remitterAmount);
+            if (srcAccount.balance < remitterAmount) {
                 throw new ForbiddenException("Balance is not enough");
+            }
+
+            if (receiverAmount < 0) {
+                throw new ForbiddenException("Amount must be bigger than 1100");
             }
 
             const desAccount = await getRepository(User).findOne({
@@ -63,10 +79,10 @@ export class TransactionService {
             await getRepository(OTP).update(checkOtp.id, { isUsed: true });
 
             await getRepository(User).update(desAccount.id, {
-                balance: desAccount.balance + amount,
+                balance: desAccount.balance + receiverAmount,
             });
             await getRepository(User).update(srcAccount.id, {
-                balance: srcAccount.balance - amount,
+                balance: srcAccount.balance - remitterAmount,
             });
 
             const transactionData = new Transaction({
@@ -76,6 +92,7 @@ export class TransactionService {
                 amount: amount,
                 bankType: bankType,
                 isDebtPay: isDebtPay,
+                isRemitterCharge: isCharge,
             });
 
             return await getRepository(Transaction).save(transactionData);
@@ -107,6 +124,7 @@ export class TransactionService {
                 account: item.desAccount,
                 bankType: item.bankType,
                 amount: item.amount,
+                isCharge: item.isRemitterCharge,
             });
 
             resultArr.push(transaction);
@@ -136,6 +154,7 @@ export class TransactionService {
                 account: item.sourceAccount,
                 bankType: item.bankType,
                 amount: item.amount,
+                isCharge: item.isRemitterCharge,
             });
 
             resultArr.push(transaction);
@@ -165,6 +184,7 @@ export class TransactionService {
                 account: item.desAccount,
                 bankType: item.bankType,
                 amount: item.amount,
+                isCharge: item.isRemitterCharge,
             });
 
             resultArr.push(transaction);
@@ -180,23 +200,34 @@ export class TransactionService {
         note: string,
         bankType: BankTypeEnum,
         otp: number,
+        isCharge: boolean,
     ) {
         if ((await this.otpService.validateOtp(userId, otp)) === true) {
             const user = await getRepository(User).findOne(userId);
+            let remitterAmount = amount;
+            let receiverAmount = amount;
 
+            if (isCharge === true) {
+                remitterAmount += CHARGE;
+            } else {
+                receiverAmount -= CHARGE;
+            }
+            if (receiverAmount < 0) {
+                throw new ForbiddenException("Amount must be bigger than 1100");
+            }
             if (user.balance - amount < 0) {
                 throw new ForbiddenException("Balance is not enough");
             }
 
             if (bankType === BankTypeEnum.PGP) {
-                await this.pgpService.sendMoney(accountNumber, amount);
+                await this.pgpService.sendMoney(accountNumber, receiverAmount);
             }
             if (bankType === BankTypeEnum.RSA) {
-                await this.rsaService.sendMoney(accountNumber, amount);
+                await this.rsaService.sendMoney(accountNumber, receiverAmount);
             }
 
             await getRepository(User).update(user.id, {
-                balance: user.balance - amount,
+                balance: user.balance - remitterAmount,
             });
 
             const transaction = new Transaction({
@@ -207,6 +238,7 @@ export class TransactionService {
                 bankType: bankType,
                 isDebtPay: false,
                 isMyBankSend: true,
+                isRemitterCharge: isCharge,
             });
 
             return await getRepository(Transaction).save(transaction);

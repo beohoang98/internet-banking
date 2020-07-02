@@ -16,21 +16,13 @@
                 <i class="el-icon-s-order"></i>
                 <template #title>Receiver List</template>
             </el-menu-item>
-            <el-menu-item index="/transactions">
-                <font-awesome-icon
-                    fixed-width
-                    style="width: 24px;"
-                    icon="exchange-alt"
-                />
+            <el-menu-item index="/history">
+                <font-awesome-icon fixed-width style="width: 24px;" icon="exchange-alt" />
                 <template #title>History</template>
             </el-menu-item>
             <el-submenu index="/transfer">
                 <template #title>
-                    <font-awesome-icon
-                        fixed-width
-                        style="width: 24px;"
-                        icon="share"
-                    />
+                    <font-awesome-icon fixed-width style="width: 24px;" icon="share" />
                     <span>Transfer</span>
                 </template>
                 <el-menu-item index="/transfer/internal">
@@ -43,11 +35,7 @@
                 </el-menu-item>
             </el-submenu>
             <el-menu-item index="/debt">
-                <font-awesome-icon
-                    fixed-width
-                    style="width: 24px;"
-                    icon="hand-holding-usd"
-                />
+                <font-awesome-icon fixed-width style="width: 24px;" icon="hand-holding-usd" />
                 <template #title>Debt</template>
             </el-menu-item>
         </el-menu>
@@ -55,35 +43,35 @@
 </template>
 
 <script lang="ts">
-    import Vue from "vue";
-    import { Component } from "vue-property-decorator";
-    import { Menu, MenuItem, Submenu } from "element-ui";
-    import {
-        faExchangeAlt,
-        faHandHoldingUsd,
-        faShare,
-    } from "@fortawesome/free-solid-svg-icons";
+import Vue from "vue";
+import { Component } from "vue-property-decorator";
+import { Menu, MenuItem, Submenu } from "element-ui";
+import {
+    faExchangeAlt,
+    faHandHoldingUsd,
+    faShare,
+} from "@fortawesome/free-solid-svg-icons";
 
-    Vue.$fa.add(faExchangeAlt);
-    Vue.$fa.add(faShare);
-    Vue.$fa.add(faHandHoldingUsd);
+Vue.$fa.add(faExchangeAlt);
+Vue.$fa.add(faShare);
+Vue.$fa.add(faHandHoldingUsd);
 
-    @Component({
-        name: "app-sidebar",
-        components: {
-            "el-menu": Menu,
-            "el-menu-item": MenuItem,
-            "el-submenu": Submenu,
-        },
-    })
-    export default class AppSidebar extends Vue {}
+@Component({
+    name: "app-sidebar",
+    components: {
+        "el-menu": Menu,
+        "el-menu-item": MenuItem,
+        "el-submenu": Submenu,
+    },
+})
+export default class AppSidebar extends Vue {}
 </script>
 
 <style lang="scss">
-    .app-sidebar {
-        height: 100%;
-        [data-prefix="fas"] {
-            margin-right: 5px;
-        }
+.app-sidebar {
+    height: 100%;
+    [data-prefix="fas"] {
+        margin-right: 5px;
     }
+}
 </style>

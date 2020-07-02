@@ -35,6 +35,7 @@ export class TransactionController {
             body.note,
             body.otp,
             body.isDebtPay,
+            body.isCharge,
             body.bankType,
         );
     }
@@ -70,6 +71,7 @@ export class TransactionController {
             body.note,
             body.bankType,
             body.otp,
+            body.isCharge,
         );
     }
 

@@ -14,13 +14,17 @@ export class CreateDebtRemindDto {
 export class GetDebtRemindDto {
     account: string;
 
-    isMyDept: boolean;
+    isMyDebt: boolean;
 
     amount: number;
 
     note: string;
 
     createAt: Date;
+
+    name: string;
+
+    id: number | string;
 
     constructor(data: Partial<GetDebtRemindDto>) {
         Object.assign(this, data);
