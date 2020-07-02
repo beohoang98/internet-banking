@@ -32,11 +32,17 @@ jobs:
             - checkout
             - restore_cache:
                 keys:
-                    - v1-deps-{{ checksum "yarn.lock" }}
-                    - v1-deps
+                    - v2-deps-{{ checksum "yarn.lock" }}
+                    - v2-deps
             - run: yarn
+            - run:
+                  working_directory: packages/client
+                  command: yarn --frozen-lockfile
+            - run:
+                  working_directory: packages/server
+                  command: yarn --frozen-lockfile
             - save_cache:
-                key: v1-deps-{{ checksum "yarn.lock" }}
+                key: v2-deps-{{ checksum "yarn.lock" }}
                 paths:
                     - ~/.cache/yarn
                     - node_modules
@@ -96,8 +102,6 @@ workflows:
             - build_client:
                   requires:
                       - install
-                      - test_client
             - build_server:
                   requires:
                       - install
-                      - test_server

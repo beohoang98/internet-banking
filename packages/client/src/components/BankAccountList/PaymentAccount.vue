@@ -25,25 +25,25 @@
 </template>
 
 <script lang="ts">
-    import Vue from "vue";
-    import { Component } from "vue-property-decorator";
-    import { Card, Row, Col } from "element-ui";
+import Vue from "vue";
+import { Component } from "vue-property-decorator";
+import { Card, Row, Col } from "element-ui";
 
-    Vue.component(Card.name, Card);
-    Vue.component(Row.name, Row);
-    Vue.component(Col.name, Col);
+Vue.component(Card.name, Card);
+Vue.component(Row.name, Row);
+Vue.component(Col.name, Col);
 
-    @Component({
-        name: "app-payment-account",
-    })
-    export default class PaymentAccount extends Vue {
-        testAccounts = [
-            {
-                accountNumber: "123456789",
-                balance: 10 ** 6,
-            },
-        ];
-    }
+@Component({
+    name: "app-payment-account",
+})
+export default class PaymentAccount extends Vue {
+    testAccounts = [
+        {
+            accountNumber: "123456789",
+            balance: 10 ** 6,
+        },
+    ];
+}
 </script>
 
 <style lang="scss"></style>

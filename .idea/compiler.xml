@@ -2,7 +2,5 @@
 <project version="4">
   <component name="TypeScriptCompiler">
     <option name="typeScriptCompilerParams" value="--max-old-space-size 768" />
-    <option name="typeScriptServiceDirectory" value="$USER_HOME$/.nvm/versions/node/v13.11.0/lib/node_modules/typescript" />
-    <option name="versionType" value="SERVICE_DIRECTORY" />
   </component>
 </project>

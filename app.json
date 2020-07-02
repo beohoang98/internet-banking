@@ -1,0 +1,27 @@
+{
+    "name": "Internet Banking",
+    "addons": [
+        {
+            "plan": "heroku-postgresql:hobby-dev",
+            "as": "DATABASE",
+            "options": {
+                "version": "12"
+            }
+        },
+        {
+            "plan": "heroku-redis:hobby-dev",
+            "as": "REDIS"
+        }
+    ],
+    "buildpacks": [
+        {
+            "url": "https://github.com/timanovsky/subdir-heroku-buildpack"
+        },
+        {
+            "url": "heroku/nodejs"
+        }
+    ],
+    "env": {
+        "PROJECT_PATH": "packages/server"
+    }
+}

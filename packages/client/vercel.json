@@ -1,0 +1,17 @@
+{
+    "version": 2,
+    "redirects": [
+        {
+            "source": "/",
+            "destination": "/app"
+        },
+        {
+            "source": "/app/(.*)",
+            "destination": "/app"
+        },
+        {
+            "source": "/admin/(.*)",
+            "destination": "/admin"
+        }
+    ]
+}
