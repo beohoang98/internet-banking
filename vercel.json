@@ -2,16 +2,16 @@
     "version": 2,
     "redirects": [
         {
-            "src": "/",
-            "dest": "/app"
+            "source": "/",
+            "destination": "/app"
         },
         {
-            "src": "/app/.*",
-            "dest": "/app/"
+            "source": "/app/.*",
+            "destination": "/app/"
         },
         {
-            "src": "/admin/.*",
-            "dest": "/admin/"
+            "source": "/admin/.*",
+            "destination": "/admin/"
         }
     ]
 }
