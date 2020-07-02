@@ -6,11 +6,11 @@
             "destination": "/app"
         },
         {
-            "source": "/app/.*",
+            "source": "/app/(.*)",
             "destination": "/app/"
         },
         {
-            "source": "/admin/.*",
+            "source": "/admin/(.*)",
             "destination": "/admin/"
         }
     ]
