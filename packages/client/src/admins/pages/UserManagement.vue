@@ -32,12 +32,25 @@
                                     align="middle"
                                 >
                                     <span>{{ user.accountNumber }}</span>
-                                    <el-button
-                                        @click="() => handleDeposit(user)"
-                                        icon="el-icon-download"
-                                        type="primary"
-                                        >Deposit</el-button
-                                    >
+                                    <div>
+                                        <el-button
+                                            @click="() => handleDeposit(user)"
+                                            icon="el-icon-download"
+                                            type="primary"
+                                            title="Deposit"
+                                            circle
+                                        />
+                                        <el-button
+                                            @click="
+                                                () =>
+                                                    (chosenUserForUpdate = user)
+                                            "
+                                            title="Update info"
+                                            icon="el-icon-info"
+                                            type="info"
+                                            circle
+                                        />
+                                    </div>
                                 </el-row>
                             </template>
                             <div>
@@ -64,9 +77,13 @@
         >
         <admin-user-add-modal :visible.sync="openAdd" />
         <admin-user-deposit-modal
-            :user="chosenUser"
-            :visible="!!chosenUser"
-            @close="chosenUser = undefined"
+            :user="chosenUserForDeposit"
+            :visible="!!chosenUserForDeposit"
+            @close="chosenUserForDeposit = null"
+        />
+        <admin-user-update-modal
+            :user="chosenUserForUpdate"
+            @close="chosenUserForUpdate = null"
         />
     </div>
 </template>
@@ -76,10 +93,15 @@ import { Component, Vue } from "vue-property-decorator";
 import { Action, Getter } from "vuex-class";
 import AdminUserAddModal from "@/admins/components/User/UserAddModal.vue";
 import AdminUserDepositModal from "@/admins/components/User/UserDepositModal.vue";
+import AdminUserUpdateModal from "@/admins/components/User/UserUpdateModal.vue";
 
 @Component({
     name: "admin-user-management",
-    components: { AdminUserDepositModal, AdminUserAddModal },
+    components: {
+        AdminUserUpdateModal,
+        AdminUserDepositModal,
+        AdminUserAddModal,
+    },
 })
 export default class UserManagement extends Vue {
     form = {
@@ -88,7 +110,8 @@ export default class UserManagement extends Vue {
     loading = false;
     openAdd = false;
 
-    chosenUser: User | null = null;
+    chosenUserForDeposit: User | null = null;
+    chosenUserForUpdate: User | null = null;
 
     @Getter("users/list") userList!: User[];
 
@@ -108,7 +131,7 @@ export default class UserManagement extends Vue {
     }
 
     handleDeposit(user: User) {
-        this.chosenUser = user;
+        this.chosenUserForDeposit = user;
     }
 }
 </script>
@@ -135,5 +158,6 @@ export default class UserManagement extends Vue {
 .user-list-wrapper {
     flex: 0 1 auto;
     overflow: auto;
+    width: 100%;
 }
 </style>

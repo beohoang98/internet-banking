@@ -10,14 +10,19 @@
                 @keydown.native.enter="onSearchName"
                 :disabled="loading"
             />
-            <el-button type="primary" icon="el-icon-plus">Add</el-button>
+            <el-button
+                type="primary"
+                @click="() => (openAdd = true)"
+                icon="el-icon-plus"
+                >Add</el-button
+            >
         </el-row>
         <el-divider />
         <el-table
             v-loading="loading"
             :lazy="!isEnd"
             :load="onLoadMore"
-            :fit="false"
+            max-height="100%"
             border
             :data="employees"
             empty-text="Empty"
@@ -44,6 +49,8 @@
                 label="Actions"
             >
                 <el-button
+                    slot-scope="{ row }"
+                    @click="() => (chosenEmployee = row)"
                     circle
                     size="small"
                     icon="el-icon-edit"
@@ -51,15 +58,24 @@
                 />
             </el-table-column>
         </el-table>
+
+        <admin-employee-add-modal :visible.sync="openAdd" />
+        <admin-employee-update-modal
+            :employee="chosenEmployee"
+            @close="() => (chosenEmployee = null)"
+        />
     </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { axiosInstance } from "@/utils/axios";
+import AdminEmployeeAddModal from "@/admins/components/Employee/EmployeeAddModal.vue";
+import AdminEmployeeUpdateModal from "@/admins/components/Employee/EmployeeUpdateModal.vue";
 
 @Component({
     name: "employee-management",
+    components: { AdminEmployeeUpdateModal, AdminEmployeeAddModal },
 })
 export default class EmployeeManagement extends Vue {
     employees: Admin[] = [];
@@ -69,6 +85,8 @@ export default class EmployeeManagement extends Vue {
     loading = false;
 
     openAdd = false;
+
+    chosenEmployee: Admin | null = null;
 
     onSearchName() {
         this.page = 1;

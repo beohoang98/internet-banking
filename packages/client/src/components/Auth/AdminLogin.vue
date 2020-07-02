@@ -21,6 +21,16 @@
                             v-model="form.password"
                         />
                     </el-form-item>
+                    <vue-recaptcha
+                        ref="captcha"
+                        :sitekey="siteKey"
+                        loadRecaptchaScript
+                        size="invisible"
+                        @verify="onVerify"
+                        @expired="() => captcha.reset()"
+                        @error="onError"
+                    >
+                    </vue-recaptcha>
                     <el-button native-type="submit" :loading="submitting"
                         >Submit</el-button
                     >
@@ -32,14 +42,22 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { Component } from "vue-property-decorator";
+import { Component, Ref } from "vue-property-decorator";
 import { Action } from "vuex-class";
 import { LoginRequest } from "@/admins/store/auth/types";
+import VueRecaptcha from "vue-recaptcha";
+import { Form } from "element-ui";
 
 @Component({
     name: "admin-login",
+    components: {
+        VueRecaptcha,
+    },
 })
 export default class AdminLogin extends Vue {
+    @Ref("captcha") captcha!: VueRecaptcha;
+    @Ref("form") formRef!: Form;
+
     form = {
         email: "",
         password: "",
@@ -48,7 +66,19 @@ export default class AdminLogin extends Vue {
 
     @Action("auth/login") login!: (payload: LoginRequest) => Promise<any>;
 
-    async onSubmit() {
+    get siteKey(): string {
+        return process.env.VUE_APP_RECAPTCHA_SITE_KEY;
+    }
+
+    onSubmit() {
+        this.captcha.execute();
+    }
+
+    onError() {
+        this.$alert("Captcha error");
+    }
+
+    async onVerify() {
         this.submitting = true;
         try {
             await this.login({
@@ -62,6 +92,7 @@ export default class AdminLogin extends Vue {
             });
         } finally {
             this.submitting = false;
+            this.captcha.reset();
         }
     }
 }

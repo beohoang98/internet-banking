@@ -59,5 +59,10 @@ export const AdminAuthModule: Module<AdminAuthState, any> = {
             localStorage.setItem("refresh_token", data.refreshToken);
             dispatch("fetchProfile");
         },
+        async logout() {
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("refresh_token");
+            window.location.reload();
+        },
     },
 };

@@ -24,12 +24,6 @@
             <el-form-item label="Employee/Admin Password" prop="password">
                 <el-input type="password" v-model="form.password" />
             </el-form-item>
-            <vue-recaptcha
-                ref="captcha"
-                size="invisible"
-                loadRecaptchaScript
-                :sitekey="sitekey"
-            />
             <el-button
                 native-type="submit"
                 style="display: block;"
@@ -71,10 +65,6 @@ export default class UserDepositModal extends Vue {
         ],
     };
 
-    get sitekey() {
-        return process.env.VUE_APP_RECAPTCHA_SITE_KEY;
-    }
-
     get amountFormatted(): string {
         return new Intl.NumberFormat().format(this.form.amount);
     }
@@ -90,7 +80,6 @@ export default class UserDepositModal extends Vue {
     async handleSubmit() {
         this.submitting = true;
         try {
-            await (this.$refs.captcha as VueRecaptcha).execute();
             const valid = await (this.$refs.form as ElForm).validate();
             if (!valid) return;
 

@@ -20,11 +20,11 @@ const routes: Array<RouteConfig> = [
         children: [
             {
                 path: "",
-                name: "home",
                 component: () => import("@/admins/pages/Home.vue"),
                 children: [
                     {
                         path: "",
+                        name: "home",
                         redirect: "users",
                     },
                     {

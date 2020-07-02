@@ -27,12 +27,12 @@ export const UsersModule: Module<AdminUsersState, any> = {
     actions: {
         async search({ commit }, term: string) {
             commit("setSearchTerm", term);
-            const { data } = await axiosInstance.get<User>("/user/profile/accountnumber", {
+            const { data } = await axiosInstance.get<User[]>("/user/search", {
                 params: {
-                    number: term,
+                    q: term,
                 },
             });
-            commit("setList", [data]);
+            commit("setList", data);
         },
     },
 };
