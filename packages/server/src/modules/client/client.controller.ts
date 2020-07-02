@@ -7,6 +7,7 @@ import {
 } from "@nestjs/common";
 import {
     ApiAcceptedResponse,
+    ApiBadRequestResponse,
     ApiBasicAuth,
     ApiCreatedResponse,
     ApiForbiddenResponse,
@@ -51,6 +52,7 @@ import { TransformClassToPlain } from "class-transformer";
     description: "Need Authorization",
 })
 @ApiNotFoundResponse({ description: "Account not found" })
+@ApiBadRequestResponse()
 export class ClientController {
     constructor(private readonly clientService: ClientService) {}
 
@@ -71,6 +73,7 @@ export class ClientController {
     @Post("send/v2")
     @ApiAcceptedResponse({ description: "Accepted send request" })
     @UseInterceptors(ClientRequestInterceptor)
+    @TransformClassToPlain({ groups: ["partner"] })
     makeTransactionV2(@Body() body: SendMoneyRequestV2Dto) {
         return this.clientService.createTransaction(
             body.data.bankType,
