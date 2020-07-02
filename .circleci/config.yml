@@ -39,7 +39,7 @@ jobs:
                   working_directory: packages/client
                   command: yarn --frozen-lockfile
             - run:
-                  working_directory: packages/client
+                  working_directory: packages/server
                   command: yarn --frozen-lockfile
             - save_cache:
                 key: v2-deps-{{ checksum "yarn.lock" }}
@@ -102,8 +102,6 @@ workflows:
             - build_client:
                   requires:
                       - install
-                      - test_client
             - build_server:
                   requires:
                       - install
-                      - test_server
