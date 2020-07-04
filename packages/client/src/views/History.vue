@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import Vue from "vue";
 import History from "@/components/History/History.vue";
 
 export default {

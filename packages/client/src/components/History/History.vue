@@ -23,27 +23,26 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { Component, Watch } from "vue-property-decorator";
+import { Component } from "vue-property-decorator";
 import {
     Button,
     Container,
-    Table,
-    TableColumn,
-    Icon,
-    Popconfirm,
     Dialog,
     Form,
     FormItem,
+    Icon,
     Input,
     InputNumber,
-    Select,
-    Option,
     Message,
+    Option,
+    Popconfirm,
+    Select,
+    Table,
+    TableColumn,
     Tag,
 } from "element-ui";
 import { Getter } from "vuex-class";
-import AddDebt from "@/components/Debt/AddDebt.vue";
-import { axiosInstance } from "../../utils/axios";
+
 Vue.component(Container.name, Container);
 Vue.component(Table.name, Table);
 Vue.component(TableColumn.name, TableColumn);

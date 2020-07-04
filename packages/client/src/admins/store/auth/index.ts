@@ -43,7 +43,7 @@ export const AdminAuthModule: Module<AdminAuthState, any> = {
                 commit("setLoaded", true);
             }
         },
-        async login({ commit, dispatch }, payload: LoginRequest) {
+        async login({ dispatch }, payload: LoginRequest) {
             const { data } = await axiosInstance.post<LoginResponse>(
                 "/auth/admin/login",
                 {},

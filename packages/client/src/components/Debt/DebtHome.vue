@@ -103,23 +103,24 @@ import { Component } from "vue-property-decorator";
 import {
     Button,
     Container,
-    Table,
-    TableColumn,
-    Icon,
-    Popconfirm,
     Dialog,
     Form,
     FormItem,
+    Icon,
     Input,
     InputNumber,
-    Select,
-    Option,
     Message,
+    Option,
+    Popconfirm,
+    Select,
+    Table,
+    TableColumn,
     Tag,
 } from "element-ui";
 import { Getter } from "vuex-class";
 import AddDebt from "@/components/Debt/AddDebt.vue";
-import { axiosInstance } from "../../utils/axios";
+import { axiosInstance } from "@/utils/axios";
+
 Vue.component(Container.name, Container);
 Vue.component(Table.name, Table);
 Vue.component(TableColumn.name, TableColumn);
@@ -154,6 +155,7 @@ export default class DebtHome extends Vue {
     rowId = -1;
     accountNumber = "";
     amount = "";
+    labelWidth = 200;
 
     handleClose() {
         this.deleteDebtVisible = false;
@@ -185,7 +187,7 @@ export default class DebtHome extends Vue {
 
     async sendOtp() {
         try {
-            const { data: data } = await axiosInstance.get("/otp");
+            await axiosInstance.get("/otp");
             Message({
                 showClose: true,
                 message: "An email otp has been sent to you",
@@ -202,7 +204,7 @@ export default class DebtHome extends Vue {
 
     async paidDebt() {
         try {
-            const { data: data } = await axiosInstance.post("/transaction", {
+            await axiosInstance.post("/transaction", {
                 desAccount: this.accountNumber,
                 amount: Number(this.amount),
                 note: this.form.note,

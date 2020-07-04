@@ -27,7 +27,7 @@ export const ReceiverModule: Module<ReceiverState, any> = {
     namespaced: true,
     state() {
         return {
-            data: [{}],
+            data: [],
             isLoading: false,
             isLoaded: false,
         };
@@ -60,7 +60,7 @@ export const ReceiverModule: Module<ReceiverState, any> = {
         async addReceiver({ commit, state }, dataCreate: CreateReceiver) {
             try {
                 commit("setLoading", true);
-                const { data: data } = await axiosInstance.post("/receiver", {
+                const { data } = await axiosInstance.post("/receiver", {
                     desAccountNumber: dataCreate.desAccountNumber,
                     name: dataCreate.name,
                     bankType: dataCreate.bankType,
@@ -80,9 +80,7 @@ export const ReceiverModule: Module<ReceiverState, any> = {
         ) {
             try {
                 commit("setLoading", true);
-                const { data: data } = await axiosInstance.delete(
-                    "/receiver/" + deleteReceiver.id,
-                );
+                await axiosInstance.delete("/receiver/" + deleteReceiver.id);
                 const cloneData = state.data;
                 cloneData?.splice(deleteReceiver.index, 1);
                 commit("setData", cloneData);

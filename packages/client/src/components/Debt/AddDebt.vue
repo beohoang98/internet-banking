@@ -50,21 +50,22 @@ import { Component, Prop, Watch } from "vue-property-decorator";
 import {
     Button,
     Container,
-    Table,
-    TableColumn,
-    Icon,
-    Popconfirm,
     Dialog,
     Form,
     FormItem,
+    Icon,
     Input,
     InputNumber,
-    Select,
-    Option,
     Message,
+    Option,
+    Popconfirm,
+    Select,
     Switch,
+    Table,
+    TableColumn,
 } from "element-ui";
-import { axiosInstance } from "../../utils/axios";
+import { axiosInstance } from "@/utils/axios";
+
 Vue.component(Container.name, Container);
 Vue.component(Table.name, Table);
 Vue.component(TableColumn.name, TableColumn);

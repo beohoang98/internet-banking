@@ -127,7 +127,7 @@ import {
     Message,
     Switch,
 } from "element-ui";
-import { axiosInstance } from "../../utils/axios";
+import { axiosInstance } from "@/utils/axios";
 Vue.component(Container.name, Container);
 Vue.component(Table.name, Table);
 Vue.component(TableColumn.name, TableColumn);
@@ -170,7 +170,6 @@ export default class Transfer extends Vue {
     }
 
     step = 1;
-    disableUpdateInput = false;
     labelWidth = "120px";
     form = {
         bankType: this.bankType,
@@ -264,7 +263,7 @@ export default class Transfer extends Vue {
 
     async nextStep() {
         try {
-            const { data: data } = await axiosInstance.get("/otp");
+            await axiosInstance.get("/otp");
             Message({
                 showClose: true,
                 message: "An email otp has been sent to you",
@@ -282,18 +281,15 @@ export default class Transfer extends Vue {
     async submit() {
         try {
             if (this.form.bankType === "LOCAL") {
-                const { data: data } = await axiosInstance.post(
-                    "/transaction",
-                    {
-                        desAccount: this.form.accountNumber,
-                        amount: Number(this.form.amount),
-                        note: this.form.note,
-                        otp: Number(this.form.otp),
-                        isDebtPay: false,
-                        bankType: this.form.bankType,
-                        isCharge: this.form.isCharge,
-                    },
-                );
+                await axiosInstance.post("/transaction", {
+                    desAccount: this.form.accountNumber,
+                    amount: Number(this.form.amount),
+                    note: this.form.note,
+                    otp: Number(this.form.otp),
+                    isDebtPay: false,
+                    bankType: this.form.bankType,
+                    isCharge: this.form.isCharge,
+                });
                 Message({
                     showClose: true,
                     message: "Create transaction successful",
@@ -302,18 +298,15 @@ export default class Transfer extends Vue {
             }
 
             if (this.form.bankType === "RSA" || this.form.bankType === "PGP") {
-                const { data: data } = await axiosInstance.post(
-                    "/transaction/interbank",
-                    {
-                        accountNumber: this.form.accountNumber,
-                        amount: Number(this.form.amount),
-                        note: this.form.note,
-                        otp: Number(this.form.otp),
-                        isDebtPay: false,
-                        bankType: this.form.bankType,
-                        isCharge: this.form.isCharge,
-                    },
-                );
+                await axiosInstance.post("/transaction/interbank", {
+                    accountNumber: this.form.accountNumber,
+                    amount: Number(this.form.amount),
+                    note: this.form.note,
+                    otp: Number(this.form.otp),
+                    isDebtPay: false,
+                    bankType: this.form.bankType,
+                    isCharge: this.form.isCharge,
+                });
                 Message({
                     showClose: true,
                     message: "Create transaction successful",

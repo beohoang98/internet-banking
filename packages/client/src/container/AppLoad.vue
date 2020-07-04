@@ -38,7 +38,7 @@ export default class AppLoad extends Vue {
         }
     }
 
-    watchIsLoaded(this: this, after: any[], before: any[]) {
+    watchIsLoaded(this: this, after: any[]) {
         if (after[0] && !this.isLocalLoaded) {
             console.debug("Count me");
             if (this.isLogged) {
