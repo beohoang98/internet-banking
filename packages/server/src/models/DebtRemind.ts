@@ -22,4 +22,7 @@ export class DebtRemind extends Base<DebtRemind> {
 
     @Column()
     desAccount: string;
+
+    @Column()
+    name: string;
 }

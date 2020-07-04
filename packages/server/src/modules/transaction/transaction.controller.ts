@@ -7,6 +7,7 @@ import {
     Req,
     UseGuards,
     UseInterceptors,
+    Query,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { JwtGuard } from "@src/guards/jwt.guard";
@@ -34,6 +35,7 @@ export class TransactionController {
             body.note,
             body.otp,
             body.isDebtPay,
+            body.isCharge,
             body.bankType,
         );
     }
@@ -69,14 +71,15 @@ export class TransactionController {
             body.note,
             body.bankType,
             body.otp,
+            body.isCharge,
         );
     }
 
     @Get("/interbank/info")
-    getInfoInterbank(@Body() body: GetInfoInterbankDto) {
+    getInfoInterbank(@Query() query: GetInfoInterbankDto) {
         return this.transactionService.getInfoInterbank(
-            body.accountNumber,
-            body.bankType,
+            query.accountNumber,
+            query.bankType,
         );
     }
 

@@ -34,6 +34,7 @@ export class UserController {
 
     @Get("profile")
     @UseGuards(JwtGuard)
+    @TransformClassToPlain({ groups: ["internal"] })
     async profile(@Req() req) {
         return this.userService.getProfile(req.user.id);
     }

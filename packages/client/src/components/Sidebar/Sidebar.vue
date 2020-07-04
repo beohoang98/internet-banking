@@ -16,7 +16,7 @@
                 <i class="el-icon-s-order"></i>
                 <template #title>Receiver List</template>
             </el-menu-item>
-            <el-menu-item index="/transactions">
+            <el-menu-item index="/history">
                 <font-awesome-icon
                     fixed-width
                     style="width: 24px;"

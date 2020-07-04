@@ -28,6 +28,9 @@ export class CreateTransactionDto {
 
     @IsEnum(BankTypeEnum)
     bankType: BankTypeEnum;
+
+    @IsBoolean()
+    isCharge: boolean;
 }
 
 export class GetMyTransactionDto {
@@ -37,6 +40,7 @@ export class GetMyTransactionDto {
     account!: string;
     bankType!: BankTypeEnum;
     amount!: number;
+    isCharge!: boolean;
     constructor(data: Partial<GetMyTransactionDto>) {
         Object.assign(this, data);
     }
@@ -59,6 +63,9 @@ export class CreateTransactionInterbankDto {
 
     @IsEnum(BankTypeEnum)
     bankType: BankTypeEnum;
+
+    @IsBoolean()
+    isCharge: boolean;
 }
 
 export class GetInfoInterbankDto {

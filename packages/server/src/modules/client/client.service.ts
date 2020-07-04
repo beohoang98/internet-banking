@@ -79,6 +79,7 @@ export class ClientService {
             amount: amount,
             isMyBankSend: false,
             isDebtPay: false,
+            isRemitterCharge: false,
         });
 
         if (clientId === BankTypeEnum.RSA)

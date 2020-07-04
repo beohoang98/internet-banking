@@ -34,6 +34,7 @@ export class DebtRemindService {
             desAccount: desAccount.accountNumber,
             amount: amount,
             remindNote: remindNote,
+            name: desAccount.name,
         });
 
         await getRepository(DebtRemind).save(dept);
@@ -60,7 +61,7 @@ export class DebtRemindService {
                 note,
             },
             to: desEmail,
-            subject: "Dept Remind",
+            subject: "Debt Remind",
             template: template,
         });
     }
@@ -86,14 +87,16 @@ export class DebtRemindService {
                     amount: list[i].amount,
                     note: list[i].remindNote,
                     createAt: list[i].createdAt,
+                    name: list[i].name,
+                    id: list[i].id,
                 });
 
                 if (list[i].desAccount === user.accountNumber) {
                     (dept.account = list[i].sourceAccount),
-                        (dept.isMyDept = true);
+                        (dept.isMyDebt = true);
                 } else {
                     (dept.account = list[i].desAccount),
-                        (dept.isMyDept = false);
+                        (dept.isMyDebt = false);
                 }
                 result.push(dept);
             }

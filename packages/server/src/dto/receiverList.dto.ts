@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsEnum, IsNumber, IsString, IsOptional } from "class-validator";
 import { Type } from "class-transformer";
 import { ApiProperty } from "@nestjs/swagger";
 import { BankTypeEnum } from "@src/models/ReceiverList";
@@ -6,7 +6,7 @@ import { BankTypeEnum } from "@src/models/ReceiverList";
 export class CreateReceiverDto {
     @ApiProperty()
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     @Type(() => String)
     name: string;
 
@@ -23,7 +23,7 @@ export class CreateReceiverDto {
 export class UpdateReceiverDto {
     @ApiProperty()
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     @Type(() => String)
     name: string;
 
