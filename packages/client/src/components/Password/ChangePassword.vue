@@ -43,10 +43,10 @@ import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import { Button, Form, FormItem, Input, Message } from "element-ui";
 import { axiosInstance } from "../../utils/axios";
-Vue.component(Form.name, Form);
-Vue.component(FormItem.name, FormItem);
-Vue.component(Input.name, Input);
-Vue.component(Button.name, Button);
+Vue.use(Form);
+Vue.use(FormItem);
+Vue.use(Input);
+Vue.use(Button);
 
 @Component({
     name: "ChangePassword",

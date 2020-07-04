@@ -7,4 +7,4 @@ import { Icon } from "element-ui";
 // import 'element-theme-dark/lib/index.css';
 locale.use(lang);
 
-Vue.component(Icon.name, Icon);
+Vue.use(Icon);

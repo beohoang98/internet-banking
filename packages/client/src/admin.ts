@@ -9,7 +9,7 @@ import "./registerServiceWorker";
 import router from "./router/admin";
 import store from "./admins/store";
 import "./plugins/vee-validate";
-import "./plugins/font-awesome";
+import FAPlugin from "./plugins/font-awesome";
 
 import "@/filters";
 
@@ -17,6 +17,7 @@ Vue.config.productionTip = false;
 
 Vue.use(ElementUI, { locale: en });
 Vue.use(VRole);
+Vue.use(FAPlugin);
 
 new Vue({
     router,

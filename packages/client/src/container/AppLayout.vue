@@ -14,11 +14,11 @@ import Vue from "vue";
 import AppSidebar from "@/components/Sidebar/Sidebar.vue";
 import { Aside, Container, Main } from "element-ui";
 
-Vue.component(Container.name, Container);
-Vue.component(Aside.name, Aside);
-Vue.component(Main.name, Main);
+Vue.use(Container);
+Vue.use(Aside);
+Vue.use(Main);
 
-export default {
+export default Vue.extend({
     components: { AppSidebar },
-};
+});
 </script>

@@ -3,6 +3,7 @@ import VueRouter, { RouteConfig } from "vue-router";
 import AppLoad from "@/container/AppLoad.vue";
 import { Component } from "vue-property-decorator";
 import AppStore from "@/store";
+import AppLayout from "@/container/AppLayout.vue";
 import NotFound from "../views/NotFound.vue";
 
 Vue.use(VueRouter);
@@ -30,20 +31,15 @@ const routes: Array<RouteConfig> = [
                             title: "Login",
                         },
                     },
-                    {
-                        name: "register",
-                        path: "register",
-                        component: () => import("@/components/Auth/Login.vue"),
-                        meta: {
-                            title: "Register",
-                        },
-                    },
                 ],
             },
             {
                 path: "/",
                 name: "AppLayout",
-                component: () => import("@/container/AppLayout.vue"),
+                component: () =>
+                    import(
+                        /* webpackChunkName: "app-layout" */ "@/container/AppLayout.vue"
+                    ),
                 meta: {
                     auth: true,
                 },
@@ -53,14 +49,20 @@ const routes: Array<RouteConfig> = [
                         redirect: "home",
                     },
                     {
-                        path: "/home",
+                        path: "home",
                         name: "Home",
-                        component: () => import("@/views/Home.vue"),
+                        component: () =>
+                            import(
+                                /* webpackChunkName: "app-home" */ "@/views/Home.vue"
+                            ),
                     },
                     {
                         path: "receivers",
                         name: "Receivers",
-                        component: () => import("@/views/Receivers.vue"),
+                        component: () =>
+                            import(
+                                /* webpackChunkName: "app-receiver" */ "@/views/Receivers.vue"
+                            ),
                     },
                     {
                         path: "change-password",
@@ -95,6 +97,7 @@ const routes: Array<RouteConfig> = [
 const router = new VueRouter({
     mode: "history",
     base: process.env.BASE_URL + "/app",
+    fallback: true,
     routes,
 });
 

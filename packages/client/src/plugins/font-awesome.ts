@@ -1,6 +1,8 @@
-import Vue from "vue";
+import { VueConstructor } from "vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { library } from "@fortawesome/fontawesome-svg-core";
 
-Vue.component("font-awesome-icon", FontAwesomeIcon);
-Vue.$fa = library;
+export default {
+    install(Vue: VueConstructor) {
+        Vue.component("font-awesome-icon", FontAwesomeIcon);
+    },
+};

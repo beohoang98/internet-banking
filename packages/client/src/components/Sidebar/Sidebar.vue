@@ -24,24 +24,6 @@
                 />
                 <template #title>History</template>
             </el-menu-item>
-            <el-submenu index="/transfer">
-                <template #title>
-                    <font-awesome-icon
-                        fixed-width
-                        style="width: 24px;"
-                        icon="share"
-                    />
-                    <span>Transfer</span>
-                </template>
-                <el-menu-item index="/transfer/internal">
-                    <i class="el-icon-s-home"></i>
-                    Internal Transfer
-                </el-menu-item>
-                <el-menu-item index="/transfer/outside">
-                    <i class="el-icon-link"></i>
-                    Outside-bank Transfer
-                </el-menu-item>
-            </el-submenu>
             <el-menu-item index="/debt">
                 <font-awesome-icon
                     fixed-width
@@ -63,18 +45,18 @@ import {
     faHandHoldingUsd,
     faShare,
 } from "@fortawesome/free-solid-svg-icons";
+import { library } from "@fortawesome/fontawesome-svg-core";
 
-Vue.$fa.add(faExchangeAlt);
-Vue.$fa.add(faShare);
-Vue.$fa.add(faHandHoldingUsd);
+Vue.use(Menu);
+Vue.use(MenuItem);
+Vue.use(Submenu);
+
+library.add(faExchangeAlt);
+library.add(faShare);
+library.add(faHandHoldingUsd);
 
 @Component({
     name: "app-sidebar",
-    components: {
-        "el-menu": Menu,
-        "el-menu-item": MenuItem,
-        "el-submenu": Submenu,
-    },
 })
 export default class AppSidebar extends Vue {}
 </script>

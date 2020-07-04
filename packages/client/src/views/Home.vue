@@ -9,9 +9,8 @@ import Vue from "vue";
 import AppPaymentAccount from "@/components/BankAccountList/PaymentAccount";
 import { Aside, Container, Main } from "element-ui";
 
-Vue.component(Container.name, Container);
-Vue.component(Aside.name, Aside);
-Vue.component(Main.name, Main);
+Vue.use(Aside);
+Vue.use(Main);
 
 export default {
     name: "Home",

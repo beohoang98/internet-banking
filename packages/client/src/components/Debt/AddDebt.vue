@@ -66,22 +66,21 @@ import {
 } from "element-ui";
 import { axiosInstance } from "@/utils/axios";
 
-Vue.component(Container.name, Container);
-Vue.component(Table.name, Table);
-Vue.component(TableColumn.name, TableColumn);
-Vue.component(Button.name, Button);
-Vue.component(Popconfirm.name, Popconfirm);
-Vue.component(Icon.name, Icon);
-Vue.component(Dialog.name, Dialog);
-Vue.component(Form.name, Form);
-Vue.component(FormItem.name, FormItem);
-Vue.component(Input.name, Input);
-Vue.component(Select.name, Select);
-Vue.component(Option.name, Option);
-Vue.component(InputNumber.name, InputNumber);
-Vue.component(Message.name, Message);
-Vue.component(Popconfirm.name, Popconfirm);
-Vue.component(Switch.name, Switch);
+Vue.use(Container);
+Vue.use(Table);
+Vue.use(TableColumn);
+Vue.use(Button);
+Vue.use(Popconfirm);
+Vue.use(Icon);
+Vue.use(Dialog);
+Vue.use(Form);
+Vue.use(FormItem);
+Vue.use(Input);
+Vue.use(Select);
+Vue.use(Option);
+Vue.use(InputNumber);
+Vue.use(Popconfirm);
+Vue.use(Switch);
 @Component({
     name: "add-debt",
 })
@@ -147,7 +146,7 @@ export default class AddDebt extends Vue {
     async getName() {
         try {
             const { data: data } = await axiosInstance.get(
-                "user/profile/accountnumber?number=" + this.form.accountNumber,
+                "user/profile/account-number?number=" + this.form.accountNumber,
             );
             if (!data) {
                 Message({

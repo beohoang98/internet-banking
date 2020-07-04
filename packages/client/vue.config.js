@@ -17,6 +17,7 @@ const config = {
  */
 const projectConfig = {
     lintOnSave: !config.NO_ESLINT,
+    parallel: true,
     chainWebpack(config) {
         if (config.NO_TS) {
             config.plugins.delete("fork-ts-checker");
@@ -56,6 +57,11 @@ const projectConfig = {
             template: "public/admin.html",
             filename: "admin/index.html",
             title: "Admin",
+        },
+    },
+    pluginOptions: {
+        options: {
+            filename: "[name]_[hash].[ext]",
         },
     },
 };

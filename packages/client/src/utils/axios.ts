@@ -22,7 +22,7 @@ axiosInstance.interceptors.response.use(
         const lastReq = error.config;
         const status = error?.response?.status;
         if (
-            (status === 403 || status === 401) &&
+            status === 401 &&
             !lastReq._retry &&
             getAccessToken() &&
             getRefreshToken()

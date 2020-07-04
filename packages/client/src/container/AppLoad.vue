@@ -1,7 +1,6 @@
 <template>
-    <div id="app-loader">
-        <router-view v-if="isLocalLoaded" />
-        <app-loading v-else />
+    <div id="app-loader" v-loading="!isLocalLoaded">
+        <router-view />
     </div>
 </template>
 
@@ -11,6 +10,9 @@ import { Action, Getter } from "vuex-class";
 import { Component } from "vue-property-decorator";
 import AppLoading from "@/components/AppLoading.vue";
 import { extend } from "vee-validate";
+import { Loading } from "element-ui";
+
+Vue.use(Loading);
 
 @Component({
     name: "app-load",
@@ -38,17 +40,17 @@ export default class AppLoad extends Vue {
         }
     }
 
-    watchIsLoaded(this: this, after: any[]) {
-        if (after[0] && !this.isLocalLoaded) {
+    watchIsLoaded(this: this, [isLoaded]: any[]) {
+        if (isLoaded && !this.isLocalLoaded) {
             console.debug("Count me");
             if (this.isLogged) {
-                this.isLocalLoaded = after[0];
+                this.isLocalLoaded = isLoaded;
             } else {
                 const to = this.$route;
                 if (to.matched.some((record) => !!record.meta.auth)) {
                     this.$router.replace({ name: "login" });
                 } else {
-                    this.isLocalLoaded = after[0];
+                    this.isLocalLoaded = isLoaded;
                 }
             }
         }

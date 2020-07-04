@@ -93,17 +93,17 @@ import {
 } from "element-ui";
 import { Getter } from "vuex-class";
 
-Vue.component(Card.name, Card);
-Vue.component(Row.name, Row);
-Vue.component(Col.name, Col);
-Vue.component(Button.name, Button);
-Vue.component(Dialog.name, Dialog);
-Vue.component(Form.name, Form);
-Vue.component(FormItem.name, FormItem);
-Vue.component(Input.name, Input);
-Vue.component(Select.name, Select);
-Vue.component(Option.name, Option);
-Vue.component(InputNumber.name, InputNumber);
+Vue.use(Card);
+Vue.use(Row);
+Vue.use(Col);
+Vue.use(Button);
+Vue.use(Dialog);
+Vue.use(Form);
+Vue.use(FormItem);
+Vue.use(Input);
+Vue.use(Select);
+Vue.use(Option);
+Vue.use(InputNumber);
 
 @Component({
     name: "app-payment-account",

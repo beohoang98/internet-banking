@@ -55,6 +55,9 @@ export default class AuthPage extends Vue {
     &-form {
         background-color: white;
         animation: authFormShow both ease-in-out 0.4s;
+        overflow: hidden;
+        padding-bottom: 100px;
+
         &-title {
             font-size: 36px;
             font-weight: bold;

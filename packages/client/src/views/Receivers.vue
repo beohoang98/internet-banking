@@ -122,39 +122,38 @@ import { Component } from "vue-property-decorator";
 import {
     Button,
     Container,
-    Table,
-    TableColumn,
-    Icon,
-    Popconfirm,
     Dialog,
     Form,
     FormItem,
+    Icon,
     Input,
     InputNumber,
-    Select,
-    Option,
     Message,
+    Option,
+    Popconfirm,
+    Select,
+    Table,
+    TableColumn,
 } from "element-ui";
 import { Getter } from "vuex-class";
 import Transfer from "@/components/Transfer/Transfer.vue";
 import AddDebt from "@/components/Debt/AddDebt.vue";
-import { axiosInstance } from "../utils/axios";
+import { axiosInstance } from "@/utils/axios";
 
-Vue.component(Container.name, Container);
-Vue.component(Table.name, Table);
-Vue.component(TableColumn.name, TableColumn);
-Vue.component(Button.name, Button);
-Vue.component(Popconfirm.name, Popconfirm);
-Vue.component(Icon.name, Icon);
-Vue.component(Dialog.name, Dialog);
-Vue.component(Form.name, Form);
-Vue.component(FormItem.name, FormItem);
-Vue.component(Input.name, Input);
-Vue.component(Select.name, Select);
-Vue.component(Option.name, Option);
-Vue.component(InputNumber.name, InputNumber);
-Vue.component(Message.name, Message);
-Vue.component(Popconfirm.name, Popconfirm);
+Vue.use(Container);
+Vue.use(Table);
+Vue.use(TableColumn);
+Vue.use(Button);
+Vue.use(Popconfirm);
+Vue.use(Icon);
+Vue.use(Dialog);
+Vue.use(Form);
+Vue.use(FormItem);
+Vue.use(Input);
+Vue.use(Select);
+Vue.use(Option);
+Vue.use(InputNumber);
+Vue.use(Popconfirm);
 
 @Component({
     name: "app-receivers",
@@ -189,7 +188,6 @@ export default class ReceiversPage extends Vue {
         bankType: "",
         accountNumber: "",
     };
-    num = 0;
     @Getter("receiver/data") data!: any;
 
     closeTransfer() {
@@ -246,7 +244,7 @@ export default class ReceiversPage extends Vue {
         try {
             if (this.form.bankType === "LOCAL") {
                 const { data: data } = await axiosInstance.get(
-                    "user/profile/accountnumber?number=" +
+                    "user/profile/account-number?number=" +
                         this.form.accountNumber,
                 );
                 if (!data) {
@@ -326,7 +324,7 @@ export default class ReceiversPage extends Vue {
     }
 
     async submitForm() {
-        if (this.disableUpdateInput === false) {
+        if (!this.disableUpdateInput) {
             try {
                 await this.$store.dispatch("receiver/addReceiver", {
                     desAccountNumber: this.form.accountNumber,
@@ -334,10 +332,6 @@ export default class ReceiversPage extends Vue {
                     bankType: this.form.bankType,
                 });
                 this.closeForm();
-                //this.dialogFormVisible = false;
-                //this.form.name = "";
-                //this.form.accountNumber = "";
-                //this.form.bankType = "";
                 Message({
                     showClose: true,
                     message: "Add new receiver successful",
@@ -365,10 +359,6 @@ export default class ReceiversPage extends Vue {
                     message: "Update receiver successful",
                     type: "success",
                 });
-                //this.dialogFormVisible = false;
-                //this.form.name = "";
-                //this.form.accountNumber = "";
-                //this.form.bankType = "";
                 this.closeForm();
             } catch (e) {
                 console.log({ error: e });
@@ -381,7 +371,7 @@ export default class ReceiversPage extends Vue {
         }
     }
 
-    mounted(): void {
+    mounted() {
         this.$store.dispatch("receiver/loadReceiverList");
     }
 }
