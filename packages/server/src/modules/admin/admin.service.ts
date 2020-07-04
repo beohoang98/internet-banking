@@ -124,6 +124,7 @@ export class AdminService {
                 amount: amount,
                 bankType: BankTypeEnum.LOCAL,
                 isDebtPay: false,
+                isRemitterCharge: false,
             });
 
             await runner.manager.increment(
@@ -146,6 +147,7 @@ export class AdminService {
             return transaction;
         } catch (e) {
             await runner.rollbackTransaction();
+            throw e;
         } finally {
             await runner.release();
         }
