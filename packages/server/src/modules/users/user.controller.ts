@@ -53,8 +53,7 @@ export class UserController {
     }
 
     @Get("profile/account-number")
-    @UseGuards(JwtGuard, RoleGuard)
-    @ForRoles(AdminRole.ADMIN, AdminRole.EMPLOYEE)
+    @UseGuards(JwtGuard)
     @TransformClassToPlain({ groups: ["internal"] })
     getProfileWithAccountNumber(@Query("number") accountNumber: string) {
         return this.userService.getProfileWithAccountNumber(accountNumber);

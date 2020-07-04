@@ -11,7 +11,7 @@ export class DebtRemind extends Base<DebtRemind> {
     @Column()
     remindNote: string;
 
-    @Column()
+    @Column({ default: "" })
     completeNote: string;
 
     @Column({ default: false })

@@ -32,7 +32,7 @@ export class Transaction extends Base<Transaction> {
     @Column()
     isDebtPay: boolean;
 
-    @Column()
+    @Column({ default: false, nullable: false })
     isRemitterCharge: boolean;
 
     @Column({ nullable: true })

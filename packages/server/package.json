@@ -70,6 +70,7 @@
         "@types/jest": "^26.0.3",
         "@types/node": "^13.13.6",
         "@types/node-rsa": "^1.0.0",
+        "@types/nodemailer": "^6.4.0",
         "@types/openpgp": "^4.4.12",
         "@types/passport-http": "^0.3.8",
         "@types/passport-jwt": "^3.0.3",

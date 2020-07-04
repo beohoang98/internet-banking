@@ -1,8 +1,8 @@
 import {
     ForbiddenException,
     Injectable,
-    InternalServerErrorException,
-} from "@nestjs/common";
+    InternalServerErrorException, UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from "@nestjs/jwt";
 import { JwtConfig } from "@src/config/jwt.config";
 import { AccessTokenDto } from "@src/dto/auth.dto";
@@ -26,18 +26,16 @@ export class AuthService {
 
     async verifyUser(usernameOrEmail: string, pass: string) {
         const user = await this.userService.findByEmail(usernameOrEmail);
-        console.debug(user, usernameOrEmail, pass);
         if (!user || !PasswordEncoder.compare(pass, user.password)) {
-            throw new ForbiddenException();
+            throw new UnauthorizedException("password or email not match");
         }
         return classToPlain(user);
     }
 
     async verifyAdmin(usernameOrEmail: string, pass: string) {
         const admin = await this.adminService.findByEmail(usernameOrEmail);
-        console.debug(admin, usernameOrEmail, pass);
         if (!admin || !PasswordEncoder.compare(pass, admin.password)) {
-            throw new ForbiddenException();
+            throw new UnauthorizedException("password or email not match");
         }
         return classToPlain(admin);
     }
