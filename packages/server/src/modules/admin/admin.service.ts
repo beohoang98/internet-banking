@@ -242,10 +242,10 @@ export class AdminService {
         return await this.partnerTransactionRepo
             .createQueryBuilder("log")
             .where("log.client_id = :id", { id })
-            .innerJoin(Transaction, "trans", "trans.id = log.transaction_id")
+            .leftJoin(Transaction, "trans", "trans.id = log.transaction_id")
             .select("COUNT(log.client_id) as transCount")
             .addSelect("SUM(trans.amount) as transSum")
             .groupBy("log.client_id")
-            .getRawMany();
+            .getRawOne();
     }
 }
