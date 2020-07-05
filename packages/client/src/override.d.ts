@@ -1,5 +1,3 @@
-import { library } from "@fortawesome/fontawesome-svg-core";
-import Vue from "vue";
 import { AxiosRequestConfig } from "axios";
 
 declare module "vue/types/vue" {

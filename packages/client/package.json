@@ -6,7 +6,7 @@
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit --passWithNoTests",
     "lint": "vue-cli-service lint --fix",
-    "format": "prettier --write --ext .js,.ts,.vue"
+    "format": "prettier --write \"src/**/*.{ts,vue,js}\""
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.29",

@@ -6,8 +6,8 @@
 
 <script>
 import Vue from "vue";
-import AppPaymentAccount from "@/components/BankAccountList/PaymentAccount";
-import { Aside, Container, Main } from "element-ui";
+import AppPaymentAccount from "@/components/BankAccountList/PaymentAccount.vue";
+import { Aside, Main } from "element-ui";
 
 Vue.use(Aside);
 Vue.use(Main);
