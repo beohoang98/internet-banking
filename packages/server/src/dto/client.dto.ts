@@ -8,8 +8,7 @@ import {
     Min,
 } from "class-validator";
 import { Type } from "class-transformer";
-import { BankTypeEnum } from "@src/models/ReceiverList";
-import {ClientType} from '@src/models';
+import { ClientType } from "@src/models";
 
 export class CheckAccountDto {
     @ApiProperty({

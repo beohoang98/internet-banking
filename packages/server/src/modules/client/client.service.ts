@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { randomBytes } from "crypto";
-import {FindOneOptions, getConnection, getRepository, Repository} from 'typeorm';
+import { FindOneOptions, getConnection, Repository } from "typeorm";
 import { Client } from "@src/models/Client";
 import { PasswordEncoder } from "@src/utils/passwordEncoder";
 import { Command, Console } from "nestjs-console";
@@ -9,7 +9,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { BankTypeEnum } from "@src/models/ReceiverList";
 import { Transaction } from "@src/models/Transaction";
 import { UserService } from "@src/modules/users/user.service";
-import {ClientTransactionLog} from '@src/models/ClientTransactionLog';
+import { ClientTransactionLog } from "@src/models/ClientTransactionLog";
 
 @Injectable()
 @Console()
