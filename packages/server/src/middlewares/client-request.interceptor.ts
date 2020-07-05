@@ -55,6 +55,7 @@ export class ClientRequestInterceptor implements NestInterceptor {
                 data,
             });
         }
+        req.client = client;
 
         return next.handle();
     }

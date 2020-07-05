@@ -14,11 +14,16 @@ import { ClientCheckMiddleware } from "@src/middlewares/client-check.middleware"
 import { ConfigModule } from "@nestjs/config";
 import { ClientRequestLog } from "@src/models/ClientRequestLog";
 import { UserModule } from "@src/modules/users/user.module";
+import { ClientTransactionLog } from "@src/models/ClientTransactionLog";
 
 @Module({
     imports: [
         ConfigModule,
-        TypeOrmModule.forFeature([Client, ClientRequestLog]),
+        TypeOrmModule.forFeature([
+            Client,
+            ClientRequestLog,
+            ClientTransactionLog,
+        ]),
         ConsoleModule,
         CryptoModule,
         UserModule,

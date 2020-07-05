@@ -9,6 +9,7 @@ import {
 } from "class-validator";
 import { Type } from "class-transformer";
 import { BankTypeEnum } from "@src/models/ReceiverList";
+import {ClientType} from '@src/models';
 
 export class CheckAccountDto {
     @ApiProperty({
@@ -68,10 +69,6 @@ export class SendMoneyDtoV2 extends CheckAccountDto {
     @ApiProperty()
     @IsOptional()
     note: string;
-
-    @ApiProperty()
-    @IsEnum(BankTypeEnum)
-    bankType: BankTypeEnum;
 }
 
 export class SendMoneyRequestV2Dto {
@@ -86,4 +83,21 @@ export class SendMoneyRequestV2Dto {
     @IsString()
     @IsNotEmpty()
     signature: string;
+}
+
+export class UpdateClientDto {
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsString()
+    secret?: string;
+
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsString()
+    publicKey?: string;
+
+    @ApiProperty({ enum: ClientType, required: false })
+    @IsOptional()
+    @IsEnum(ClientType)
+    type?: ClientType;
 }

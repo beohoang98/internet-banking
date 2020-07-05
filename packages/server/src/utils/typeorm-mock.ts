@@ -9,6 +9,7 @@ import {
     Transaction,
     User,
 } from "@src/models";
+import { ClientTransactionLog } from "@src/models/ClientTransactionLog";
 
 export class MockTypeORMConfig implements TypeOrmOptionsFactory {
     createTypeOrmOptions(
@@ -28,6 +29,7 @@ export class MockTypeORMConfig implements TypeOrmOptionsFactory {
                 OTP,
                 ReceiverList,
                 Transaction,
+                ClientTransactionLog,
             ],
             autoLoadEntities: true,
             name: "default",

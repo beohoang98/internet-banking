@@ -16,6 +16,7 @@ import {
     ApiBearerAuth,
     ApiConsumes,
     ApiOkResponse,
+    ApiParam,
     ApiTags,
 } from "@nestjs/swagger";
 import { ForRoles } from "@src/guards/role.decorator";
@@ -31,6 +32,8 @@ import { RoleGuard } from "@src/guards/role.guard";
 import { JwtGuard } from "@src/guards/jwt.guard";
 import { Request } from "express";
 import { PaginateQueryDto, PaginationDto } from "@src/dto/paginate.dto";
+import { TransformClassToPlain } from "class-transformer";
+import { UpdateClientDto } from "@src/dto/client.dto";
 
 @Controller("admin")
 @ApiTags("admin")
@@ -89,5 +92,52 @@ export class AdminController {
     @ForRoles(AdminRole.ADMIN)
     deleteEmployee(@Param("id") id: number) {
         return this.adminService.deleteEmployee(id);
+    }
+
+    @Get("partner")
+    @ForRoles(AdminRole.ADMIN)
+    @TransformClassToPlain({ groups: ["admin"] })
+    getPartners() {
+        return this.adminService.getPartners();
+    }
+
+    @Get("partner/:id")
+    @ForRoles(AdminRole.ADMIN)
+    @ApiParam({ type: String, name: "id" })
+    @TransformClassToPlain({ groups: ["admin"] })
+    getPartnerDetails(@Param("id") id: string) {
+        return this.adminService.getPartner(id);
+    }
+
+    @Put("partner/:id")
+    @ForRoles(AdminRole.ADMIN)
+    @ApiParam({ type: String, name: "id" })
+    @TransformClassToPlain({ groups: ["admin"] })
+    updatePartner(@Body() body: UpdateClientDto, @Param("id") id: string) {
+        return this.adminService.updatePartner(id, body);
+    }
+
+    @Get("partner/:id/transactions")
+    @ForRoles(AdminRole.ADMIN)
+    @ApiParam({ type: String, name: "id" })
+    @TransformClassToPlain({ groups: ["admin"] })
+    getPartnerTransactions(
+        @Param("id") id: string,
+        @Query() q: PaginateQueryDto,
+        @Req() req: Request,
+    ) {
+        return this.adminService.getPartnerTransactions(id, {
+            route: req.path,
+            limit: q.limit,
+            page: q.page,
+        });
+    }
+
+    @Get("partner/:id/transaction-total")
+    @ForRoles(AdminRole.ADMIN)
+    @ApiParam({ type: String, name: "id" })
+    @TransformClassToPlain({ groups: ["admin"] })
+    getPartnerTransactionsTotal(@Param("id") id: string) {
+        return this.adminService.getPartnerTransactionSum(id);
     }
 }
