@@ -1,8 +1,9 @@
 import {
     ForbiddenException,
     Injectable,
-    InternalServerErrorException, UnauthorizedException,
-} from '@nestjs/common';
+    InternalServerErrorException,
+    UnauthorizedException,
+} from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { JwtConfig } from "@src/config/jwt.config";
 import { AccessTokenDto } from "@src/dto/auth.dto";

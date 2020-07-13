@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { randomBytes } from "crypto";
-import { FindOneOptions, getRepository, Repository } from "typeorm";
+import { FindOneOptions, getConnection, Repository } from "typeorm";
 import { Client } from "@src/models/Client";
 import { PasswordEncoder } from "@src/utils/passwordEncoder";
 import { Command, Console } from "nestjs-console";
@@ -9,6 +9,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { BankTypeEnum } from "@src/models/ReceiverList";
 import { Transaction } from "@src/models/Transaction";
 import { UserService } from "@src/modules/users/user.service";
+import { ClientTransactionLog } from "@src/models/ClientTransactionLog";
 
 @Injectable()
 @Console()
@@ -59,10 +60,10 @@ export class ClientService {
     }
 
     async createTransaction(
-        clientId: BankTypeEnum,
+        client: Client,
         accountNumber: string,
         sourceAccount: string,
-        note: string,
+        note = "",
         amount: number,
     ) {
         const user = await this.userService.findByAccountNumber(accountNumber);
@@ -72,20 +73,38 @@ export class ClientService {
             );
         }
 
-        const transaction = new Transaction({
-            sourceAccount: sourceAccount,
-            desAccount: accountNumber,
-            note: note,
-            amount: amount,
-            isMyBankSend: false,
-            isDebtPay: false,
-            isRemitterCharge: false,
-        });
+        const runner = getConnection().createQueryRunner();
+        await runner.startTransaction();
+        try {
+            const transactionObject = new Transaction({
+                sourceAccount: sourceAccount,
+                desAccount: accountNumber,
+                note: note,
+                amount: amount,
+                isMyBankSend: false,
+                isDebtPay: false,
+                isRemitterCharge: false,
+            });
 
-        if (clientId === BankTypeEnum.RSA)
-            transaction.bankType = BankTypeEnum.RSA;
-        if (clientId === BankTypeEnum.PGP)
-            transaction.bankType = BankTypeEnum.PGP;
-        return await getRepository(Transaction).save(transaction);
+            if (client.type.toString() === BankTypeEnum.RSA)
+                transactionObject.bankType = BankTypeEnum.RSA;
+            if (client.type.toString() === BankTypeEnum.PGP)
+                transactionObject.bankType = BankTypeEnum.PGP;
+            const transaction = await runner.manager.save(transactionObject);
+
+            const transactionLog = new ClientTransactionLog({
+                transaction,
+                client,
+            });
+            await runner.manager.save(transactionLog);
+            await runner.commitTransaction();
+
+            return transaction;
+        } catch (e) {
+            await runner.rollbackTransaction();
+            throw e;
+        } finally {
+            await runner.release();
+        }
     }
 }

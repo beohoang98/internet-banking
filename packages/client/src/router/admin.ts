@@ -49,10 +49,20 @@ const routes: Array<RouteConfig> = [
                         path: "partner",
                         name: "partner-management",
                         component: () =>
-                            import("@/admins/pages/UserManagement.vue"),
+                            import("@/admins/pages/PartnerManagement.vue"),
                         meta: {
                             role: ["ADMIN"],
                         },
+                        children: [
+                            {
+                                path: ":id",
+                                name: "partner-detail",
+                                component: () =>
+                                    import(
+                                        "@/admins/components/Partner/PartnerDetailModal.vue"
+                                    ),
+                            },
+                        ],
                     },
                 ],
             },

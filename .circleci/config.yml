@@ -71,7 +71,7 @@ jobs:
                 name: test
                 command: yarn test:cov
             - store_test_results:
-                path: ./server/coverage
+                path: ./packages/server/coverage
     build_client:
         executor: node
         steps:

@@ -18,6 +18,9 @@ import { BankTypeEnum } from "@src/models/ReceiverList";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DepositLog } from "@src/models/DepositLog";
 import { IPaginationOptions, paginate } from "nestjs-typeorm-paginate/index";
+import { Client } from "@src/models";
+import { UpdateClientDto } from "@src/dto/client.dto";
+import { ClientTransactionLog } from "@src/models/ClientTransactionLog";
 
 @Injectable()
 @Console()
@@ -25,6 +28,14 @@ export class AdminService {
     constructor(
         @InjectRepository(Admin)
         private readonly adminRepo: Repository<Admin>,
+
+        @InjectRepository(Client)
+        private readonly partnerRepo: Repository<Client>,
+
+        @InjectRepository(ClientTransactionLog)
+        private readonly partnerTransactionRepo: Repository<
+            ClientTransactionLog
+        >,
     ) {}
 
     async findById(id: number) {
@@ -188,5 +199,53 @@ export class AdminService {
 
     async deleteEmployee(id: number) {
         return await getRepository(Admin).softDelete(id);
+    }
+
+    getPartners() {
+        return this.partnerRepo.find();
+    }
+
+    getPartner(id: string) {
+        return this.partnerRepo.findOne({
+            where: {
+                id,
+            },
+        });
+    }
+
+    updatePartner(id: string, dto: UpdateClientDto) {
+        return this.partnerRepo.update(
+            { id },
+            {
+                secret: dto.secret
+                    ? PasswordEncoder.encode(dto.secret)
+                    : undefined,
+                publicKey: dto.publicKey
+                    ? Buffer.from(dto.publicKey, "utf-8").toString("base64")
+                    : undefined,
+                type: dto.type,
+            },
+        );
+    }
+
+    getPartnerTransactions(id: string, options: IPaginationOptions) {
+        return paginate(this.partnerTransactionRepo, options, {
+            where: {
+                client: {
+                    id,
+                },
+            },
+        });
+    }
+
+    async getPartnerTransactionSum(id: string) {
+        return await this.partnerTransactionRepo
+            .createQueryBuilder("log")
+            .where("log.client_id = :id", { id })
+            .leftJoin(Transaction, "trans", "trans.id = log.transaction_id")
+            .select("COUNT(log.client_id) as transCount")
+            .addSelect("SUM(trans.amount) as transSum")
+            .groupBy("log.client_id")
+            .getRawOne();
     }
 }

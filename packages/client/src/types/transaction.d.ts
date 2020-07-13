@@ -1,4 +1,4 @@
-declare class Transaction {
+declare interface Transaction {
     id: number;
     note: string;
     sourceAccount: string;
@@ -7,4 +7,7 @@ declare class Transaction {
     bankType: string;
     isDebtPay: boolean;
     isMyBankSend: boolean;
+
+    createdAt: Date;
+    updatedAt: Date;
 }

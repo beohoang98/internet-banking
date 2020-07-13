@@ -8,15 +8,15 @@ import {
     Min,
 } from "class-validator";
 import { Type } from "class-transformer";
-import { BankTypeEnum } from "@src/models/ReceiverList";
+import { ClientType } from "@src/models";
 
 export class CheckAccountDto {
     @ApiProperty({
         type: "integer",
-        example: 1234567890,
+        example: 12345678,
     })
     @IsInt()
-    @Min(10 ** 9) // 10 digits
+    @Min(10 ** 6) // 6 digits
     accountNumber: number;
 }
 export class CheckAccountResponseDto {
@@ -63,15 +63,11 @@ export class SendMoneyDtoV2 extends CheckAccountDto {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
-    sourceAccount: string;
+    sourceAccount?: string;
 
     @ApiProperty()
     @IsOptional()
-    note: string;
-
-    @ApiProperty()
-    @IsEnum(BankTypeEnum)
-    bankType: BankTypeEnum;
+    note?: string;
 }
 
 export class SendMoneyRequestV2Dto {
@@ -86,4 +82,21 @@ export class SendMoneyRequestV2Dto {
     @IsString()
     @IsNotEmpty()
     signature: string;
+}
+
+export class UpdateClientDto {
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsString()
+    secret?: string;
+
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsString()
+    publicKey?: string;
+
+    @ApiProperty({ enum: ClientType, required: false })
+    @IsOptional()
+    @IsEnum(ClientType)
+    type?: ClientType;
 }

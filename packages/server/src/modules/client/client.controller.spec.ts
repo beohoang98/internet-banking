@@ -2,7 +2,7 @@ import * as moment from "moment";
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { BankTypeEnum, Client } from "@src/models";
+import { Client } from "@src/models";
 import * as request from "supertest";
 import { ClientService } from "@src/modules/client/client.service";
 import { MockTypeORMConfig } from "@src/utils/typeorm-mock";
@@ -168,9 +168,10 @@ describe("ClientController", () => {
     });
 
     test("partner-should-be-verify", async () => {
+        const user = await createUser();
         await createClient();
-        const sendData: SendMoneyDto = {
-            accountNumber: 1234567890,
+        const sendData: SendMoneyDtoV2 = {
+            accountNumber: +user.accountNumber,
             amount: 500000,
         };
         const body = await createSignBody(sendData);
@@ -180,7 +181,7 @@ describe("ClientController", () => {
             .digest("hex");
 
         const res = await request(app.getHttpServer())
-            .post("/partner/send/")
+            .post("/partner/send/v2")
             .set("x-partner-time", moment().unix().toString())
             .set("x-partner-hash", hash)
             .auth(testClient.id, testClient.secret)
@@ -191,13 +192,12 @@ describe("ClientController", () => {
     });
 
     test("partner-cant-be-verify-when-diff-json-order-keys", async () => {
-        await app
-            .get(ClientService)
-            .create(testClient.id, testClient.secret, testClient.publicKey);
+        const user = await createUser();
+        await createClient();
         const pgpClient = app.get(PGPService);
-        const sendData: SendMoneyDto = {
+        const sendData: SendMoneyDtoV2 = {
             amount: 500000,
-            accountNumber: 1234567890,
+            accountNumber: +user.accountNumber,
         };
         const signature = await pgpClient.sign(
             JSON.stringify(sendData),
@@ -219,7 +219,7 @@ describe("ClientController", () => {
             .digest("hex");
 
         const res = await request(app.getHttpServer())
-            .post("/partner/send")
+            .post("/partner/send/v2")
             .set("x-partner-time", moment().unix().toString())
             .set("x-partner-hash", hash)
             .auth(testClient.id, testClient.secret)
@@ -229,12 +229,11 @@ describe("ClientController", () => {
     });
 
     test("partner-denied-because-wrong-signature", async () => {
-        await app
-            .get(ClientService)
-            .create(testClient.id, testClient.secret, testClient.publicKey);
+        const user = await createUser();
+        await createClient();
         const pgpClient = app.get(PGPService);
-        const sendData: SendMoneyDto = {
-            accountNumber: 1234567890,
+        const sendData: SendMoneyDtoV2 = {
+            accountNumber: +user.accountNumber,
             amount: 500000,
         };
         const signature = await pgpClient.sign(
@@ -255,7 +254,7 @@ describe("ClientController", () => {
             .digest("hex");
 
         const res = await request(app.getHttpServer())
-            .post("/partner/send")
+            .post("/partner/send/v2")
             .set("x-partner-time", moment().unix().toString())
             .set("x-partner-hash", hash)
             .auth(testClient.id, testClient.secret)
@@ -266,15 +265,12 @@ describe("ClientController", () => {
 
     test("partner-send-ok", async () => {
         const user = await createUser();
-        await app
-            .get(ClientService)
-            .create(testClient.id, testClient.secret, testClient.publicKey);
+        await createClient();
         const sendData: SendMoneyDtoV2 = {
             amount: 500000,
             accountNumber: +user.accountNumber,
             sourceAccount: "123456789",
             note: "dance",
-            bankType: BankTypeEnum.PGP,
         };
 
         const body = await createSignBody(sendData);
@@ -296,15 +292,12 @@ describe("ClientController", () => {
 
     test("partner-send-failed-because-account-not-exist", async () => {
         const user = await createUser();
-        await app
-            .get(ClientService)
-            .create(testClient.id, testClient.secret, testClient.publicKey);
+        await createClient();
         const sendData: SendMoneyDtoV2 = {
             amount: 500000,
             accountNumber: +user.accountNumber + 1000,
             sourceAccount: "123456789",
             note: "dance",
-            bankType: BankTypeEnum.PGP,
         };
 
         const body = await createSignBody(sendData);

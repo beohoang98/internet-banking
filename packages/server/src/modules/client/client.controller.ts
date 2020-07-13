@@ -1,7 +1,9 @@
 import {
     Body,
     Controller,
+    GoneException,
     Post,
+    Req,
     UseGuards,
     UseInterceptors,
 } from "@nestjs/common";
@@ -13,6 +15,7 @@ import {
     ApiForbiddenResponse,
     ApiHeader,
     ApiNotFoundResponse,
+    ApiOperation,
     ApiTags,
     ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
@@ -21,12 +24,12 @@ import * as moment from "moment";
 import {
     CheckAccountDto,
     CheckAccountResponseDto,
-    SendMoneyRequestDto,
     SendMoneyRequestV2Dto,
 } from "@src/dto/client.dto";
 import { ClientRequestInterceptor } from "@src/middlewares/client-request.interceptor";
 import { ClientService } from "./client.service";
 import { TransformClassToPlain } from "class-transformer";
+import { Request } from "express";
 
 @Controller("partner")
 @ApiTags("partner")
@@ -66,17 +69,26 @@ export class ClientController {
     @Post("send")
     @ApiAcceptedResponse({ description: "Accepted send request" })
     @UseInterceptors(ClientRequestInterceptor)
-    makeTransaction(@Body() body: SendMoneyRequestDto) {
-        return body;
+    @ApiOperation({
+        deprecated: true,
+        description: "This API is deprecated, move to /api/partner/send/v2",
+    })
+    makeTransaction() {
+        throw new GoneException(
+            "This API is deprecated, move to /api/partner/send/v2",
+        );
     }
 
     @Post("send/v2")
     @ApiAcceptedResponse({ description: "Accepted send request" })
     @UseInterceptors(ClientRequestInterceptor)
     @TransformClassToPlain({ groups: ["partner"] })
-    makeTransactionV2(@Body() body: SendMoneyRequestV2Dto) {
+    makeTransactionV2(
+        @Body() body: SendMoneyRequestV2Dto,
+        @Req() req: Request,
+    ) {
         return this.clientService.createTransaction(
-            body.data.bankType,
+            req.client,
             body.data.accountNumber.toString(),
             body.data.sourceAccount,
             body.data.note,
