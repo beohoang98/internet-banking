@@ -63,7 +63,7 @@ export class ClientService {
         client: Client,
         accountNumber: string,
         sourceAccount: string,
-        note: string,
+        note = "",
         amount: number,
     ) {
         const user = await this.userService.findByAccountNumber(accountNumber);

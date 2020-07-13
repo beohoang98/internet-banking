@@ -7,13 +7,13 @@ import { User } from "@src/models/User";
     name: "transaction",
 })
 export class Transaction extends Base<Transaction> {
-    @Column()
+    @Column({ nullable: true })
     note: string;
 
-    @Column()
+    @Column({ nullable: true })
     sourceAccount: string;
 
-    @Column()
+    @Column({ nullable: false })
     desAccount: string;
 
     @ManyToOne(() => User, {
