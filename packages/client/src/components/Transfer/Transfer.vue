@@ -7,7 +7,7 @@
             ref="dialog"
         >
             <div v-if="step === 1">
-                <el-form :model="form" ref="form" v-loading="true">
+                <el-form :model="form" ref="form" v-loading="isLoading">
                     <el-form-item label="Bank" :label-width="labelWidth">
                         <el-select
                             v-model="form.bankType"
@@ -128,6 +128,7 @@ import {
     Switch,
 } from "element-ui";
 import { axiosInstance } from "@/utils/axios";
+import { Getter } from "vuex-class";
 Vue.use(Container);
 Vue.use(Table);
 Vue.use(TableColumn);
@@ -168,8 +169,11 @@ export default class Transfer extends Vue {
         this.form.bankType = this.bankType;
     }
 
+    @Getter("auth/profile") profile!: any;
+
     step = 1;
     labelWidth = "120px";
+    isLoading = false;
     form = {
         bankType: this.bankType,
         accountNumber: this.accountNumber,
@@ -182,6 +186,7 @@ export default class Transfer extends Vue {
     handleClose() {
         this.visible = false;
         this.resetForm();
+        this.isLoading = false;
         this.$emit("close-dialog");
     }
 
@@ -198,6 +203,7 @@ export default class Transfer extends Vue {
 
     async getName() {
         try {
+            this.isLoading = true;
             if (this.form.bankType === "LOCAL") {
                 const { data: data } = await axiosInstance.get(
                     "user/profile/account-number?number=" +
@@ -257,28 +263,57 @@ export default class Transfer extends Vue {
                 message: e.response?.data?.message || e + "",
                 type: "error",
             });
+        } finally {
+            this.isLoading = false;
         }
     }
 
     async nextStep() {
-        try {
-            await axiosInstance.get("/otp");
+        let remitterAmount = Number(this.form.amount);
+        let receriverAmount = Number(this.form.amount);
+        if (this.form.isCharge === true) {
+            remitterAmount += 1100;
+        } else {
+            receriverAmount -= 1100;
+        }
+        if (receriverAmount < 0) {
             Message({
                 showClose: true,
-                message: "An email otp has been sent to you",
-                type: "success",
-            });
-            this.step = 2;
-        } catch (e) {
-            Message({
-                showClose: true,
-                message: e,
+                message: "Amount must be bigger than 1100 VND",
                 type: "error",
             });
+            return 0;
+        }
+        if (Number(this.profile.balance) < Number(remitterAmount)) {
+            Message({
+                showClose: true,
+                message: "Balance is not enough",
+                type: "error",
+            });
+        } else {
+            try {
+                this.isLoading = true;
+                await axiosInstance.get("/otp");
+                Message({
+                    showClose: true,
+                    message: "An email otp has been sent to you",
+                    type: "success",
+                });
+                this.step = 2;
+            } catch (e) {
+                Message({
+                    showClose: true,
+                    message: e,
+                    type: "error",
+                });
+            } finally {
+                this.isLoading = false;
+            }
         }
     }
     async submit() {
         try {
+            this.isLoading = true;
             if (this.form.bankType === "LOCAL") {
                 await axiosInstance.post("/transaction", {
                     desAccount: this.form.accountNumber,
@@ -320,6 +355,8 @@ export default class Transfer extends Vue {
                 message: e,
                 type: "error",
             });
+        } finally {
+            this.isLoading = false;
         }
     }
 

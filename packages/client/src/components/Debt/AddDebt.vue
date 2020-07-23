@@ -6,7 +6,7 @@
             @close="handleClose()"
             ref="dialog"
         >
-            <el-form :model="form" ref="form">
+            <el-form :model="form" ref="form" v-loading="isLoading">
                 <el-form-item
                     label="Account number"
                     :label-width="labelWidth"
@@ -107,9 +107,11 @@ export default class AddDebt extends Vue {
         amount: "",
         note: "",
     };
+    isLoading = false;
     handleClose() {
         this.visible = false;
         this.resetForm();
+        this.isLoading = false;
         this.$emit("close-dialog");
     }
 
@@ -122,6 +124,7 @@ export default class AddDebt extends Vue {
 
     async createDebt() {
         try {
+            this.isLoading = true;
             await this.$store.dispatch("debt/addDebt", {
                 desAccountNumber: this.form.accountNumber,
                 note: this.form.note,
@@ -140,11 +143,14 @@ export default class AddDebt extends Vue {
                 message: e,
                 type: "error",
             });
+        } finally {
+            this.isLoading = false;
         }
     }
 
     async getName() {
         try {
+            this.isLoading = true;
             const { data: data } = await axiosInstance.get(
                 "user/profile/account-number?number=" + this.form.accountNumber,
             );
@@ -162,6 +168,8 @@ export default class AddDebt extends Vue {
                 message: e,
                 type: "error",
             });
+        } finally {
+            this.isLoading = false;
         }
     }
 }
