@@ -79,7 +79,7 @@
             :visible.sync="dialogFormVisible"
             @close="closeForm()"
         >
-            <el-form :model="form" ref="form">
+            <el-form :model="form" ref="form" v-loading="isLoading">
                 <el-form-item label="Bank" :label-width="labelWidth">
                     <el-select
                         v-model="form.bankType"
@@ -179,6 +179,8 @@ export default class ReceiversPage extends Vue {
     addTransBankType = "";
     isChoose = false;
 
+    isLoading = false;
+
     dialogDebtVisible = false;
     addDebtAccountNumber = "";
     addDebtName = "";
@@ -212,6 +214,7 @@ export default class ReceiversPage extends Vue {
         this.form.accountNumber = "";
         this.form.bankType = "";
         this.disableUpdateInput = false;
+        this.isLoading = false;
     }
 
     handleCreateDebt(row: any) {
@@ -242,6 +245,7 @@ export default class ReceiversPage extends Vue {
 
     async getName() {
         try {
+            this.isLoading = true;
             if (this.form.bankType === "LOCAL") {
                 const { data: data } = await axiosInstance.get(
                     "user/profile/account-number?number=" +
@@ -301,6 +305,8 @@ export default class ReceiversPage extends Vue {
                 message: e,
                 type: "error",
             });
+        } finally {
+            this.isLoading = false;
         }
     }
     async handleDelete(row: any) {
@@ -326,6 +332,7 @@ export default class ReceiversPage extends Vue {
     async submitForm() {
         if (!this.disableUpdateInput) {
             try {
+                this.isLoading = true;
                 await this.$store.dispatch("receiver/addReceiver", {
                     desAccountNumber: this.form.accountNumber,
                     name: this.form.name,
@@ -344,9 +351,12 @@ export default class ReceiversPage extends Vue {
                     message: e,
                     type: "error",
                 });
+            } finally {
+                this.isLoading = false;
             }
         } else {
             try {
+                this.isLoading = true;
                 await this.$store.dispatch("receiver/updateReceiver", {
                     id: this.id,
                     desAccountNumber: this.form.accountNumber,
@@ -367,6 +377,8 @@ export default class ReceiversPage extends Vue {
                     message: e,
                     type: "error",
                 });
+            } finally {
+                this.isLoading = false;
             }
         }
     }

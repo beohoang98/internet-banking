@@ -21,7 +21,7 @@ export class Client {
     @Expose({ groups: ["admin"] })
     publicKey: string;
 
-    @Column({ enum: ClientType, default: ClientType.PGP })
+    @Column({ type: "enum", enum: ClientType, default: ClientType.PGP })
     @Expose()
     type: ClientType;
 
