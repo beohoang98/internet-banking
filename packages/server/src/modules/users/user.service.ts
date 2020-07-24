@@ -32,7 +32,7 @@ export class UserService {
         return await this.userRepo.findOne({ where: { email } });
     }
     async findByAccountNumber(accountNumber: string) {
-        return await this.userRepo.findOne({ where: { accountNumber } });
+        return await this.userRepo.findOneOrFail({ where: { accountNumber } });
     }
     search(search: string) {
         return this.userRepo.find({
