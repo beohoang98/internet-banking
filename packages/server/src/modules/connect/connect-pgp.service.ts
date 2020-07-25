@@ -44,9 +44,13 @@ export class ConnectPgpService implements ConnectAbstractService {
         return res.data;
     }
 
-    async sendMoney(
+    async sendMoney(accountNumber: number | string, amount: number) {}
+
+    async sendMoneyPGP(
         accountNumber: number | string,
         amount: number,
+        numberSender: number | string,
+        message: string,
     ): Promise<any> {
         const partnerCode = this.configService.get<string>(
             "PGP_CLIENT_PARTNER_CODE",
@@ -57,8 +61,10 @@ export class ConnectPgpService implements ConnectAbstractService {
         );
 
         const data = {
-            Number: accountNumber + "",
-            Money: amount + "",
+            numberReceiver: accountNumber + "",
+            numberSender: numberSender + "",
+            amount: amount + "",
+            message: message,
         };
         const time = moment().unix();
 

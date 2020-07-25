@@ -6,10 +6,10 @@ import { HandlebarsAdapter } from "@nestjs-modules/mailer/dist/adapters/handleba
 const mailConfig = (): MailerOptions => ({
     transport: {
         debug: process.env.NODE_ENV !== "production",
-        url: process.env.MAIL_URL,
+        //url: process.env.MAIL_URL,
         host: process.env.MAIL_HOST,
         port: Number(process.env.MAIL_PORT),
-        secure: true,
+        secure: false,
         tls: {
             rejectUnauthorized: false,
         },

@@ -16,13 +16,14 @@ export class Transaction extends Base<Transaction> {
     @Column({ nullable: false })
     desAccount: string;
 
+    /*
     @ManyToOne(() => User, {
         onUpdate: "CASCADE",
         onDelete: "NO ACTION",
     })
     @JoinColumn({ name: "desAccount", referencedColumnName: "accountNumber" })
     desUser: User;
-
+*/
     @Column()
     amount: number;
 
