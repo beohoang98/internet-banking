@@ -1,7 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
+import { Column, Entity } from "typeorm";
 import { Base } from "./Base";
 import { BankTypeEnum } from "./ReceiverList";
-import { User } from "@src/models/User";
 
 @Entity({
     name: "transaction",
@@ -16,13 +15,14 @@ export class Transaction extends Base<Transaction> {
     @Column({ nullable: false })
     desAccount: string;
 
+    /*
     @ManyToOne(() => User, {
         onUpdate: "CASCADE",
         onDelete: "NO ACTION",
     })
     @JoinColumn({ name: "desAccount", referencedColumnName: "accountNumber" })
     desUser: User;
-
+*/
     @Column()
     amount: number;
 
