@@ -220,7 +220,7 @@ export class TransactionService {
             }
 
             if (bankType === BankTypeEnum.PGP) {
-                await this.pgpService.sendMoneyPGP(
+                await this.pgpService.sendMoney(
                     accountNumber,
                     receiverAmount,
                     user.accountNumber,

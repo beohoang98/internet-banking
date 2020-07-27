@@ -29,10 +29,12 @@ describe("Connect PGP", () => {
     });
 
     test("should send money success", async () => {
-        const res = service.sendMoney("123456789101112", 50000).then((data) => {
-            console.log(data, typeof data);
-            return data;
-        });
+        const res = service
+            .sendMoney("123456789101112", 50000, 1000000, "Test from Group 24")
+            .then((data) => {
+                console.log(data, typeof data);
+                return data;
+            });
         await expect(res).resolves.toBeDefined();
     });
 });

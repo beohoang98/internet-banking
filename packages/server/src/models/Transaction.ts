@@ -1,7 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
+import { Column, Entity } from "typeorm";
 import { Base } from "./Base";
 import { BankTypeEnum } from "./ReceiverList";
-import { User } from "@src/models/User";
 
 @Entity({
     name: "transaction",
