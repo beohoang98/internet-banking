@@ -14,5 +14,9 @@ export interface ConnectAbstractService {
      */
     checkAccount(accountNumber: number | string): Promise<any>;
 
-    sendMoney(accountNumber: number | string, amount: number): Promise<any>;
+    sendMoney(
+        accountNumber: number | string,
+        amount: number,
+        ...args: any
+    ): Promise<any>;
 }

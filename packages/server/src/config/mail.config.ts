@@ -9,7 +9,6 @@ const mailConfig = (): MailerOptions => ({
         url: process.env.MAIL_URL,
         host: process.env.MAIL_HOST,
         port: Number(process.env.MAIL_PORT),
-        secure: true,
         tls: {
             rejectUnauthorized: false,
         },
