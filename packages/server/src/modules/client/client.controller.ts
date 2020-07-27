@@ -11,6 +11,7 @@ import {
     ApiAcceptedResponse,
     ApiBadRequestResponse,
     ApiBasicAuth,
+    ApiBody,
     ApiCreatedResponse,
     ApiForbiddenResponse,
     ApiHeader,
@@ -60,6 +61,9 @@ export class ClientController {
     constructor(private readonly clientService: ClientService) {}
 
     @Post("check-account")
+    @ApiBody({
+        type: CheckAccountDto,
+    })
     @ApiCreatedResponse({ type: CheckAccountResponseDto })
     @TransformClassToPlain({ groups: ["partner"] })
     checkAccountInfo(@Body() body: CheckAccountDto) {
@@ -80,6 +84,7 @@ export class ClientController {
     }
 
     @Post("send/v2")
+    @ApiBody({ type: SendMoneyRequestV2Dto })
     @ApiAcceptedResponse({ description: "Accepted send request" })
     @UseInterceptors(ClientRequestInterceptor)
     @TransformClassToPlain({ groups: ["partner"] })
