@@ -55,8 +55,12 @@ export class ClientService {
         return this.clientRepository.findOne(args);
     }
 
-    checkProfile(accountNumber: string) {
-        return this.userService.findByAccountNumber(accountNumber);
+    async checkProfile(accountNumber: string) {
+        const user = await this.userService.findByAccountNumber(accountNumber);
+        if (!user) {
+            throw new BadRequestException("User not found");
+        }
+        return user;
     }
 
     async createTransaction(
