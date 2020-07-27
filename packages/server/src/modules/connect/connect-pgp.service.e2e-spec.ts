@@ -21,7 +21,7 @@ describe("Connect PGP", () => {
     });
 
     test("should check account success", async () => {
-        const res = service.checkAccount("123456789101112").then((data) => {
+        const res = service.checkAccount("4117802221578676").then((data) => {
             console.log(data);
             return data;
         });
@@ -30,7 +30,12 @@ describe("Connect PGP", () => {
 
     test("should send money success", async () => {
         const res = service
-            .sendMoney("123456789101112", 50000, 1000000, "Test from Group 24")
+            .sendMoney(
+                "4117802221578676",
+                50000,
+                10000000,
+                "Test from Group 24",
+            )
             .then((data) => {
                 console.log(data, typeof data);
                 return data;
