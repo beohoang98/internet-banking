@@ -235,6 +235,7 @@ export class AdminService {
                     id,
                 },
             },
+            relations: ["transaction"],
         });
     }
 
@@ -243,8 +244,8 @@ export class AdminService {
             .createQueryBuilder("log")
             .where("log.client_id = :id", { id })
             .leftJoin(Transaction, "trans", "trans.id = log.transaction_id")
-            .select("COUNT(log.client_id) as transCount")
-            .addSelect("SUM(trans.amount) as transSum")
+            .select("COUNT(log.client_id) as trans_count")
+            .addSelect("SUM(trans.amount) as trans_sum")
             .groupBy("log.client_id")
             .getRawOne();
     }
