@@ -56,7 +56,7 @@
                             <template #header>
                                 <h2>Total transaction</h2>
                             </template>
-                            <p>{{ stat.transCount }}</p>
+                            <p>{{ stat.trans_count }}</p>
                         </el-card>
                     </el-col>
                     <el-col>
@@ -64,12 +64,19 @@
                             <template #header>
                                 <h2>Total amount</h2>
                             </template>
-                            <p>{{ stat.transSum | vndFormat }}</p>
+                            <p>{{ stat.trans_sum | vndFormat }}</p>
                         </el-card>
                     </el-col>
                 </el-row>
                 <el-divider />
-                <el-table :data="transactions"></el-table>
+                <el-table :data="transactions">
+                    <el-table-column prop="id" label="ID" />
+                    <el-table-column prop="createdAt" label="Created At">
+                        <template :slot-scope="{ row: { createdAt } }">
+                            {{ createdAt | datetime }}
+                        </template>
+                    </el-table-column>
+                </el-table>
             </el-tab-pane>
         </el-tabs>
     </el-dialog>
@@ -101,8 +108,8 @@ export default class PartnerDetailModal extends Vue {
         newPassword: [{ type: "string", min: 6, required: false }],
     };
     stat = {
-        transCount: 0,
-        transSum: 0,
+        trans_count: 0,
+        trans_sum: 0,
     };
 
     handleOnClose() {
@@ -133,7 +140,7 @@ export default class PartnerDetailModal extends Vue {
             .get(`/admin/partner/${this.partnerId}/transaction-total`)
             .then(({ data }) => {
                 console.debug(data);
-                this.stat = data[0];
+                this.stat = data;
             });
     }
 
