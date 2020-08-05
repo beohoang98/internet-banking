@@ -19,21 +19,21 @@ import {
     ApiParam,
     ApiTags,
 } from "@nestjs/swagger";
-import { ForRoles } from "@src/guards/role.decorator";
-
-import { AdminRole } from "@src/models/Admin";
 import {
     CreateAdminDto,
     DepositToUserAccount,
+    PartnerTransactionQuery,
     UpdateEmployeeDto,
 } from "@src/dto/admin.dto";
-import { AdminService } from "./admin.service";
-import { RoleGuard } from "@src/guards/role.guard";
-import { JwtGuard } from "@src/guards/jwt.guard";
-import { Request } from "express";
-import { PaginateQueryDto, PaginationDto } from "@src/dto/paginate.dto";
-import { TransformClassToPlain } from "class-transformer";
 import { UpdateClientDto } from "@src/dto/client.dto";
+import { PaginateQueryDto, PaginationDto } from "@src/dto/paginate.dto";
+import { JwtGuard } from "@src/guards/jwt.guard";
+import { ForRoles } from "@src/guards/role.decorator";
+import { RoleGuard } from "@src/guards/role.guard";
+import { AdminRole } from "@src/models/Admin";
+import { TransformClassToPlain } from "class-transformer";
+import { Request } from "express";
+import { AdminService } from "./admin.service";
 
 @Controller("admin")
 @ApiTags("admin")
@@ -123,13 +123,15 @@ export class AdminController {
     @TransformClassToPlain({ groups: ["admin"] })
     getPartnerTransactions(
         @Param("id") id: string,
-        @Query() q: PaginateQueryDto,
+        @Query() q: PartnerTransactionQuery,
         @Req() req: Request,
     ) {
         return this.adminService.getPartnerTransactions(id, {
             route: req.path,
             limit: q.limit,
             page: q.page,
+            from: q.from || new Date(1900, 1, 1),
+            to: q.to || new Date(),
         });
     }
 
