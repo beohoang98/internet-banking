@@ -3659,10 +3659,10 @@ data-urls@^1.0.0, data-urls@^1.1.0:
     whatwg-mimetype "^2.2.0"
     whatwg-url "^7.0.0"
 
-dayjs@^1.8.31:
-  version "1.8.32"
-  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.8.32.tgz#66c48b95c397d9f7907e89bd29f78b3d19d40294"
-  integrity sha512-V91aTRu5btP+uzGHaaOfodckEfBWhmi9foRP7cauAO1PTB8+tZ9o0Jec7q6TIIRY1N4q1IfiKsZunkB/AEWqMQ==
+dayjs@^1.8.33:
+  version "1.8.33"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.8.33.tgz#18bc4a2b6c1c6f4d67b4c4f2536c0b97e5b766f7"
+  integrity sha512-881TDLZCdpJFKbraWRHcUG8zfMLLX400ENf9rFZDuWc5zYMss6xifo2PhlDX0ftOmR2NRmaIY47bAa4gKQfXqw==
 
 de-indent@^1.0.2:
   version "1.0.2"
@@ -10732,10 +10732,10 @@ vary@~1.1.2:
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
 
-vee-validate@^3.3.7:
-  version "3.3.8"
-  resolved "https://registry.yarnpkg.com/vee-validate/-/vee-validate-3.3.8.tgz#5aea8a7f7b775c7372a7ff34bcdf835844049d7a"
-  integrity sha512-1LUGmtwqnu6PvKFq5Ia07GdvWD8uvA6mpxrqHLcHnWp0hkBS05oGsI1GP860gzlT6lSEmDsPN6GiPIoqOkuVNg==
+vee-validate@^3.3.9:
+  version "3.3.9"
+  resolved "https://registry.yarnpkg.com/vee-validate/-/vee-validate-3.3.9.tgz#73db22eb28bea913b6a93b90369bb4cbf5e67d45"
+  integrity sha512-0ibP+8dNU8XitkhcB5UBnVlHdPlUqFx6jGg4vNUN/lw5geVKBvgyo83y7YCvYA5iqQPgCnuQxsx8kTHa0d/Zyw==
 
 vendors@^1.0.0:
   version "1.0.4"
@@ -10822,6 +10822,11 @@ vue-router@^3.3.4:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.4.0.tgz#05dfcc112917025dac9e71cba414f72833424ba6"
   integrity sha512-MeY8fSRqxrgQ8WEj22/d8k1eGU+ugN1TmfaceeetZz1d7Ej9mcS3jLEhIkLZEeOE5sP8q6hbhbR4qFcyn9NUMA==
+
+vue-router@^3.4.3:
+  version "3.4.3"
+  resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.4.3.tgz#fa93768616ee338aa174f160ac965167fa572ffa"
+  integrity sha512-BADg1mjGWX18Dpmy6bOGzGNnk7B/ZA0RxuA6qedY/YJwirMfKXIDzcccmHbQI0A6k5PzMdMloc0ElHfyOoX35A==
 
 vue-style-loader@^4.1.0, vue-style-loader@^4.1.2:
   version "4.1.2"
