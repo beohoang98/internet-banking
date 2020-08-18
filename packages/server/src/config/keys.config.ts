@@ -29,5 +29,4 @@ const ProdKeys = () => ({
     RSA_PRIVATE: Buffer.from(process.env.PRIVATE_RSA_KEY, "base64"),
 });
 
-export const Keys =
-    process.env.NODE_ENV === "production" ? ProdKeys() : DevKeys();
+export const Keys = process.env.NODE_ENV === "production" ? ProdKeys : DevKeys;

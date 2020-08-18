@@ -10,7 +10,7 @@ import axios from "axios";
 @Injectable()
 export class ConnectPgpService implements ConnectAbstractService {
     readonly type = "PGP";
-    readonly privateKey = Keys.PGP_PRIVATE;
+    readonly privateKey = Keys().PGP_PRIVATE;
     readonly host = "https://hhbank.herokuapp.com";
     constructor(
         readonly cryptoService: PGPService,
