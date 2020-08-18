@@ -10,6 +10,7 @@ import { BankTypeEnum } from "@src/models/ReceiverList";
 import { Transaction } from "@src/models/Transaction";
 import { UserService } from "@src/modules/users/user.service";
 import { ClientTransactionLog } from "@src/models/ClientTransactionLog";
+import { User } from "@src/models";
 
 @Injectable()
 @Console()
@@ -95,6 +96,14 @@ export class ClientService {
             if (client.type.toString() === BankTypeEnum.PGP)
                 transactionObject.bankType = BankTypeEnum.PGP;
             const transaction = await runner.manager.save(transactionObject);
+            await runner.manager.increment(
+                User,
+                {
+                    desAccount: accountNumber,
+                },
+                "balance",
+                amount,
+            );
 
             const transactionLog = new ClientTransactionLog({
                 transaction,
