@@ -4,14 +4,20 @@ import {
     InternalServerErrorException,
     UnprocessableEntityException,
 } from "@nestjs/common";
-import { CreateAdminDto } from "@src/dto/admin.dto";
+import { CreateAdminDto, PartnerTransactionQuery } from "@src/dto/admin.dto";
 import { Admin, AdminRole } from "@src/models/Admin";
 import { PasswordEncoder } from "@src/utils/passwordEncoder";
 import { validateOrReject } from "class-validator";
 import { Command as _Command } from "commander";
 import * as crypto from "crypto";
 import { Command, Console } from "nestjs-console";
-import { getConnectionManager, getRepository, Like, Repository } from "typeorm";
+import {
+    getConnectionManager,
+    getRepository,
+    Like,
+    Repository,
+    Between,
+} from "typeorm";
 import { User } from "@src/models/User";
 import { Transaction } from "@src/models/Transaction";
 import { BankTypeEnum } from "@src/models/ReceiverList";
@@ -228,12 +234,13 @@ export class AdminService {
         );
     }
 
-    getPartnerTransactions(id: string, options: IPaginationOptions) {
+    getPartnerTransactions(id: string, options: PartnerTransactionQuery) {
         return paginate(this.partnerTransactionRepo, options, {
             where: {
                 client: {
                     id,
                 },
+                createdAt: Between(options.from, options.to),
             },
             relations: ["transaction"],
         });

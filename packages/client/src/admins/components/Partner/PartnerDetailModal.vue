@@ -16,8 +16,8 @@
                 @back="handleOnClose"
             />
         </template>
-        <el-tabs tab-position="top">
-            <el-tab-pane label="Info">
+        <el-tabs tab-position="top" value="trans">
+            <el-tab-pane label="Info" name="info">
                 <el-form
                     ref="form"
                     label-position="left"
@@ -49,7 +49,7 @@
                     </el-collapse>
                 </el-form>
             </el-tab-pane>
-            <el-tab-pane label="Transactions">
+            <el-tab-pane label="Transactions" name="trans">
                 <el-row>
                     <el-col>
                         <el-card>
@@ -69,26 +69,54 @@
                     </el-col>
                 </el-row>
                 <el-divider />
-                <el-table :data="transactions">
-                    <el-table-column prop="id" label="ID" />
-                    <el-table-column prop="createdAt" label="Created At">
-                        <template :slot-scope="{ row: { createdAt } }">
-                            {{ createdAt | datetime }}
-                        </template>
-                    </el-table-column>
-                </el-table>
+                <!--                <el-table :data="transactions">-->
+                <!--                    <el-table-column prop="id" label="ID" />-->
+                <!--                    <el-table-column prop="createdAt" label="Created At">-->
+                <!--                        <template :slot-scope="{ row: { createdAt } }">-->
+                <!--                            {{ createdAt | datetime }}-->
+                <!--                        </template>-->
+                <!--                    </el-table-column>-->
+                <!--                </el-table>-->
+                <el-form>
+                    <el-form-item label="Filter">
+                        <el-date-picker
+                            v-model="dateRangeFilter"
+                            start-placeholder="Start"
+                            end-placeholder="End"
+                            format="dd/MM/yyyy"
+                            type="daterange"
+                            range-separator="To"
+                            :clearable="true"
+                            editable
+                            append-to-body
+                        />
+                    </el-form-item>
+                </el-form>
+                <app-paginate-table
+                    :queries="transQueries"
+                    :api_url="`/admin/partner/${partnerId}/transactions`"
+                    :fields="{
+                        id: `ID`,
+                        createdAt: `Created At`,
+                        'transaction.amount': `Amount`,
+                    }"
+                    :formatter="formatter"
+                />
             </el-tab-pane>
         </el-tabs>
     </el-dialog>
 </template>
 
 <script lang="ts">
-import { Component, Ref, Vue } from "vue-property-decorator";
+import Vue from "vue";
+import { Component, Ref } from "vue-property-decorator";
 import { Form } from "element-ui";
 import { axiosInstance } from "@/utils/axios";
+import AppPaginateTable from "@/components/PaginateTable/PaginateTable.vue";
 
 @Component({
     name: "partner-detail-modal",
+    components: { AppPaginateTable },
 })
 export default class PartnerDetailModal extends Vue {
     @Ref("form") form!: Form;
@@ -98,6 +126,7 @@ export default class PartnerDetailModal extends Vue {
     isLoaded = false;
 
     transactions: Transaction[] = [];
+    dateRangeFilter: Date[] = [];
 
     info = {
         publicKey: "",
@@ -129,14 +158,6 @@ export default class PartnerDetailModal extends Vue {
 
     fetchTransaction() {
         axiosInstance
-            .get<Paginate<PartnerTransLog>>(
-                `/admin/partner/${this.partnerId}/transactions`,
-            )
-            .then(({ data }) => {
-                this.transactions = data.items.map((item) => item.transaction);
-            });
-
-        axiosInstance
             .get(`/admin/partner/${this.partnerId}/transaction-total`)
             .then(({ data }) => {
                 console.debug(data);
@@ -165,6 +186,25 @@ export default class PartnerDetailModal extends Vue {
                 this.isLoading = false;
                 this.isLoaded = true;
             });
+    }
+
+    get formatter() {
+        return {
+            createdAt: (val: PartnerTransLog) =>
+                this.globalFilter("datetime")(val.createdAt),
+            "transaction.amount": (val: PartnerTransLog) =>
+                this.globalFilter("vndFormat")(val.transaction.amount),
+        };
+    }
+    get transQueries() {
+        return {
+            from: this?.dateRangeFilter?.[0],
+            to: this?.dateRangeFilter?.[1],
+        };
+    }
+
+    globalFilter(name: string) {
+        return (Vue as any).options.filters[name] || ((val: any) => val);
     }
 
     mounted() {

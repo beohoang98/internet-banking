@@ -5,7 +5,7 @@ import {
     Pagination,
 } from "nestjs-typeorm-paginate/index";
 import { ApiProperty } from "@nestjs/swagger";
-import { Transform } from "class-transformer";
+import { Type } from "class-transformer";
 import { IsOptional } from "class-validator";
 
 export class PaginationLinks implements IPaginationLinks {
@@ -46,12 +46,12 @@ export class PaginationDto implements Pagination<any> {
 export class PaginateQueryDto implements IPaginationOptions {
     @ApiProperty({ type: Number, required: false })
     @IsOptional()
-    @Transform(() => Number)
+    @Type(() => Number)
     limit = 20;
 
     @ApiProperty({ type: Number, required: false })
     @IsOptional()
-    @Transform(() => Number)
+    @Type(() => Number)
     page = 1;
 
     [key: string]: any;

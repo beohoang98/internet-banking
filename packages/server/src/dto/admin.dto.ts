@@ -5,10 +5,12 @@ import {
     IsNotEmpty,
     IsOptional,
     IsString,
+    IsDate,
 } from "class-validator";
-import { Type } from "class-transformer";
+import { Type, Transform } from "class-transformer";
 import { ApiProperty } from "@nestjs/swagger";
 import { AdminRole } from "@src/models/Admin";
+import { PaginateQueryDto } from "./paginate.dto";
 
 export class CreateAdminDto {
     @ApiProperty()
@@ -69,4 +71,18 @@ export class UpdateEmployeeDto {
     // @IsNotEmpty()
     // @Type(() => String)
     // password: string;
+}
+
+export class PartnerTransactionQuery extends PaginateQueryDto {
+    @ApiProperty({ type: "date", required: false })
+    @IsOptional()
+    @IsDate()
+    @Transform((val) => new Date(val))
+    from?: Date;
+
+    @ApiProperty({ type: "date", required: false })
+    @IsOptional()
+    @IsDate()
+    @Transform((val) => new Date(val))
+    to?: Date;
 }
