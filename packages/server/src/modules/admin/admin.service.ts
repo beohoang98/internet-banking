@@ -183,8 +183,8 @@ export class AdminService {
         return await paginate(
             this.adminRepo,
             {
-                page,
-                limit,
+                page: +page,
+                limit: +limit,
                 route: "/api/admin/employee",
             },
             {
@@ -235,15 +235,23 @@ export class AdminService {
     }
 
     getPartnerTransactions(id: string, options: PartnerTransactionQuery) {
-        return paginate(this.partnerTransactionRepo, options, {
-            where: {
-                client: {
-                    id,
-                },
-                createdAt: Between(options.from, options.to),
+        return paginate(
+            this.partnerTransactionRepo,
+            {
+                page: +options.page,
+                limit: +options.limit,
+                route: `/api/admin/partner/${id}/transactions`,
             },
-            relations: ["transaction"],
-        });
+            {
+                where: {
+                    client: {
+                        id,
+                    },
+                    createdAt: Between(options.from, options.to),
+                },
+                relations: ["transaction"],
+            },
+        );
     }
 
     async getPartnerTransactionSum(id: string) {
