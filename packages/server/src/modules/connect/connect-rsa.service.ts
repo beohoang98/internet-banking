@@ -9,7 +9,7 @@ import * as moment from "moment";
 @Injectable()
 export class ConnectRSAService implements ConnectAbstractService {
     type: "RSA" = "RSA";
-    privateKey = Keys.RSA_PRIVATE;
+    privateKey = Keys().RSA_PRIVATE;
     host = "https://internet-banking-29-service.herokuapp.com";
     partnerCode = "";
 
